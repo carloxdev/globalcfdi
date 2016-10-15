@@ -100,9 +100,12 @@ class EmpresaCreateView(View):
             empresa.ciec = datos_formulario.get('ciec')
             empresa.activa = datos_formulario.get('activa')
             empresa.email = datos_formulario.get('email')
+            empresa.logo = datos_formulario.get('logo')
 
-            if request.user.username == 'root':
+            if request.user.is_staff:
                 empresa.usuario = datos_formulario.get('usuario')
+            else:
+                empresa.usuario = request.user
 
             empresa.save()
 
@@ -162,6 +165,7 @@ class EmpresaUpdateView(View):
             empresa.ciec = datos_formulario.get('ciec')
             empresa.activa = datos_formulario.get('activa')
             empresa.email = datos_formulario.get('email')
+            empresa.logo = datos_formulario.get('logo')
 
             if request.user.username == 'root':
                 empresa.usuario = datos_formulario.get('usuario')

@@ -47,7 +47,7 @@ class Resumen(models.Model):
     )
 
     class Meta:
-        unique_together = (('fecha', 'tipo'),)
+        unique_together = (('empresa', 'fecha', 'tipo'),)
 
     def __str__(self):
         return "{} - {}".format(self.fecha, self.tipo)

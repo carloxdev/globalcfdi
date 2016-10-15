@@ -11,6 +11,7 @@ from sat import WebSat
 from tools.datos import Filtro
 from tools.datos import FileManager
 from tools.datos import Ruta
+from tools.datos import Validator
 from tools.mistakes import ErrorValidacion
 from tools.mistakes import ErrorEjecucion
 from documentos import Comprobante
@@ -87,13 +88,16 @@ class Contador(object):
 
                 print "\nRECORRIENDO ARCHIVOS DESCARGADOS: "
                 lista_archivos = FileManager.get_Files(
-                    download_abspath, ".xml")
+                    download_abspath,
+                    ".xml"
+                )
                 no_descargadas = len(lista_archivos)
 
                 if no_descargadas > 0:
 
                     no_guardadas = 0
                     no_validadas = 0
+                    total = 0
 
                     for archivo in lista_archivos:
                         comprobante = Comprobante(
@@ -102,6 +106,8 @@ class Contador(object):
                         )
                         print "\nLeyendo archivo: {}".format(archivo.nombre)
                         comprobante.read()
+                        total = Validator.convertToFloat(comprobante.total)
+
                         no_guardadas += comprobante.save(
                             _tipo, self.empresa.clave, ruta.urlpath)
 
@@ -113,14 +119,23 @@ class Contador(object):
                 print "Archivos {} descargados:.... {}".format(".xml", no_descargadas)
                 print "Archivos {} guardados:...... {}".format(".xml", no_guardadas)
                 print "Archivos {} validados:...... {}".format(".xml", no_validadas)
+                print "Total:....................... {}".format(str(total))
 
             else:
                 no_descargadas = 0
                 no_guardadas = 0
                 no_validadas = 0
 
-            self.set_Resumen(_fecha, _tipo, no_encontradas,
-                             no_descargadas, no_guardadas, no_validadas)
+            self.set_Resumen(
+                self.empresa,
+                _fecha,
+                _tipo,
+                no_encontradas,
+                no_descargadas,
+                no_guardadas,
+                no_validadas,
+                total,
+            )
 
         except Exception, error:
             print str(error)
@@ -296,17 +311,19 @@ class Contador(object):
             print str(error)
             return None, None
 
-    def set_Resumen(self, _fecha, _tipo, _encontradas, _descargadas, _guardadas, _validadas):
+    def set_Resumen(self, _empresa, _fecha, _tipo, _encontradas, _descargadas, _guardadas, _validadas, _total):
 
         try:
 
             ModeloResumen.add(
+                _empresa,
                 _fecha,
                 _tipo,
                 _encontradas,
                 _descargadas,
                 _guardadas,
-                _validadas
+                _validadas,
+                _total
             )
 
             print "Resumen creado y guardado"
@@ -330,6 +347,9 @@ class Contador(object):
 
                 if resumen.cantidad_validadas < _validadas:
                     resumen.cantidad_validadas = _validadas
+
+                if resumen.total > _total:
+                    resumen.total = _total
 
                 resumen.save()
 
