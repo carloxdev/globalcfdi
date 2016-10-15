@@ -9,8 +9,9 @@ from configuracion.models import Empresa
 
 
 RESUMEN_TIPO = (
-    ('RECIBIDAS', 'FACTURAS RECIBIDAS'),
-    ('EMITIDAS', 'FACTURAS EMITIDAS'),
+    ('PROVEEDOR', 'FACTURA DE PROVEEDOR'),
+    ('CLIENTE', 'FACTURA A CLIENTE'),
+    ('EMPLEADO', 'COMPROBANTE DE EMPLEADO'),
 )
 
 COMPROBACION_ESTADOS = (
@@ -30,7 +31,7 @@ class Resumen(models.Model):
     cantidad_descargadas = models.IntegerField(default=0)
     cantidad_guardadas = models.IntegerField(default=0)
     cantidad_validadas = models.IntegerField(default=0)
-
+    total = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     empresa = models.ForeignKey(Empresa, null=True)
     created_date = models.DateTimeField(
         auto_now=False,
