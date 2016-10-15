@@ -31,6 +31,7 @@ class Resumen(models.Model):
     cantidad_guardadas = models.IntegerField(default=0)
     cantidad_validadas = models.IntegerField(default=0)
 
+    empresa = models.ForeignKey(Empresa, null=True)
     created_date = models.DateTimeField(
         auto_now=False,
         auto_now_add=True,

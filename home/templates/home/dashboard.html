@@ -27,17 +27,17 @@
 
 	<div class="row">
 
-		{% if empresas %}
-			{% for empresa in empresas %}
+		{% if lista_empresa_resumen %}
+			{% for empresa_resumen in lista_empresa_resumen %}
 
 				<div class="col-md-4">
 					<div class="panel panel-default">
 						<div class="panel-heading">
-							<a href="#">{{ empresa.razon_social }}</a>
+							<a href="#">{{ empresa_resumen.empresa.razon_social }}</a>
 							
 						</div>
 						<div class="panel-body">
-							
+							recbibidas <span>{{empresa_resumen.recibidas_total}}</span>
 						</div>				
 					</div>
 				</div>

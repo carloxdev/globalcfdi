@@ -17,6 +17,7 @@ class AdminEmpresa(admin.ModelAdmin):
         'activa',
         'usuario',
         'email',
+        'logo',
         'created_date',
         'updated_date',
     )

@@ -26,10 +26,14 @@ from django.contrib.auth.hashers import make_password
 
 # Otros Models:
 from configuracion.models import Empresa
+from facturas.models import FacturaProveedor
 
 # Formularios:
 from .forms import UsuarioCreateForm
 from .forms import UsuarioEditForm
+
+# negocio.py
+from .negocio import EmpresaResumen
 
 
 class Index(View):
@@ -93,8 +97,16 @@ class Dashboard(View):
 
         empresas = Empresa.objects.all()
 
+        lista = []
+
+        for empresa in empresas:
+
+            facturas = FacturaProveedor.objects.filter(empresa=empresa)
+            recibidas = len(facturas)
+            lista.append(EmpresaResumen(empresa, recibidas))
+
         contexto = {
-            'empresas': empresas
+            'lista_empresa_resumen': lista
         }
 
         return render(request, self.template_name, contexto)

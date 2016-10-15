@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'configuracion.apps.ConfiguracionConfig',
     'facturas.apps.FacturasConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

@@ -20,6 +20,7 @@ class AdminResumen(admin.ModelAdmin):
         'cantidad_descargadas',
         'cantidad_guardadas',
         'cantidad_validadas',
+        'empresa',
         'created_date',
         'updated_date',
     )
