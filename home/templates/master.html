@@ -1,0 +1,120 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %} {% endblock title %}</title>
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap-flatly-theme.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'master.css' %}" />
+
+	{% block css %}
+	
+	{% endblock css %}	
+</head>
+<body>
+
+	<div id="wrap">
+	  <div id="main">
+	    
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+			
+				<div class="navbar-header">
+
+					<a href="{% url 'home.index' %}" class="navbar-brand">CFDI-OK</a>
+
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu">
+						<span class="sr-only">Menu</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+
+				<div class="collapse navbar-collapse" id="menu">
+					<ul class="nav navbar-nav navbar-right">
+						{% if user.is_authenticated %}
+						<li><a href="{% url 'home.dashboard' %}">Dashboard</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+								Facturas
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Facturas Proveedores</a></li>
+								<li><a href="#">Facturas Clientes</a></li>
+								<li><a href="#">Comprobantes de Empleados</a></li>
+							</ul>							
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+								Configuracion
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+							</ul>
+
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+								
+								{% if user.username == "root" %}
+									Administrador
+								{% else %}
+									{{ user.username }}
+								{% endif %}
+								
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								{% if user.is_staff %}
+								<li><a href="{% url 'home.usuario_lista' %}">Usuarios</a></li>
+								{% endif%}
+								<li><a href="{% url 'home.logout' %}">Salir</a></li>
+							</ul>
+						</li>
+						{% else %}
+				        <li><a href="#">¿Quienes somos?</a></li>
+				        <li><a href="{% url 'home.servicios' %}">Servicios</a></li>
+				        <li><a href="#">Contactanos</a></li>
+						<li><a href="{% url 'home.login' %}">Login</a></li>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		{% block contenido %}
+
+		{% endblock contenido %}
+
+	  </div>
+	</div>
+
+ 	<footer class="footer">
+ 		<div class="container">
+ 			<div class="row">
+ 				<div class="col-sm-6">
+ 					<p> Desarrollado por Oktosys S.A. de C. V. </p>
+ 				</div>
+ 				<div class="col-sm-6">
+ 					<p>
+ 						XXX-XXX-XXX
+ 					</p>
+ 				</div>
+ 			</div>
+ 		</div>
+ 	</footer>
+
+
+	<script src="{% static 'libs/jquery/jquery_2.2.4.js' %}"></script>
+	<script src="{% static 'libs/bootstrap/js/bootstrap.js' %}"></script>
+	<script src="{% static 'master.js' %}"></script>
+
+	{% block scripts %}
+
+	{% endblock scripts %}
+
+</body>
+</html>

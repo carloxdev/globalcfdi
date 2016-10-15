@@ -1,0 +1,60 @@
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %} Dashboard {% endblock title %}
+
+{% block css %}
+	<link rel='stylesheet' href="{% static 'home/dashboard.css' %}" />
+{% endblock css %}
+
+{% block contenido %} 
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active">Dashboard</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row titulo">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h2>Empresas:</h2>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+
+		{% if empresas %}
+			{% for empresa in empresas %}
+
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<a href="#">{{ empresa.razon_social }}</a>
+							
+						</div>
+						<div class="panel-body">
+							
+						</div>				
+					</div>
+				</div>
+
+			{% endfor %}
+
+		{% else %}
+			<div class="col-md-12">
+				<h3>No se tiene ninguna empresa configurada</h3>
+			</div>
+
+		{% endif %}
+
+	</div>
+</div>
+
+{% endblock contenido %}
+
+
+

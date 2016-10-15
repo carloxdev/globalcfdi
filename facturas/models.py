@@ -1,0 +1,288 @@
+# -*- coding: utf-8 -*-
+
+# Librerias Django:
+from __future__ import unicode_literals
+from django.db import models
+
+# Otros Modelos:
+from configuracion.models import Empresa
+
+
+RESUMEN_TIPO = (
+    ('RECIBIDAS', 'FACTURAS RECIBIDAS'),
+    ('EMITIDAS', 'FACTURAS EMITIDAS'),
+)
+
+COMPROBACION_ESTADOS = (
+    ('RECONOCIDO', 'RECONOCIDO'),
+    ('NO_RECONOCIDO', 'NO RECONOCIDO'),
+)
+
+
+class Resumen(models.Model):
+
+    fecha = models.DateField()
+    tipo = models.CharField(
+        max_length=9,
+        choices=RESUMEN_TIPO
+    )
+    cantidad_encontradas = models.IntegerField(default=0)
+    cantidad_descargadas = models.IntegerField(default=0)
+    cantidad_guardadas = models.IntegerField(default=0)
+    cantidad_validadas = models.IntegerField(default=0)
+
+    created_date = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=True,
+        blank=True
+    )
+    updated_date = models.DateTimeField(
+        auto_now=True,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        unique_together = (('fecha', 'tipo'),)
+
+    def __str__(self):
+        return "{} - {}".format(self.fecha, self.tipo)
+
+
+class Factura(models.Model):
+    # Comprobante
+    serie = models.CharField(max_length=255, null=True, blank=True)
+    folio = models.CharField(max_length=255, null=True, blank=True)
+    fecha = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    formaDePago = models.CharField(max_length=255, null=True, blank=True)
+    noCertificado = models.CharField(max_length=255, null=True, blank=True)
+    subTotal = models.CharField(max_length=255, null=True, blank=True)
+    tipoCambio = models.CharField(max_length=255, null=True, blank=True)
+    moneda = models.CharField(max_length=255, null=True, blank=True)
+    sello = models.CharField(max_length=500, null=True, blank=True)
+    total = models.CharField(max_length=255, null=True, blank=True)
+    tipoDeComprobante = models.CharField(max_length=255, null=True, blank=True)
+    metodoDePago = models.CharField(max_length=255, null=True, blank=True)
+    lugarExpedicion = models.CharField(max_length=255, null=True, blank=True)
+    numCtaPago = models.CharField(max_length=255, null=True, blank=True)
+    condicionesDePago = models.CharField(
+        max_length=2000, null=True, blank=True
+    )
+
+    # Emisor
+    emisor_rfc = models.CharField(max_length=255, null=True, blank=True)
+    emisor_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    # Emisor Direccion
+    emisor_calle = models.CharField(max_length=255, null=True, blank=True)
+    emisor_noExterior = models.CharField(max_length=255, null=True, blank=True)
+    emisor_noInterior = models.CharField(max_length=255, null=True, blank=True)
+    emisor_colonia = models.CharField(max_length=255, null=True, blank=True)
+    emisor_localidad = models.CharField(max_length=255, null=True, blank=True)
+    emisor_municipio = models.CharField(max_length=255, null=True, blank=True)
+    emisor_estado = models.CharField(max_length=255, null=True, blank=True)
+    emisor_pais = models.CharField(max_length=255, null=True, blank=True)
+    emisor_codigoPostal = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
+    # Emisor Expedido En
+    emisor_expedidoEn_calle = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_noExterior = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_noInterior = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_colonia = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_municipio = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_estado = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    emisor_expedidoEn_pais = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
+    # Emisor Regimen
+    emisor_regimen = models.CharField(max_length=255, null=True, blank=True)
+
+    # Receptor
+    receptor_rfc = models.CharField(max_length=255, null=True, blank=True)
+    receptor_nombre = models.CharField(max_length=255, null=True, blank=True)
+
+    # Receptor Direccion
+    receptor_calle = models.CharField(max_length=255, null=True, blank=True)
+    receptor_noExterior = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    receptor_noInterior = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    receptor_colonia = models.CharField(max_length=255, null=True, blank=True)
+    receptor_localidad = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    receptor_municipio = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    receptor_estado = models.CharField(max_length=255, null=True, blank=True)
+    receptor_pais = models.CharField(max_length=255, null=True, blank=True)
+    receptor_codigoPostal = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
+    # Conceptos
+    conceptos = models.TextField(null=True, blank=True)
+
+    # Impuestos
+    totalImpuestosTrasladados = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    totalImpuestosRetenidos = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
+    # Impuestos Trasladados
+    impuestos_trasladados = models.TextField(null=True, blank=True)
+
+    # Impuestos Retenidos
+    impuestos_retenidos = models.TextField(null=True, blank=True)
+
+    # Complementos
+    uuid = models.CharField(max_length=255, unique=True)
+    fechaTimbrado = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    noCertificadoSAT = models.CharField(max_length=255, null=True, blank=True)
+    selloSAT = models.CharField(max_length=500, null=True, blank=True)
+
+    # Datos Adicionales
+    empresa = models.ForeignKey(Empresa)
+    comentarios = models.TextField(null=True, blank=True)
+    comprobacion = models.CharField(
+        max_length=13,
+        choices=COMPROBACION_ESTADOS,
+        default="NO_RECONOCIDO",
+        null=True
+    )
+    url = models.CharField(max_length=255, null=True, blank=True)
+    tiene_pdf = models.BooleanField(default=False)
+    estadoSat = models.CharField(
+        max_length=255, null=True, blank=True, default="SIN VALIDAR")
+
+    created_date = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=True,
+        blank=True
+    )
+    updated_date = models.DateTimeField(
+        auto_now=True,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        abstract = True
+
+
+class FacturaProveedor(Factura):
+
+    def __str__(self):
+        return "{} - {}".format(self.uuid, self.emisor_rfc)
+
+
+class FacturaCliente(Factura):
+
+    def __str__(self):
+        return "{} - {}".format(self.uuid, self.receptor_rfc)
+
+
+class ComprobanteEmpleado(Factura):
+
+    # Nomina Datos
+    registroPatronal = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    numEmpleado = models.CharField(max_length=255, null=True, blank=True)
+    curp = models.CharField(max_length=255, null=True, blank=True)
+    tipoRegimen = models.CharField(max_length=255, null=True, blank=True)
+    numSeguridadSocial = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    fechaPago = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    fechaInicialPago = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    fechaFinalPago = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    numDiasPagados = models.IntegerField(default=0)
+    clabe = models.CharField(max_length=255, null=True, blank=True)
+    banco = models.CharField(max_length=255, null=True, blank=True)
+    fechaInicioRelLaboral = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+    antiguedad = models.CharField(max_length=255, null=True, blank=True)
+    puesto = models.CharField(max_length=255, null=True, blank=True)
+    tipoJornada = models.CharField(max_length=255, null=True, blank=True)
+    periodicidadPago = models.CharField(max_length=255, null=True, blank=True)
+    riesgoPuesto = models.CharField(max_length=255, null=True, blank=True)
+    salarioDiarioIntegrado = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+
+    # Nomina Percepciones
+    percepciones_totalGravado = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    percepciones_totalExento = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    percepciones = models.TextField(null=True, blank=True)
+
+    # Nomina Deducciones
+    deducciones_totalGravado = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    deducciones_totalExento = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    deducciones = models.TextField(null=True, blank=True)
+
+    # Horas Extras
+    horasExtras = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} - {}".format(self.uuid, self.receptor_rfc)

@@ -1,0 +1,46 @@
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %} Nueva Empresa {% endblock title %}
+
+{% block contenido %}
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+	<li class="active">Nueva</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row titulo">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h3>Nueva Empresa:</h3>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 col-lg-offset-2">
+			<form action="" method="POST" enctype="multipart/form-data">
+
+				{% csrf_token %}
+				{{ form.as_p }}
+
+				{% if mensaje %}
+					<div class="alert alert-danger mensaje--center">
+						{{ mensaje }}
+					</div>
+				{% else %}
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit">Guardar</button>	
+					</div>
+				{% endif %}
+			</form>
+		</div>
+	</div>	
+</div>
+
+{% endblock contenido %}
