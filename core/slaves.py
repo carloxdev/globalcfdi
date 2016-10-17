@@ -106,6 +106,9 @@ class Contador(object):
                         )
                         print "\nLeyendo archivo: {}".format(archivo.nombre)
                         comprobante.read()
+
+                        # if comprobante.registroPatronal:
+
                         total = Validator.convertToFloat(comprobante.total)
 
                         no_guardadas += comprobante.save(
@@ -125,6 +128,7 @@ class Contador(object):
                 no_descargadas = 0
                 no_guardadas = 0
                 no_validadas = 0
+                total = 0
 
             self.set_Resumen(
                 self.empresa,
@@ -309,7 +313,6 @@ class Contador(object):
 
         except Exception, error:
             print str(error)
-            return None, None
 
     def set_Resumen(self, _empresa, _fecha, _tipo, _encontradas, _descargadas, _guardadas, _validadas, _total):
 
@@ -333,27 +336,27 @@ class Contador(object):
             if error.tipo == 'IntegrityError':
                 print error.mensaje
 
-            try:
-                resumen = ModeloResumen.get(_fecha, _tipo)
+                try:
+                    resumen = ModeloResumen.get(_fecha, _tipo)
 
-                if resumen.cantidad_encontradas < _encontradas:
-                    resumen.cantidad_encontradas = _encontradas
+                    if resumen.cantidad_encontradas < _encontradas:
+                        resumen.cantidad_encontradas = _encontradas
 
-                if resumen.cantidad_descargadas < _descargadas:
-                    resumen.cantidad_descargadas = _descargadas
+                    if resumen.cantidad_descargadas < _descargadas:
+                        resumen.cantidad_descargadas = _descargadas
 
-                if resumen.cantidad_guardadas < _guardadas:
-                    resumen.cantidad_guardadas = _guardadas
+                    if resumen.cantidad_guardadas < _guardadas:
+                        resumen.cantidad_guardadas = _guardadas
 
-                if resumen.cantidad_validadas < _validadas:
-                    resumen.cantidad_validadas = _validadas
+                    if resumen.cantidad_validadas < _validadas:
+                        resumen.cantidad_validadas = _validadas
 
-                if resumen.total > _total:
-                    resumen.total = _total
+                    if resumen.total > _total:
+                        resumen.total = _total
 
-                resumen.save()
+                    resumen.save()
 
-                print "Se actualizo el Resumen"
+                    print "Se actualizo el Resumen"
 
-            except Exception, error:
-                print error.mensaje
+                except Exception, error:
+                    print str(error)

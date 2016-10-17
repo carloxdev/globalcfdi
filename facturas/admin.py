@@ -14,13 +14,14 @@ from .models import ComprobanteEmpleado
 class AdminResumen(admin.ModelAdmin):
 
     list_display = (
+        'empresa',
         'fecha',
         'tipo',
         'cantidad_encontradas',
         'cantidad_descargadas',
         'cantidad_guardadas',
         'cantidad_validadas',
-        'empresa',
+        'total',
         'created_date',
         'updated_date',
     )
