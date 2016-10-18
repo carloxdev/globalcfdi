@@ -18,9 +18,8 @@ for archivo in lista_archivos:
         achivo_buscar, directorio_busqueda)
 
     if len(archivos_encontrados) > 0:
-        print "Archivo {}: {} Encontrados".format(archivo.nombre, len(archivos_encontrados))
+        print "Archivo {}: {} Encontrados".format(achivo_buscar.nombre, len(archivos_encontrados))
         archivos_encontrados[0].copy(directorio_entrada)
-        print "Se copio archivo"
 
     # print "Archivo {}: {} Encontrados".format(archivo.nombre,
     # len(archivos_encontrados))

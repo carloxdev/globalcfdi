@@ -12,6 +12,7 @@ from tools.datos import Filtro
 from tools.datos import FileManager
 from tools.datos import Ruta
 from tools.datos import Validator
+from tools.datos import ResumenRegistro
 from tools.mistakes import ErrorValidacion
 from tools.mistakes import ErrorEjecucion
 from documentos import Comprobante
@@ -39,7 +40,15 @@ class Contador(object):
 
     def get_Invoices_ByDay(self, _tipo, _fecha):
 
+        lista_resumen = []
+        no_encontradas = 0
+        no_descargadas = 0
+        no_guardadas = 0
+        no_validadas = 0
+        total = 0
+
         try:
+
             ruta = Ruta(
                 self.ruta_ejecucion,
                 self.empresa.clave,
@@ -95,51 +104,45 @@ class Contador(object):
 
                 if no_descargadas > 0:
 
-                    no_guardadas = 0
-                    no_validadas = 0
-                    total = 0
-
                     for archivo in lista_archivos:
                         comprobante = Comprobante(
                             archivo.basepath,
                             archivo.nombre
                         )
                         print "\nLeyendo archivo: {}".format(archivo.nombre)
-                        comprobante.read()
+                        comprobante.read(_tipo)
 
-                        # if comprobante.registroPatronal:
+                        # Guardar en BD:
+                        resultado_saveToDB = comprobante.save_toBD(
+                            self.empresa.clave,
+                            ruta.urlpath
+                        )
+                        no_guardadas += resultado_saveToDB
 
+                        # Validar comprobante:
+                        resultado_validate = comprobante.validate()
+                        no_validadas += resultado_validate
+
+                        # Crear objeto de resumen:
                         total = Validator.convertToFloat(comprobante.total)
+                        registroResumen = ResumenRegistro(
+                            comprobante.resumen_tipo,
+                            resultado_saveToDB,
+                            resultado_validate,
+                            total
+                        )
+                        lista_resumen.append(registroResumen)
 
-                        no_guardadas += comprobante.save(
-                            _tipo, self.empresa.clave, ruta.urlpath)
+            # Crear Resumen:
+            print "\nRESUMEN: "
+            self.set_Resumen(_fecha, _tipo, lista_resumen)
 
-                        comprobante.validate(_tipo)
-                        no_validadas += 1
-
-                print "\nRESUMEN: "
-                print "Archivos {} encontrados:.... {}".format(".xml", no_encontradas)
-                print "Archivos {} descargados:.... {}".format(".xml", no_descargadas)
-                print "Archivos {} guardados:...... {}".format(".xml", no_guardadas)
-                print "Archivos {} validados:...... {}".format(".xml", no_validadas)
-                print "Total:....................... {}".format(str(total))
-
-            else:
-                no_descargadas = 0
-                no_guardadas = 0
-                no_validadas = 0
-                total = 0
-
-            self.set_Resumen(
-                self.empresa,
-                _fecha,
-                _tipo,
-                no_encontradas,
-                no_descargadas,
-                no_guardadas,
-                no_validadas,
-                total,
-            )
+            # Informar Resultado:
+            print "Archivos {} encontrados:.... {}".format(".xml", no_encontradas)
+            print "Archivos {} descargados:.... {}".format(".xml", no_descargadas)
+            print "Archivos {} guardados:...... {}".format(".xml", no_guardadas)
+            print "Archivos {} validados:...... {}".format(".xml", no_validadas)
+            print "Total:........................ {}".format(str(total))
 
         except Exception, error:
             print str(error)
@@ -275,8 +278,7 @@ class Contador(object):
                     )
                     print "\nLeyendo archivo: {}".format(archivo.nombre)
                     comprobante.read()
-                    no_guardadas += comprobante.save(
-                        _tipo,
+                    no_guardadas += comprobante.save_toBD(
                         self.empresa_clave,
                         ruta.urlpath
                     )
@@ -309,41 +311,109 @@ class Contador(object):
                     )
                     print "\nLeyendo archivo: {}".format(archivo.nombre)
                     comprobante.read()
-                    comprobante.validate(_tipo)
+                    comprobante.validate()
 
         except Exception, error:
             print str(error)
 
-    def set_Resumen(self, _empresa, _fecha, _tipo, _encontradas, _descargadas, _guardadas, _validadas, _total):
+    def set_Resumen(self, _fecha, _tipo, _lista_resumen):
+
+        provee_total_guardados = 0
+        provee_total_validados = 0
+        provee_total_monto = 0.0
+
+        emplea_total_guardados = 0
+        emplea_total_validados = 0
+        emplea_total_monto = 0.0
+
+        client_total_guardados = 0
+        client_total_validados = 0
+        client_total_monto = 0.0
+
+        try:
+
+            if len(_lista_resumen):
+
+                for resumen in _lista_resumen:
+
+                    if resumen.tipo == "PROVEEDORES":
+                        provee_total_guardados += resumen.no_guardadas
+                        provee_total_validados += resumen.no_validadas
+                        provee_total_monto += resumen.total
+
+                    elif resumen.tipo == "EMPLEADOS":
+                        emplea_total_guardados += resumen.no_guardadas
+                        emplea_total_validados += resumen.no_validadas
+                        emplea_total_monto += resumen.total
+
+                    elif resumen.tipo == "CLIENTES":
+                        client_total_guardados += resumen.no_guardadas
+                        client_total_validados += resumen.no_validadas
+                        client_total_monto += resumen.total
+
+                    else:
+                        raise ErrorValidacion(
+                            "Contador.set_Resumen()",
+                            "No se establecio un tipo de resumen valido en un registro"
+                        )
+
+            if _tipo == "RECIBIDAS":
+                self.save_Resumen(
+                    _fecha,
+                    "PROVEEDORES",
+                    provee_total_guardados,
+                    provee_total_validados,
+                    provee_total_monto
+                )
+
+            elif _tipo == "EMITIDAS":
+
+                self.save_Resumen(
+                    _fecha,
+                    "CLIENTES",
+                    client_total_guardados,
+                    client_total_validados,
+                    client_total_monto
+                )
+
+                self.save_Resumen(
+                    _fecha,
+                    "EMPLEADOS",
+                    emplea_total_guardados,
+                    emplea_total_validados,
+                    emplea_total_monto
+                )
+
+            else:
+                raise ErrorValidacion(
+                    "Contador.set_Resumen()",
+                    "No se establecio un tipo valido"
+                )
+
+        except Exception, error:
+            print str(error)
+
+    def save_Resumen(self, _fecha, _tipo, _guardadas, _validadas, _total):
 
         try:
 
             ModeloResumen.add(
-                _empresa,
+                self.empresa,
                 _fecha,
                 _tipo,
-                _encontradas,
-                _descargadas,
                 _guardadas,
                 _validadas,
-                _total
+                "{0:.4f}".format(_total)
             )
 
-            print "Resumen creado y guardado"
+            print "Resumen de {} creado y guardado".format(_tipo)
 
         except Exception, error:
 
             if error.tipo == 'IntegrityError':
-                print error.mensaje
 
                 try:
                     resumen = ModeloResumen.get(_fecha, _tipo)
-
-                    if resumen.cantidad_encontradas < _encontradas:
-                        resumen.cantidad_encontradas = _encontradas
-
-                    if resumen.cantidad_descargadas < _descargadas:
-                        resumen.cantidad_descargadas = _descargadas
 
                     if resumen.cantidad_guardadas < _guardadas:
                         resumen.cantidad_guardadas = _guardadas
@@ -352,7 +422,7 @@ class Contador(object):
                         resumen.cantidad_validadas = _validadas
 
                     if resumen.total > _total:
-                        resumen.total = _total
+                        resumen.total = "{0:.4f}".format(_total)
 
                     resumen.save()
 
@@ -360,3 +430,6 @@ class Contador(object):
 
                 except Exception, error:
                     print str(error)
+
+            else:
+                print str(error)

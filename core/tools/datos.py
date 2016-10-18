@@ -389,3 +389,12 @@ class Validator(object):
         url = os.path.join(ruta, file_name)
 
         return url.replace("\\", "/")
+
+
+class ResumenRegistro(object):
+
+    def __init__(self, _tipo, _guardadas, _validadas, _total):
+        self.tipo = _tipo
+        self.no_guardadas = _guardadas
+        self.no_validadas = _validadas
+        self.total = _total

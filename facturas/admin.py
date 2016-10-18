@@ -17,8 +17,6 @@ class AdminResumen(admin.ModelAdmin):
         'empresa',
         'fecha',
         'tipo',
-        'cantidad_encontradas',
-        'cantidad_descargadas',
         'cantidad_guardadas',
         'cantidad_validadas',
         'total',

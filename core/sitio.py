@@ -375,7 +375,7 @@ class ModeloComprobanteEmpleado(object):
 class ModeloResumen(object):
 
     @classmethod
-    def add(self, _empresa, _fecha, _tipo, _encontradas, _descargadas, _guardadas, _validadas, _total):
+    def add(self, _empresa, _fecha, _tipo, _guardadas, _validadas, _total):
 
         try:
             connection.close()
@@ -383,8 +383,6 @@ class ModeloResumen(object):
                 empresa=_empresa,
                 fecha=_fecha,
                 tipo=_tipo,
-                cantidad_encontradas=_encontradas,
-                cantidad_descargadas=_descargadas,
                 cantidad_guardadas=_guardadas,
                 cantidad_validadas=_validadas,
                 total=_total

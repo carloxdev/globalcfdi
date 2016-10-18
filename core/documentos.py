@@ -141,6 +141,7 @@ class Comprobante(Archivo):
         # Url, Estado:
         self.empresa_clave = ''
         self.url = ''
+        self.resumen_tipo = 'UNKNOWN'
 
         self.raiz = None
         self.name_spaces = None
@@ -730,12 +731,12 @@ class Comprobante(Archivo):
 
         except Exception, error:
             raise ErrorEjecucion(
-                'Comprobante.read_Nomina_Deducciones_Node()',
+                'Comprobante.read_Nomina_HorasExtras()',
                 type(error).__name__,
                 str(error)
             )
 
-    def read(self):
+    def read(self, _tipo):
 
         # Se obtienen datos del COMPROBANTE
         try:
@@ -866,6 +867,17 @@ class Comprobante(Archivo):
         except Exception, error:
             print "Obtiendo datos del nodo HORAS EXTRAS............{}".format(error.mensaje)
 
+        if _tipo == "RECIBIDAS":
+            self.resumen_tipo = "PROVEEDORES"
+
+        elif _tipo == "EMITIDAS":
+            if self.registroPatronal:
+                self.resumen_tipo = "EMPLEADOS"
+            else:
+                self.resumen_tipo = "CLIENTES"
+        else:
+            self.resumen_tipo = "DESCONOCIDO"
+
     def __str__(self):
         return """
         UUID: {}
@@ -883,7 +895,7 @@ class Comprobante(Archivo):
             self.fechaTimbrado
         )
 
-    def validate(self, _tipo):
+    def validate(self):
 
         try:
             estadoSAT = WebServiceSAT.get_Estado(
@@ -895,18 +907,19 @@ class Comprobante(Archivo):
 
             print "Estado en SAT: {}".format(estadoSAT)
 
-            if _tipo == "RECIBIDAS":
+            if self.resumen_tipo == "PROVEEDORES":
                 record = ModeloFacturaProveedor.get(self.uuid)
 
-            elif _tipo == "EMITIDAS":
-                if self.registroPatronal:
-                    record = ModeloComprobanteEmpleado.get(self.uuid)
-                else:
-                    record = ModeloFacturaCliente.get(self.uuid)
+            elif self.resumen_tipo == "EMPLEADOS":
+                record = ModeloComprobanteEmpleado.get(self.uuid)
+
+            elif self.resumen_tipo == "CLIENTES":
+                record = ModeloFacturaCliente.get(self.uuid)
+
             else:
                 raise ErrorValidacion(
                     "Comprobante.validate()",
-                    "No se establecio un tipo valido"
+                    "Estado {}: No se establecio un tipo valido".format(self.resumen_tipo)
                 )
 
             print "Estado en BD: {}".format(record.estadoSat)
@@ -915,13 +928,17 @@ class Comprobante(Archivo):
                 record.estadoSat = estadoSAT
                 record.save()
                 print "Se actualizo estado en la BD"
+
             else:
                 print "No ha cambiado el estado en la BD"
 
+            return 1
+
         except Exception, error:
             print (error.mensaje)
+            return 0
 
-    def save(self, _tipo, _empresa_clave, _urlpath):
+    def save_toBD(self, _empresa_clave, _urlpath):
 
         self.empresa_clave = _empresa_clave
         self.url = Validator.convertToUrl(
@@ -929,25 +946,25 @@ class Comprobante(Archivo):
             self.nombre
         )
 
+        # import ipdb; ipdb.set_trace()
+
         try:
-            if _tipo == "RECIBIDAS":
+            if self.resumen_tipo == "PROVEEDORES":
                 ModeloFacturaProveedor.add(self)
-                return 1
 
-            elif _tipo == "EMITIDAS":
-                if self.registroPatronal:
-                    ModeloComprobanteEmpleado.add(self)
-                    return 1
+            elif self.resumen_tipo == "EMPLEADOS":
+                ModeloComprobanteEmpleado.add(self)
 
-                else:
-                    ModeloFacturaCliente.add(self)
-                    return 1
+            elif self.resumen_tipo == "CLIENTES":
+                ModeloFacturaCliente.add(self)
 
             else:
                 raise ErrorValidacion(
-                    "Comprobante.save()",
-                    "No se establecio un tipo valido"
+                    "Comprobante.save_toBD()",
+                    "Estado {}: No se establecio un tipo valido".format(self.resumen_tipo)
                 )
+
+            return 1
 
         except Exception, error:
             print (error.mensaje)

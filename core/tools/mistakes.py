@@ -84,7 +84,11 @@ class ErrorEjecucion(Exception):
         if self.funcion == 'Comprobante.read_Nomina_Deducciones_Node()':
             if self.mensaje == "'NoneType' object has no attribute 'find'":
                 self.mensaje = "No existe este nodo"
-
+        if self.funcion == 'Comprobante.read_Nomina_HorasExtras()':
+            if self.mensaje == "'NoneType' object is not iterable":
+                self.mensaje = "No tiene Horas Extras"
+            if self.mensaje == "'NoneType' object has no attribute 'find'":
+                self.mensaje = "No existe este nodo"
         if self.funcion == 'ModeloFacturaProveedor.add()':
             if self.tipo == 'IntegrityError':
                 self.mensaje = 'Factura de Proveedor ya existe en la BD'
@@ -100,6 +104,8 @@ class ErrorEjecucion(Exception):
         if self.funcion == 'ModeloResumen.add()':
             if self.tipo == "IntegrityError":
                 self.mensaje = 'Ya existe el registro de resumen para este dia'
+
+
 
     def __str__(self):
 
