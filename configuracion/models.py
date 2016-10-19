@@ -23,7 +23,7 @@ class Empresa(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.razon_social
+        return self.clave
 
 
 # class Responsable(models.Model):
