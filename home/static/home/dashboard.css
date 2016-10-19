@@ -2,7 +2,40 @@ h3, .h3 {
 	text-align: center;	
 }
 
-
-.titulo {
-	margin-bottom: -20px;
+#empresas {
+	background-color: #ececec;
+	border: 10px solid #ffffff;
+	
+    
 }
+
+#tab {
+    background-color: #ffffff;
+    border: 5px solid #ECECEC;   
+    padding: 10px;
+    text-align: center;
+}
+
+.row {
+	 
+    margin-left: 15px;
+    margin-right: 15px;
+    padding: 15px;
+}
+
+#logo {
+
+	width: 80px;
+	height: 80px;
+	border-radius: 100%;
+	text-align: center
+}
+
+
+
+#nom_emp{
+text-transform: uppercase;
+}
+
+
+#mes{text-align: center;}
