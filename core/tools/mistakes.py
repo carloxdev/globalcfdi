@@ -105,8 +105,6 @@ class ErrorEjecucion(Exception):
             if self.tipo == "IntegrityError":
                 self.mensaje = 'Ya existe el registro de resumen para este dia'
 
-
-
     def __str__(self):
 
         if self.funcion == 'WebSAT.download()':

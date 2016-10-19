@@ -89,6 +89,7 @@ class Archivo(object):
         self.basepath = _basepath
         self.abspath = os.path.join(self.basepath, self.nombre)
         self.abspath_old = ""
+        self.file = None
 
     def move(self, _basepath_new):
 
@@ -106,6 +107,21 @@ class Archivo(object):
         shutil.copy(self.abspath, _abspath_new)
         print "Se copio archivo a: {}".format(_abspath_new)
 
+    def create(self):
+
+        if os.path.isfile(self.abspath):
+            print "El archivo {} ya existe".format(self.abspath)
+        else:
+            try:
+                self.file = open(self.abspath, "w")
+                return "Archivo {} creado".format(self.abspath)
+
+            except Exception, error:
+                raise ErrorEjecucion(
+                    'Archivo.create()',
+                    type(error).__name__,
+                    str(error)
+                )
 
 # Estandariazacion de varibales:
 # basepath = ruta de un archivo sin el nombre del archivo:  /user/files <--- aqui dentro esta el archivo: ejemplo.xml
@@ -297,6 +313,7 @@ class Ruta(object):
         self.abspath = self.get_AbsPath()
         self.relativepath = self.get_RelativePath()
         self.urlpath = self.get_UrlPath()
+        self.logpath = self.get_LogPath()
 
     def get_AbsPath(self):
 
@@ -306,6 +323,18 @@ class Ruta(object):
         )
 
         return abspath
+
+    def get_LogPath(self):
+        directorio = os.path.join(
+            self.run_path,
+            "media",
+            "facturas",
+            "Logs"
+        )
+
+        dirs = str(directorio)
+
+        return dirs
 
     def get_RelativePath(self):
         directorio = os.path.join(

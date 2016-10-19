@@ -23,7 +23,7 @@ class Cfdineitor(object):
 
         for empresa in lista_empresas:
 
-            esclavo = Contador(empresa, self.ruta_ejecucion)
+            esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
 
             esclavo.get_Invoices_LastThreeDays("RECIBIDAS")
             esclavo.get_Invoices_LastThreeDays("EMITIDAS")

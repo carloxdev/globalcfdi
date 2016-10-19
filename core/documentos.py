@@ -2,6 +2,8 @@
 
 # Librerias Python:
 import os
+import sys
+import time
 
 # Librerias de Terceros:
 from lxml import etree
@@ -946,8 +948,6 @@ class Comprobante(Archivo):
             self.nombre
         )
 
-        # import ipdb; ipdb.set_trace()
-
         try:
             if self.resumen_tipo == "PROVEEDORES":
                 ModeloFacturaProveedor.add(self)
@@ -969,3 +969,33 @@ class Comprobante(Archivo):
         except Exception, error:
             print (error.mensaje)
             return 0
+
+
+class Log(Archivo):
+
+    def __init__(self, _basepath, _operacion, _tipo, _empresa_clave):
+
+        name = "{}-{}-{}_{}-{}.log".format(
+            _operacion,
+            _tipo,
+            _empresa_clave,
+            time.strftime("%d%m%y"),
+            time.strftime("%H%M%S")
+        )
+
+        Archivo.__init__(self, _basepath, name)
+        self.salida_origen = None
+
+    def begin_capture(self):
+        self.salida_origen = sys.stdout
+
+        # Crear archivo
+        self.create()
+
+        # Asigna salita a archivo
+        sys.stdout = self.file
+
+    def end_capture(self):
+        sys.stdout = self.salida_origen
+        if self.file:
+            self.file.close()

@@ -15,18 +15,22 @@ from tools.datos import Validator
 from tools.datos import ResumenRegistro
 from tools.mistakes import ErrorValidacion
 from tools.mistakes import ErrorEjecucion
+from tools.comunicacion import Postman
 from documentos import Comprobante
+from documentos import Log
 
 # Modelos del Sitio:
 from sitio import ModeloResumen
+from sitio import ModeloAmbiente
 
 
 class Contador(object):
 
-    def __init__(self, _empresa, _ruta_ejecucion):
+    def __init__(self, _empresa, _ruta_ejecucion, _ambiente):
 
         self.empresa = _empresa
         self.ruta_ejecucion = _ruta_ejecucion
+        self.ambiente = _ambiente
 
     def get_Invoices_LastThreeDays(self, _tipo):
 
@@ -47,17 +51,31 @@ class Contador(object):
         no_validadas = 0
         total = 0
 
+        ambiente = None
+
+        ruta = Ruta(
+            self.ruta_ejecucion,
+            self.empresa.clave,
+            _tipo,
+            _fecha
+        )
+
+        log = Log(
+            ruta.logpath,
+            "GET",
+            _tipo,
+            self.empresa.clave
+        )
+
         try:
 
-            ruta = Ruta(
-                self.ruta_ejecucion,
-                self.empresa.clave,
-                _tipo,
-                _fecha
-            )
+            log.begin_capture()
 
             relativepath = ruta.relativepath
             download_abspath = ruta.abspath
+
+            ambiente = ModeloAmbiente.get(self.ambiente)
+
             print "\nCREANDO DIRECTORIOS: "
             FileManager.create_Directory(self.ruta_ejecucion, relativepath)
 
@@ -146,6 +164,23 @@ class Contador(object):
 
         except Exception, error:
             print str(error)
+
+        finally:
+
+            # Guardar Log in BD
+
+            # Get Resultado Resultado de Operacion.
+
+            # Enviar Correo
+            log.end_capture()
+
+            Postman.send_GmailMessage_WithAttach(
+                ambiente,
+                self.empresa.email,
+                "Log de proceso",
+                "Ejemplo de log",
+                log.abspath
+            )
 
     def search_ByDay(self, _funcion, _elFiltro, _elSat):
 
@@ -415,18 +450,25 @@ class Contador(object):
                 try:
                     resumen = ModeloResumen.get(_fecha, _tipo)
 
+                    es_modificable = False
+
                     if resumen.cantidad_guardadas < _guardadas:
                         resumen.cantidad_guardadas = _guardadas
+                        es_modificable = True
 
                     if resumen.cantidad_validadas < _validadas:
                         resumen.cantidad_validadas = _validadas
+                        es_modificable = True
 
                     if resumen.total > _total:
                         resumen.total = "{0:.4f}".format(_total)
+                        es_modificable = True
 
-                    resumen.save()
-
-                    print "Se actualizo el Resumen"
+                    if es_modificable:
+                        resumen.save()
+                        print "Se actualizo el Resumen"
+                    else:
+                        print "No hubo cambios desde la ultima descarga/validacion"
 
                 except Exception, error:
                     print str(error)

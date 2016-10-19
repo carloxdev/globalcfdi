@@ -28,20 +28,47 @@
 	<div class="row">
 
 		{% if lista_empresa_resumen %}
+
 			{% for empresa_resumen in lista_empresa_resumen %}
 
-				<div class="col-md-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<a href="#">{{ empresa_resumen.empresa.razon_social }}</a>
-							
+				<div id="empresas" class="col-md-4">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-4">
+							<img id="logo" SRC="logo.png">
+					    </div>
+					    <div id="nom_emp" class="col-xs-12 col-sm-12 col-md-8">
+							Empresa <br>
+							nombre de empresa
 						</div>
-						<div class="panel-body">
-							recbibidas <span>{{empresa_resumen.recibidas_total}}</span>
-						</div>				
+					    <div id="mes" class="col-md-12">
+							Reporte Mensual Octubre 2016
+					    </div>
+					    <div id="tab" class="col-md-6">
+							0 <br>
+							Folios Proveedores
+					    </div>
+					    <div id="tab" class="col-md-6">
+							$0,000.00 <br>
+							Importe
+					    </div>
+						<div id="tab" class="col-md-6">
+							0 <br>
+							Folios Clientes
+						    </div>
+					    <div id="tab" class="col-md-6">
+							$0,000.00 <br>
+							Importe
+					    </div>
+						<div id="tab" class="col-md-6">
+							0 <br>
+							Folios Nomina
+						    </div>
+					    <div id="tab" class="col-md-6">
+							$0,000.00 <br>
+							Importe
+					    </div>					    
 					</div>
 				</div>
-
 			{% endfor %}
 
 		{% else %}
@@ -55,6 +82,3 @@
 </div>
 
 {% endblock contenido %}
-
-
-

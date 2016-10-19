@@ -29,11 +29,31 @@ application = get_wsgi_application()
 # from django.conf import settings
 
 # Modelos
+from home.models import Ambiente
 from configuracion.models import Empresa
 from facturas.models import FacturaProveedor
 from facturas.models import FacturaCliente
 from facturas.models import ComprobanteEmpleado
 from facturas.models import Resumen
+
+
+class ModeloAmbiente(object):
+
+    @classmethod
+    def get(self, _clave):
+
+        try:
+            connection.close()
+            ambiente = Ambiente.objects.get(clave=_clave)
+            return ambiente
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                "ModeloFacturaProveedor.get(): {0} - {1}".format(
+                    type(error).__name__,
+                    str(error)
+                )
+            )
 
 
 class ModeloEmpresa(object):
