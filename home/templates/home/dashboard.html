@@ -1,3 +1,4 @@
+
 {% extends 'master.html' %}
 
 {% load static from staticfiles %}
@@ -31,40 +32,40 @@
 
 			{% for resumen in lista_empresas_resumen %}
 
-				<div id="empresas" class="col-md-4">
-					<div class="row">
+				<div class="col-md-4 contenedor">
+					<div class="row empresas">
 						<div class="col-xs-12 col-sm-12 col-md-4">
 
-							<img id="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
+							<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
 					    </div>
-					    <div id="nom_emp" class="col-xs-12 col-sm-12 col-md-8">
+					    <div class="col-xs-12 col-sm-12 col-md-8 nom_emp">
 							Empresa: <br>
 							{{ resumen.empresa.razon_social }}
 						</div>
-					    <div id="mes" class="col-md-12">
+					    <div class="col-md-12 mes">
 							Reporte Mensual Octubre 2016
 					    </div>
-					    <div id="tab" class="col-md-6">
+					    <div class="col-md-6 tab">
 							{{ resumen.cantidad_proveedores }} <br>
 							Folios Proveedores
 					    </div>
-					    <div id="tab" class="col-md-6">
+					    <div class="col-md-6 tab">
 							${{ resumen.total_proveedores }} <br>
 							Importe
 					    </div>
-						<div id="tab" class="col-md-6">
+						<div class="col-md-6 tab">
 							{{ resumen.cantidad_clientes }} <br>
 							Folios Clientes
 						    </div>
-					    <div id="tab" class="col-md-6">
+					    <div class="col-md-6 tab">
 							${{ resumen.total_clientes }} <br>
 							Importe
 					    </div>
-						<div id="tab" class="col-md-6">
+						<div class="col-md-6 tab">
 							{{ resumen.cantidad_nomina }} <br>
 							Folios Nomina
 						    </div>
-					    <div id="tab" class="col-md-6">
+					    <div class="col-md-6 tab">
 							${{ resumen.total_nomina }} <br>
 							Importe
 					    </div>					    
