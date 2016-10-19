@@ -9,9 +9,9 @@ from configuracion.models import Empresa
 
 
 RESUMEN_TIPO = (
-    ('PROVEEDOR', 'FACTURA DE PROVEEDOR'),
-    ('CLIENTE', 'FACTURA A CLIENTE'),
-    ('EMPLEADO', 'COMPROBANTE DE EMPLEADO'),
+    ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
+    ('CLIENTES', 'FACTURAS DE CLIENTES'),
+    ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
 )
 
 COMPROBACION_ESTADOS = (
@@ -24,14 +24,12 @@ class Resumen(models.Model):
 
     fecha = models.DateField()
     tipo = models.CharField(
-        max_length=9,
+        max_length=12,
         choices=RESUMEN_TIPO
     )
-    cantidad_encontradas = models.IntegerField(default=0)
-    cantidad_descargadas = models.IntegerField(default=0)
     cantidad_guardadas = models.IntegerField(default=0)
     cantidad_validadas = models.IntegerField(default=0)
-    total = models.DecimalField(max_digits=10, decimal_places=4, default=0)
+    total = models.DecimalField(max_digits=20, decimal_places=4, default=0.0)
     empresa = models.ForeignKey(Empresa, null=True)
     created_date = models.DateTimeField(
         auto_now=False,

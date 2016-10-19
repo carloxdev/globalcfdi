@@ -82,11 +82,14 @@ class Filtro(object):
 class Archivo(object):
 
     def __init__(self, _basepath, _name):
+        # titulo = nombre del archivo sin extension
         self.nombre = _name
+        self.titulo = os.path.splitext(_name)[0]
         self.extension = os.path.splitext(_name)[1]
         self.basepath = _basepath
         self.abspath = os.path.join(self.basepath, self.nombre)
         self.abspath_old = ""
+        self.file = None
 
     def move(self, _basepath_new):
 
@@ -99,6 +102,26 @@ class Archivo(object):
 
         print "Se movio archivo a: {}".format(abspath_new)
 
+    def copy(self, _abspath_new):
+
+        shutil.copy(self.abspath, _abspath_new)
+        print "Se copio archivo a: {}".format(_abspath_new)
+
+    def create(self):
+
+        if os.path.isfile(self.abspath):
+            print "El archivo {} ya existe".format(self.abspath)
+        else:
+            try:
+                self.file = open(self.abspath, "w")
+                return "Archivo {} creado".format(self.abspath)
+
+            except Exception, error:
+                raise ErrorEjecucion(
+                    'Archivo.create()',
+                    type(error).__name__,
+                    str(error)
+                )
 
 # Estandariazacion de varibales:
 # basepath = ruta de un archivo sin el nombre del archivo:  /user/files <--- aqui dentro esta el archivo: ejemplo.xml
@@ -122,9 +145,9 @@ class FileManager(object):
                 for directorio, subdirectorios, lista_nombreArchivos in archivos:
 
                     for nombre_archivo in lista_nombreArchivos:
-                        (name, ext) = os.path.splitext(nombre_archivo)
+                        (title, ext) = os.path.splitext(nombre_archivo)
 
-                        if ext == _extension:
+                        if ext == _extension.upper() or ext == _extension.lower():
                             lista_archivos.append(
                                 Archivo(directorio, nombre_archivo)
                             )
@@ -161,7 +184,7 @@ class FileManager(object):
                         # Se separa el nombre y la extension de archivo
                         (name, ext) = os.path.splitext(nombre_archivo)
 
-                        if ext == _extension:
+                        if ext == _extension.upper() or ext == _extension.lower():
 
                             if re.search('\(\d+\)$', name):
 
@@ -212,19 +235,19 @@ class FileManager(object):
             )
 
     @classmethod
-    def create_Directory(self, _basepath, _newFolders):
+    def create_Directory(self, _basepath, _new_nameFolders):
 
         try:
-            directory_abspath = os.path.join(_basepath, _newFolders)
+            directory_abspath = os.path.join(_basepath, _new_nameFolders)
 
             if os.path.exists(directory_abspath):
                 print "El directorio ya existe: {}".format(directory_abspath)
             else:
 
-                list_newfolders = _newFolders.split('/')
+                list_new_namefolders = _new_nameFolders.split('/')
                 folder_abspath = ''
 
-                for folderName in list_newfolders:
+                for folderName in list_new_namefolders:
 
                     folder_abspath = os.path.join(
                         _basepath, folder_abspath, folderName)
@@ -236,6 +259,43 @@ class FileManager(object):
 
             raise ErrorEjecucion(
                 "FileManager.create_Directory()",
+                type(error).__name__,
+                str(error)
+            )
+
+    @classmethod
+    def find_File(self, _archivo, _abspath):
+
+        lista_archivos = []
+
+        try:
+            if os.path.exists(_abspath):
+
+                archivos = os.walk(_abspath)
+
+                for directorio, subdirectorios, lista_nombreArchivos in archivos:
+
+                    for nombre_archivo in lista_nombreArchivos:
+                        (title, ext) = os.path.splitext(nombre_archivo)
+
+                        if title == _archivo.titulo and ext == _archivo.extension.upper():
+                            lista_archivos.append(
+                                Archivo(directorio, nombre_archivo)
+                            )
+
+                        if title == _archivo.titulo and ext == _archivo.extension.lower():
+                            lista_archivos.append(
+                                Archivo(directorio, nombre_archivo)
+                            )
+
+            else:
+                print "El folder no existe: {}".format(_abspath)
+
+            return lista_archivos
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                "FileManager.find_File()",
                 type(error).__name__,
                 str(error)
             )
@@ -253,6 +313,7 @@ class Ruta(object):
         self.abspath = self.get_AbsPath()
         self.relativepath = self.get_RelativePath()
         self.urlpath = self.get_UrlPath()
+        self.logpath = self.get_LogPath()
 
     def get_AbsPath(self):
 
@@ -262,6 +323,18 @@ class Ruta(object):
         )
 
         return abspath
+
+    def get_LogPath(self):
+        directorio = os.path.join(
+            self.run_path,
+            "media",
+            "facturas",
+            "Logs"
+        )
+
+        dirs = str(directorio)
+
+        return dirs
 
     def get_RelativePath(self):
         directorio = os.path.join(
@@ -345,3 +418,12 @@ class Validator(object):
         url = os.path.join(ruta, file_name)
 
         return url.replace("\\", "/")
+
+
+class ResumenRegistro(object):
+
+    def __init__(self, _tipo, _guardadas, _validadas, _total):
+        self.tipo = _tipo
+        self.no_guardadas = _guardadas
+        self.no_validadas = _validadas
+        self.total = _total
