@@ -23,7 +23,7 @@ class Empresa(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.clave
+        return self.clave.encode("utf-8")
 
 
 # class Responsable(models.Model):

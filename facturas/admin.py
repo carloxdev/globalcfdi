@@ -8,6 +8,7 @@ from .models import Resumen
 from .models import FacturaCliente
 from .models import FacturaProveedor
 from .models import ComprobanteEmpleado
+from .models import Log
 
 
 @admin.register(Resumen)
@@ -23,6 +24,10 @@ class AdminResumen(admin.ModelAdmin):
         'created_date',
         'updated_date',
     )
+    search_fields = (
+        'created_date',
+    )
+    list_filter = ('tipo', 'empresa', 'fecha')
 
 
 @admin.register(FacturaCliente)
@@ -91,6 +96,17 @@ class AdminFacturaCliente(admin.ModelAdmin):
         'created_date',
         'updated_date',
     )
+    list_filter = (
+        'empresa',
+        'estadoSat',
+        'comprobacion',
+        'fecha',
+        'moneda',
+        'receptor_nombre'
+    )
+    search_fields = (
+
+    )
 
 
 @admin.register(FacturaProveedor)
@@ -158,6 +174,14 @@ class AdminFacturaProveedor(admin.ModelAdmin):
         'estadoSat',
         'created_date',
         'updated_date',
+    )
+    list_filter = (
+        'empresa',
+        'estadoSat',
+        'comprobacion',
+        'fecha',
+        'moneda',
+        'emisor_nombre'
     )
 
 
@@ -251,4 +275,37 @@ class AdminComprobanteEmpleado(admin.ModelAdmin):
         'horasExtras',
         'created_date',
         'updated_date',
+    )
+    list_filter = (
+        'empresa',
+        'estadoSat',
+        'comprobacion',
+        'fecha',
+        'moneda',
+        'receptor_nombre'
+    )
+
+
+@admin.register(Log)
+class AdminLog(admin.ModelAdmin):
+    list_display = (
+        'empresa',
+        'nombre',
+        'estado',
+        'operacion',
+        'fecha_operacion',
+        'descripcion',
+        'url',
+        'created_date',
+        'updated_date',
+    )
+    list_filter = (
+        'estado',
+        'operacion',
+        'empresa',
+    )
+    search_fields = (
+        'nombre',
+        'fecha_operacion',
+        'created_date',
     )

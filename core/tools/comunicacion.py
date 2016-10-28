@@ -14,31 +14,27 @@ from mistakes import ErrorEjecucion
 
 class Postman(object):
 
-    # def __init__(self, _user, _password, _smtpSever, _toAddress):
+    def __init__(self, _fromEmailAccount, _password, _smtpSever):
 
-    @classmethod
-    def send_Message_WithAttach(self, _ambiente, _toAddress, _subject, _text, _file_abspath=""):
+        self.fromAddress = _fromEmailAccount
+        self.contrasena = _password
+        self.smtpServer = _smtpSever
+
+    def send_Message_WithAttach(self, _toAddress, _subject, _text, _file_abspath=""):
 
         try:
 
-            usuario = _ambiente.account_email
-            contrasena = _ambiente.password_email
-            smtpServer = _ambiente.smtp_sever
-            toAddress = _toAddress
-
-            fromAddress = usuario
-
             msg = MIMEMultipart(
-                From=fromAddress,
-                To=toAddress,
+                From=self.fromAddress,
+                To=_toAddress,
                 Date=formatdate(localtime=True),
                 Subject=_subject
             )
 
             msg.attach(MIMEText(_text))
             msg['Subject'] = _subject
-            msg['From'] = fromAddress
-            msg['To'] = toAddress
+            msg['From'] = self.fromAddress
+            msg['To'] = _toAddress
 
             if _file_abspath != "":
                 msg.attach(MIMEApplication(
@@ -48,13 +44,14 @@ class Postman(object):
                     Name=basename(_file_abspath)
                 ))
 
-            server = SMTP(smtpServer)
-            server.login(usuario, contrasena)
-            dirs = toAddress.replace(',', ' ')
+            server = SMTP(self.smtpServer)
+            server.login(self.fromAddress, self.contrasena)
+            dirs = _toAddress.replace(',', ' ')
             destinatario = dirs.split()
-            server.sendmail(fromAddress, destinatario, msg.as_string())
+            server.sendmail(self.fromAddress, destinatario, msg.as_string())
             server.quit()
-            return "Mensaje Enviado.......OK"
+
+            print "Mensaje Enviado.......OK"
 
         except Exception, error:
             raise ErrorEjecucion(
@@ -63,29 +60,21 @@ class Postman(object):
                 str(error)
             )
 
-    @classmethod
-    def send_GmailMessage_WithAttach(self, _ambiente, _toAddress, _subject, _text, _file_abspath=""):
+    def send_GmailMessage_WithAttach(self, _toAddress, _subject, _text, _file_abspath=""):
 
         try:
 
-            usuario = _ambiente.account_email
-            contrasena = _ambiente.password_email
-            smtpServer = _ambiente.smtp_sever
-            toAddress = _toAddress
-
-            fromAddress = usuario
-
             msg = MIMEMultipart(
-                From=fromAddress,
-                To=toAddress,
+                From=self.fromAddress,
+                To=_toAddress,
                 Date=formatdate(localtime=True),
                 Subject=_subject
             )
 
             msg.attach(MIMEText(_text))
             msg['Subject'] = _subject
-            msg['From'] = fromAddress
-            msg['To'] = toAddress
+            msg['From'] = self.fromAddress
+            msg['To'] = _toAddress
 
             if _file_abspath != "":
                 msg.attach(MIMEApplication(
@@ -95,15 +84,16 @@ class Postman(object):
                     Name=basename(_file_abspath)
                 ))
 
-            server = SMTP(smtpServer)
+            server = SMTP(self.smtpServer)
             server.ehlo()
             server.starttls()
-            server.login(usuario, contrasena)
-            dirs = toAddress.replace(',', ' ')
+            server.login(self.fromAddress, self.contrasena)
+            dirs = _toAddress.replace(',', ' ')
             destinatario = dirs.split()
-            server.sendmail(fromAddress, destinatario, msg.as_string())
+            server.sendmail(self.fromAddress, destinatario, msg.as_string())
             server.quit()
-            return "Mensaje Enviado.......OK"
+
+            print "Mensaje Enviado.......OK"
 
         except Exception, error:
             raise ErrorEjecucion(
@@ -112,8 +102,7 @@ class Postman(object):
                 str(error)
             )
 
-    def get_MIME(self, _file_abspath):
-        return 
+
 # Cuenta de correo para notificaciones:
 # Cuenta: notificaciones@nuvoil.com
 # Contraseña: p272liq

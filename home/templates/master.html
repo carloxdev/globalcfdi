@@ -40,19 +40,21 @@
 						<li><a href="{% url 'home.dashboard' %}">Dashboard</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-								Facturas
+								Comprobantes
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">Facturas Proveedores</a></li>
-								<li><a href="#">Facturas Clientes</a></li>
-								<li><a href="#">Comprobantes de Empleados</a></li>
+								<li><a href="{% url 'facturas.comprobantes_proveedores' %}">Proveedores</a></li>
+								<li><a href="{% url 'facturas.comprobantes_clientes' %}">Clientes</a></li>
+								<li><a href="{% url 'facturas.comprobantes_empleados' %}">Empleados</a></li>
+								<li><a href="{% url 'facturas.resumen' %}">Resumen</a></li>
+								<li><a href="{% url 'facturas.logs' %}">Logs</a></li>								
 							</ul>							
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
 								Configuracion
 							</a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu">					
 								<li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
 							</ul>
 
@@ -70,7 +72,7 @@
 							<ul class="dropdown-menu">
 								{% if user.is_staff %}
 								<li><a href="{% url 'home.usuario_lista' %}">Usuarios</a></li>
-								{% endif%}
+								{% endif%}									
 								<li><a href="{% url 'home.logout' %}">Salir</a></li>
 							</ul>
 						</li>

@@ -3,6 +3,8 @@
 
 {% load static from staticfiles %}
 
+{% load humanize %}
+
 {% block title %} Dashboard {% endblock title %}
 
 {% block css %}
@@ -35,8 +37,11 @@
 				<div class="col-md-4 contenedor">
 					<div class="row empresas">
 						<div class="col-xs-12 col-sm-12 col-md-4">
-
+							{% if resumen.empresa.logo %}
 							<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
+							{% else %}
+							<img src="{% static 'images/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
+							{% endif %}
 					    </div>
 					    <div class="col-xs-12 col-sm-12 col-md-8 nom_emp">
 							{{ resumen.empresa.razon_social }}
@@ -49,7 +54,7 @@
 							Folios Proveedores
 					    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							${{ resumen.total_proveedores }} <br>
+							$ {{ resumen.total_proveedores | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>
 						<div class="col-md-6 col-xs-6 tab">
@@ -57,7 +62,7 @@
 							Folios Clientes
 						    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							${{ resumen.total_clientes }} <br>
+							$ {{ resumen.total_clientes | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>
 						<div class="col-md-6 col-xs-6 tab">
@@ -65,7 +70,7 @@
 							Folios Nomina
 						    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							${{ resumen.total_nomina }} <br>
+							$ {{ resumen.total_nomina | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>					    
 					</div>

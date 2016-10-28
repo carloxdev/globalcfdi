@@ -35,6 +35,7 @@ from facturas.models import FacturaProveedor
 from facturas.models import FacturaCliente
 from facturas.models import ComprobanteEmpleado
 from facturas.models import Resumen
+from facturas.models import Log
 
 
 class ModeloAmbiente(object):
@@ -57,6 +58,22 @@ class ModeloAmbiente(object):
 
 
 class ModeloEmpresa(object):
+
+    @classmethod
+    def get(self, _empresa_clave):
+
+        try:
+            connection.close()
+            empresa = Empresa.objects.get(clave=_empresa_clave)
+            return empresa
+
+        except Exception, error:
+
+            raise ErrorEjecucion(
+                "ModeloEmpresa.get_Activas()",
+                type(error).__name__,
+                str(error)
+            )
 
     @classmethod
     def get_Activas(self):
@@ -428,6 +445,49 @@ class ModeloResumen(object):
         except Exception, error:
             raise ErrorEjecucion(
                 'ModeloResumen.get()',
+                type(error).__name__,
+                str(error)
+            )
+
+
+class ModeloLog(object):
+
+    @classmethod
+    def add(self, _log):
+
+        try:
+            connection.close()
+            log = Log(
+                nombre=_log.nombre,
+                estado=_log.estado,
+                operacion=_log.operacion,
+                empresa=_log.empresa,
+                fecha_operacion=_log.fecha_operacion,
+                url=_log.url
+            )
+
+            log.save()
+
+            print "Se creo registro de log en BD"
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'ModeloLog.add()',
+                type(error).__name__,
+                str(error)
+            )
+
+    @classmethod
+    def get(self, _nombre):
+
+        try:
+            connection.close()
+            log = Log.objects.get(nombre=_nombre)
+            return log
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'ModeloLog.get()',
                 type(error).__name__,
                 str(error)
             )

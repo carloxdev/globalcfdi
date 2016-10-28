@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Librerias Python:
-from datetime import date
-from datetime import timedelta
-
 # Librerias Propias:
 from sat import WebSat
 
@@ -15,13 +11,11 @@ from tools.datos import Validator
 from tools.datos import ResumenRegistro
 from tools.mistakes import ErrorValidacion
 from tools.mistakes import ErrorEjecucion
-from tools.comunicacion import Postman
 from documentos import Comprobante
 from documentos import Log
 
 # Modelos del Sitio:
 from sitio import ModeloResumen
-from sitio import ModeloAmbiente
 
 
 class Contador(object):
@@ -32,16 +26,6 @@ class Contador(object):
         self.ruta_ejecucion = _ruta_ejecucion
         self.ambiente = _ambiente
 
-    def get_Invoices_LastThreeDays(self, _tipo):
-
-        ahora = date.today()
-
-        contador = 1
-        while contador <= 3:
-            fecha = ahora - timedelta(days=contador)
-            self.get_Invoices_ByDay(_tipo, fecha)
-            contador += 1
-
     def get_Invoices_ByDay(self, _tipo, _fecha):
 
         lista_resumen = []
@@ -50,8 +34,6 @@ class Contador(object):
         no_guardadas = 0
         no_validadas = 0
         total = 0
-
-        ambiente = None
 
         ruta = Ruta(
             self.ruta_ejecucion,
@@ -62,9 +44,11 @@ class Contador(object):
 
         log = Log(
             ruta.logpath,
+            ruta.urllogpath,
             "GET",
             _tipo,
-            self.empresa.clave
+            self.empresa,
+            _fecha
         )
 
         try:
@@ -73,8 +57,6 @@ class Contador(object):
 
             relativepath = ruta.relativepath
             download_abspath = ruta.abspath
-
-            ambiente = ModeloAmbiente.get(self.ambiente)
 
             print "\nCREANDO DIRECTORIOS: "
             FileManager.create_Directory(self.ruta_ejecucion, relativepath)
@@ -142,7 +124,9 @@ class Contador(object):
                         no_validadas += resultado_validate
 
                         # Crear objeto de resumen:
-                        total = Validator.convertToFloat(comprobante.total)
+                        total = Validator.convertToFloat(
+                            comprobante.total) * Validator.convertToFloat(comprobante.tipoCambio)
+
                         registroResumen = ResumenRegistro(
                             comprobante.resumen_tipo,
                             resultado_saveToDB,
@@ -156,35 +140,42 @@ class Contador(object):
             self.set_Resumen(_fecha, _tipo, lista_resumen)
 
             # Informar Resultado:
-            print "Archivos {} encontrados:.... {}".format(".xml", no_encontradas)
-            print "Archivos {} descargados:.... {}".format(".xml", no_descargadas)
-            print "Archivos {} guardados:...... {}".format(".xml", no_guardadas)
-            print "Archivos {} validados:...... {}".format(".xml", no_validadas)
-            print "Total:........................ {}".format(str(total))
+            log.resumen_text = """
+            Archivos encontrados:.... {}
+            Archivos descargados:.... {}
+            Archivos guardados:...... {}
+            Archivos validados:...... {}
+            Total:................... {}
+            """.format(
+                no_encontradas,
+                no_descargadas,
+                no_guardadas,
+                no_validadas,
+                str(total)
+            )
+
+            print log.resumen_text
+
+            if no_encontradas == no_descargadas and no_encontradas == no_validadas:
+                log.estado = "EXITO"
+            else:
+                log.estado = "DETALLES"
 
         except Exception, error:
-            print str(error)
+            log.estado = "ERROR"
+            log.resument_text = str(error)
+            print log.resumen_text
 
         finally:
-
-            # Guardar Log in BD
-
-            # Get Resultado Resultado de Operacion.
-
-            # Enviar Correo
             log.end_capture()
-
-            Postman.send_GmailMessage_WithAttach(
-                ambiente,
-                self.empresa.email,
-                "Log de proceso",
-                "Ejemplo de log",
-                log.abspath
-            )
+            return log
 
     def search_ByDay(self, _funcion, _elFiltro, _elSat):
 
         try:
+
+            no_encontradas = 0
+
             print "\nBUSCANDO FACTURAS POR DIA: "
             lista_links_byDay = _funcion(_elFiltro)
             no_encontradas = len(lista_links_byDay)

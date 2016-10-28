@@ -52,6 +52,19 @@ class Chronos(object):
     def sleep(self, sec=1):
         time.sleep(sec)
 
+    @classmethod
+    def getDays(self, month, year):
+
+        days = []
+
+        month = calendar.monthcalendar(year, month)
+        for week in month:
+            for day in week:
+                if day != 0:
+                    days.append(day)
+
+        return days
+
 
 class Filtro(object):
 
@@ -59,8 +72,8 @@ class Filtro(object):
         self.uuid = ''
         self.emisor_rfc = ''
         self.year = _fecha.year
-        self.month = _fecha.month
-        self.day = _fecha.day
+        self.month = '{:02d}'.format(_fecha.month)
+        self.day = '{:02d}'.format(_fecha.day)
         self.start_hour = '00'
         self.start_minute = '00'
         self.start_second = '00'
@@ -314,6 +327,7 @@ class Ruta(object):
         self.relativepath = self.get_RelativePath()
         self.urlpath = self.get_UrlPath()
         self.logpath = self.get_LogPath()
+        self.urllogpath = self.get_UrlLogPath()
 
     def get_AbsPath(self):
 
@@ -337,6 +351,7 @@ class Ruta(object):
         return dirs
 
     def get_RelativePath(self):
+
         directorio = os.path.join(
             "media",
             "facturas",
@@ -359,6 +374,16 @@ class Ruta(object):
             '{:02d}'.format(self.fecha.year),
             '{:02d}'.format(self.fecha.month),
             '{:02d}'.format(self.fecha.day),
+        )
+
+        url = str(directorio)
+
+        return url
+
+    def get_UrlLogPath(self):
+        directorio = os.path.join(
+            "facturas",
+            "Logs"
         )
 
         url = str(directorio)
@@ -395,10 +420,19 @@ class Validator(object):
 
     @classmethod
     def convertToChar(self, data, default=""):
-        if data is None:
-            return ""
-        else:
-            return data.encode("utf-8")
+        try:
+            if data is None:
+                return default
+            else:
+                if default == "1":
+                    value = float(data)
+                    return str(value)
+
+                else:
+                    return data.encode("utf-8")
+
+        except:
+            return default
 
     @classmethod
     def convertToDate(self, data, hora=True):

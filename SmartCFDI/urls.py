@@ -7,10 +7,45 @@ from django.conf import settings
 from django.conf.urls import include
 from django.conf.urls.static import static
 
+# API Rest
+from rest_framework import routers
+
+# Mis API Views:
+from facturas.views import FacturaProveedorAPI
+from facturas.views import FacturaClienteAPI
+from facturas.views import ComprobanteEmpleadoAPI
+from facturas.views import LogAPI
+
+router = routers.DefaultRouter()
+router.register(
+    r'facturas_proveedor',
+    FacturaProveedorAPI,
+    'facturas_proveedor'
+)
+router.register(
+    r'facturas_cliente',
+    FacturaClienteAPI,
+    'facturas_cliente'
+)
+router.register(
+    r'comprobantes_empleado',
+    ComprobanteEmpleadoAPI,
+    'comprobantes_empleado'
+)
+router.register(
+    r'logs',
+    LogAPI,
+    'logs'
+)
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/', include(router.urls)),
     url(r'^', include('home.urls')),
+    url(r'^', include('autorizacion.urls')),
     url(r'^', include('configuracion.urls')),
+    url(r'^', include('facturas.urls')),
 ]
 
 

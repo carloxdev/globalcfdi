@@ -1,0 +1,106 @@
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %} Resumenes {% endblock title %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block contenido %}
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active">Resumenes</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row titulo">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h3>Resumen:</h3>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		
+		<div class="col-md-8">
+
+			{% if resumenes %}
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover table-condensed">
+					<tr>
+						<th>Fecha</th> 
+						<th>Tipo</th> 
+						<th>Guardadas</th> 
+						<th>Validadas</th> 
+						<th>Total</th> 
+						<th>Empresa</th> 
+						<th>Creado el</th> 
+						<th>Actualizado el</th> 
+					</tr>
+					{% for resumen in resumenes %}
+					<tr>
+						<td> {{ resumen.fecha }} </td>
+						<td> {{ resumen.tipo }} </td>
+						<td> {{ resumen.cantidad_guardadas }} </td>
+						<td> {{ resumen.cantidad_validadas }} </td>
+						<td> {{ resumen.total }} </td>
+						<td> {{ resumen.empresa }} </td>
+						<td> {{ resumen.created_date }} </td>
+						<td> {{ resumen.updated_date }} </td>
+					</tr>
+					{% endfor %}
+				</table>		
+
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<nav>
+						{% if resumenes.paginator.count > 15 %}
+						<ul class="pagination">
+							{% if resumenes.has_previous %}
+						    <li>
+						        <a href="?page={{ resumenes.previous_page_number }}">&laquo;</a>
+						    </li>
+							{% endif %}
+						    
+						    <li class="">
+						        <span>Page {{ resumenes.number }} of {{ resumenes.paginator.num_pages }}</span>
+						    </li>
+							
+							{% if resumenes.has_next %}
+						    <li>
+						        <a href="?page={{ resumenes.next_page_number }}">&raquo;</a>
+						    </li>
+							{% endif %}
+						</ul>
+					    {% endif %}
+					</nav>
+				</div>
+			</div>
+
+			{% else %}
+			<h3 class="sin-resultados">No se encontraron resumenes</h3>
+			{% endif %}	
+
+		</div>
+
+		<div class="col-md-4">
+			<div class="panel panel-default">
+			  <div class="panel-heading">Filtros</div>
+			  <div class="panel-body">Aqui van los filtros</div>
+			</div>			
+		</div>
+
+	</div>
+
+</div>
+
+{% endblock contenido %}
+

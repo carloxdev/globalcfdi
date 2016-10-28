@@ -13,5 +13,5 @@ class AdminAmbiente(admin.ModelAdmin):
         'clave',
         'account_email',
         'password_email',
-        'smtp_sever',
+        'smtp_server',
     )

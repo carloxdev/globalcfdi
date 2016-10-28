@@ -1,0 +1,56 @@
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %} Comprobantes de Clientes {% endblock title %}
+
+{% block css %}
+
+<!-- Kendo -->
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common-material.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.material.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.dataviz.material.min.css' %}"/>
+
+<!-- Alertifyjs --> 
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
+
+{% endblock css %}
+
+{% block contenido %}
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active">Comprobantes Clientes</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="panel panel-default">
+	  <div class="panel-heading">Filtros</div>
+	  <div class="panel-body">Aqui van los filtros</div>
+	</div>
+	
+
+    <div id="resultados" class="grid" >
+
+    </div>
+
+</div>
+
+{% endblock contenido %}
+
+{% block scripts %}
+
+<!-- Alertifyjs -->
+<script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Kendo Js-->
+<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+
+<!-- Js del Sitio -->
+<script src="{% static 'ComprobantesClientes/factura_cliente.js' %}"></script>
+
+{% endblock scripts %}
+

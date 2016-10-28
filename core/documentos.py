@@ -21,6 +21,7 @@ from sat import WebServiceSAT
 from sitio import ModeloFacturaCliente
 from sitio import ModeloFacturaProveedor
 from sitio import ModeloComprobanteEmpleado
+from sitio import ModeloLog
 
 
 class Comprobante(Archivo):
@@ -973,29 +974,66 @@ class Comprobante(Archivo):
 
 class Log(Archivo):
 
-    def __init__(self, _basepath, _operacion, _tipo, _empresa_clave):
+    def __init__(self, _basepath, _urllogpath, _operacion, _tipo, _empresa, _fecha_operacion):
+
+        self.operacion = _operacion
+        self.tipo = _tipo
+        self.empresa = _empresa
+        self.fecha_operacion = _fecha_operacion
 
         name = "{}-{}-{}_{}-{}.log".format(
-            _operacion,
-            _tipo,
-            _empresa_clave,
+            self.operacion,
+            self.tipo,
+            self.empresa.clave,
             time.strftime("%d%m%y"),
             time.strftime("%H%M%S")
         )
 
         Archivo.__init__(self, _basepath, name)
         self.salida_origen = None
+        self.estado = ""
+        self.resumen_text = ""
+        self.url = Validator.convertToUrl(
+            _urllogpath,
+            self.nombre
+        )
 
     def begin_capture(self):
-        self.salida_origen = sys.stdout
 
-        # Crear archivo
-        self.create()
+        try:
+            self.salida_origen = sys.stdout
 
-        # Asigna salita a archivo
-        sys.stdout = self.file
+            # Crear archivo
+            self.create()
+            self.estado = "PROCESANDO"
+            ModeloLog.add(self)
 
-    def end_capture(self):
-        sys.stdout = self.salida_origen
-        if self.file:
-            self.file.close()
+            # Asigna salida a archivo
+            sys.stdout = self.file
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'Log.begin_capture()',
+                type(error).__name__,
+                str(error)
+            )
+
+    def end_capture(self, ):
+
+        try:
+
+            logRecord = ModeloLog.get(self.nombre)
+            logRecord.estado = self.estado
+            logRecord.descripcion = self.resumen_text
+            logRecord.save()
+
+            sys.stdout = self.salida_origen
+            if self.file:
+                self.file.close()
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'Log.end_capture()',
+                type(error).__name__,
+                str(error)
+            )

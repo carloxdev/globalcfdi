@@ -19,6 +19,19 @@ COMPROBACION_ESTADOS = (
     ('NO_RECONOCIDO', 'NO RECONOCIDO'),
 )
 
+LOG_ESTADOS = (
+    ('EXITO', 'EXITO'),
+    ('ERROR', 'ERROR'),
+    ('DETALLE', 'DETALLE'),
+    ('PROCESANDO', 'PROCESANDO'),
+)
+
+LOG_OPERACION_TIPO = (
+    ('GET', 'OBTENER'),
+    ('SAVE', 'GUARDAR'),
+    ('VALIDATE', 'VALIDAR'),
+)
+
 
 class Resumen(models.Model):
 
@@ -48,7 +61,39 @@ class Resumen(models.Model):
         unique_together = (('empresa', 'fecha', 'tipo'),)
 
     def __str__(self):
-        return "{} - {}".format(self.fecha, self.tipo)
+        return "{} - {}".format(self.fecha, self.tipo).encode("utf-8")
+
+
+class Log(models.Model):
+    empresa = models.ForeignKey(Empresa, null=True)
+    nombre = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    estado = models.CharField(
+        max_length=10,
+        choices=LOG_ESTADOS,
+        null=True
+    )
+    operacion = models.CharField(
+        max_length=8,
+        choices=LOG_OPERACION_TIPO,
+        null=True
+    )
+    fecha_operacion = models.DateField()
+    descripcion = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=500, null=True, blank=True)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (
+            ('empresa', 'nombre', 'operacion', 'fecha_operacion'),)
+
+    def __str__(self):
+        return self.nombre.encode("utf-8")
 
 
 class Factura(models.Model):
@@ -206,13 +251,13 @@ class Factura(models.Model):
 class FacturaProveedor(Factura):
 
     def __str__(self):
-        return "{} - {}".format(self.uuid, self.emisor_rfc)
+        return "{} - {}".format(self.uuid, self.emisor_rfc).encode("utf-8")
 
 
 class FacturaCliente(Factura):
 
     def __str__(self):
-        return "{} - {}".format(self.uuid, self.receptor_rfc)
+        return "{} - {}".format(self.uuid, self.receptor_rfc).encode("utf-8")
 
 
 class ComprobanteEmpleado(Factura):
@@ -285,4 +330,4 @@ class ComprobanteEmpleado(Factura):
     horasExtras = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return "{} - {}".format(self.uuid, self.receptor_rfc)
+        return "{} - {}".format(self.uuid, self.receptor_rfc).encode("utf-8")
