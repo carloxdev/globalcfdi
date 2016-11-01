@@ -12,18 +12,24 @@ from django.views.generic.base import View
 
 # API Rest:
 from rest_framework import viewsets
+from rest_framework import filters
 
 # Serializadores:
 from .serializers import FacturaProveedorSerializer
 from .serializers import FacturaClienteSerializer
 from .serializers import ComprobanteEmpleadoSerializer
 from .serializers import LogSerializer
+from .serializers import ResumenSerializer
 
 # Paginadores:
-from .pagination import FacturaProveedorPaginacion
-from .pagination import FacturaClientePaginacion
-from .pagination import ComprobanteEmpleadoPaginacion
-from .pagination import LogPaginacion
+from .pagination import GenericPagination
+
+# Filtros:
+from .filters import LogFilter
+from .filters import FacturaProveedorFilter
+from .filters import FacturaClienteFilter
+from .filters import ComprobanteEmpleadoFilter
+
 
 # Modelos
 from .models import FacturaProveedor
@@ -32,11 +38,21 @@ from .models import ComprobanteEmpleado
 from .models import Log
 from .models import Resumen
 
+# Formularios:
+from .forms import FacturaProveedorFormFiltros
+from .forms import ObtenerForm
+from .forms import LogFormFiltros
+
 # Django Paginacion:
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
+# Tasks
+from .tasks import imprimir_Datos
+
+# import os
+# from core.tecnology import Cfdineitor
 
 # ----------------- COMPROBANTES PROVEEDORES ----------------- #
 
@@ -48,7 +64,14 @@ class FacturaProveedorList(View):
         self.template_name = 'ComprobantesProveedores/facproveedor_lista.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+
+        formulario = FacturaProveedorFormFiltros(request.user)
+
+        contexto = {
+            'form': formulario
+        }
+
+        return render(request, self.template_name, contexto)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -58,7 +81,13 @@ class FacturaClienteList(View):
         self.template_name = 'ComprobantesClientes/faccliente_lista.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+        formulario = FacturaProveedorFormFiltros(request.user)
+
+        contexto = {
+            'form': formulario
+        }
+
+        return render(request, self.template_name, contexto)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -68,17 +97,13 @@ class ComprobanteEmpleadoList(View):
         self.template_name = 'ComprobantesEmpleados/comempleado_lista.html'
 
     def get(self, request):
-        return render(request, self.template_name, {})
+        formulario = FacturaProveedorFormFiltros(request.user)
 
+        contexto = {
+            'form': formulario
+        }
 
-@method_decorator(login_required, name='dispatch')
-class logsList(View):
-
-    def __init__(self):
-        self.template_name = 'Logs/log_lista.html'
-
-    def get(self, request):
-        return render(request, self.template_name, {})
+        return render(request, self.template_name, contexto)
 
 
 @method_decorator(login_required, name='dispatch')
@@ -113,30 +138,115 @@ class ResumenList(View):
         return render(request, self.template_name, contexto)
 
 
+@method_decorator(login_required, name='dispatch')
+class LogsList(View):
+
+    def __init__(self):
+        self.template_name = 'Logs/log_lista.html'
+
+    def get(self, request):
+
+        formulario = LogFormFiltros(request.user)
+
+        contexto = {
+            'form': formulario
+        }
+
+        return render(request, self.template_name, contexto)
+
+
+@method_decorator(login_required, name='dispatch')
+class Obtener(View):
+
+    def __init__(self):
+        self.template_name = 'Logs/obtener.html'
+        self.mensaje = ''
+
+    def get(self, request):
+        formulario = ObtenerForm(username=request.user)
+
+        contexto = {
+            'form': formulario
+        }
+
+        return render(request, self.template_name, contexto)
+
+    def post(self, request):
+
+        formulario = ObtenerForm(request.POST, username=request.user)
+
+        if formulario.is_valid():
+
+            # run_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'Sitio'))
+            # print run_path
+            # app = Cfdineitor("PRODUCCION", run_path)
+            # app.get_Invoices_Company("LSV")
+            imprimir_Datos.delay()
+            imprimir_Datos.delay()
+            self.mensaje = "Ejemplo"
+
+        contexto = {
+            'form': formulario,
+            'mensaje': self.mensaje
+        }
+        return render(request, self.template_name, contexto)
+
 # ----------------- API REST ----------------- #
 
-class FacturaProveedorAPI(viewsets.ModelViewSet):
-    queryset = FacturaProveedor.objects.all()
-    serializer_class = FacturaProveedorSerializer
-    pagination_class = FacturaProveedorPaginacion
 
-    # filter_backends = (filters.DjangoFilterBackend,)
-    # filter_class = FacturaRecibidaFilter
+class FacturaProveedorAPI(viewsets.ModelViewSet):
+    # queryset = FacturaProveedor
+    serializer_class = FacturaProveedorSerializer
+    pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = FacturaProveedorFilter
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+
+        for empresa in empresas:
+            print empresa.clave
+
+        return FacturaProveedor.objects.filter(empresa__in=empresas)
 
 
 class FacturaClienteAPI(viewsets.ModelViewSet):
-    queryset = FacturaCliente.objects.all()
+    # queryset = FacturaCliente.objects.all()
     serializer_class = FacturaClienteSerializer
-    pagination_class = FacturaClientePaginacion
+    pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = FacturaClienteFilter
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+        return FacturaCliente.objects.filter(empresa__in=empresas)
 
 
 class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
-    queryset = ComprobanteEmpleado.objects.all()
+    # queryset = ComprobanteEmpleado.objects.all()
     serializer_class = ComprobanteEmpleadoSerializer
-    pagination_class = ComprobanteEmpleadoPaginacion
+    pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ComprobanteEmpleadoFilter
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+        return ComprobanteEmpleado.objects.filter(empresa__in=empresas)
 
 
 class LogAPI(viewsets.ModelViewSet):
     queryset = Log.objects.all()
     serializer_class = LogSerializer
-    pagination_class = LogPaginacion
+    pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = LogFilter
+
+
+class ResumenAPI(viewsets.ModelViewSet):
+    queryset = Resumen.objects.all()
+    serializer_class = ResumenSerializer
+    pagination_class = GenericPagination

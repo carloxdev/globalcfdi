@@ -49,3 +49,16 @@ html, body {
 .mensaje--center {
 	text-align: center;
 }
+
+.grid {
+	font-size: .8em;
+	margin-bottom: 2em;
+}
+
+.filtros {
+	font-size: .8em;	
+}
+
+table a:not(.btn), .table a:not(.btn) {
+    text-decoration: none;
+}

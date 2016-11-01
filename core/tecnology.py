@@ -25,6 +25,7 @@ class Cfdineitor(object):
         self.get_appconfig()
 
     def get_appconfig(self):
+
         app_config = ModeloAmbiente.get(self.ambiente)
 
         self.cartero = Postman(
@@ -34,9 +35,10 @@ class Cfdineitor(object):
         )
 
     def get_Invoices_Company(self, _empresa_clave):
+
         empresa = ModeloEmpresa.get(_empresa_clave)
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-        lista_meses = [1, 2, 3, 4, 5, 6, 7, 8]
+        lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.get_Invoices_ByMonths(esclavo, "RECIBIDAS", lista_meses)
         self.get_Invoices_ByMonths(esclavo, "EMITIDAS", lista_meses)
 

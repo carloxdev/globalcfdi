@@ -8,7 +8,8 @@ from .views import FacturaProveedorList
 from .views import FacturaClienteList
 from .views import ComprobanteEmpleadoList
 from .views import ResumenList
-from .views import logsList
+from .views import LogsList
+from .views import Obtener
 
 
 # ----------------- FACTURAS PROVEEDORES ----------------- #
@@ -35,7 +36,12 @@ urlpatterns = [
     ),
     url(
         r'^logs/$',
-        logsList.as_view(),
+        LogsList.as_view(),
         name='facturas.logs'
+    ),
+    url(
+        r'^obtener/$',
+        Obtener.as_view(),
+        name='facturas.obtener'
     ),
 ]

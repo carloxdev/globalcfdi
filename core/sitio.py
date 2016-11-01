@@ -4,12 +4,14 @@
 import os
 import sys
 import datetime
+import json
 
 # Librerias Propias:
 from tools.mistakes import ErrorEjecucion
 
 
 # Conectando con la configuracion del sitio
+# import ipdb; ipdb.set_trace() 
 if __name__ == 'sitio':
     project_abspath = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 else:
@@ -145,11 +147,11 @@ class ModeloFacturaProveedor(object):
                 receptor_estado=_comprobante.receptor_estado,
                 receptor_pais=_comprobante.receptor_pais,
                 receptor_codigoPostal=_comprobante.receptor_codigoPostal,
-                conceptos=_comprobante.conceptos,
+                conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=_comprobante.impuestos_trasladados,
-                impuestos_retenidos=_comprobante.impuestos_retenidos,
+                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
@@ -243,11 +245,11 @@ class ModeloFacturaCliente(object):
                 receptor_estado=_comprobante.receptor_estado,
                 receptor_pais=_comprobante.receptor_pais,
                 receptor_codigoPostal=_comprobante.receptor_codigoPostal,
-                conceptos=_comprobante.conceptos,
+                conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=_comprobante.impuestos_trasladados,
-                impuestos_retenidos=_comprobante.impuestos_retenidos,
+                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
@@ -340,11 +342,11 @@ class ModeloComprobanteEmpleado(object):
                 receptor_estado=_comprobante.receptor_estado,
                 receptor_pais=_comprobante.receptor_pais,
                 receptor_codigoPostal=_comprobante.receptor_codigoPostal,
-                conceptos=_comprobante.conceptos,
+                conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=_comprobante.impuestos_trasladados,
-                impuestos_retenidos=_comprobante.impuestos_retenidos,
+                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
@@ -370,11 +372,11 @@ class ModeloComprobanteEmpleado(object):
                 salarioDiarioIntegrado=_comprobante.salarioDiarioIntegrado,
                 percepciones_totalGravado=_comprobante.percepciones_totalGravado,
                 percepciones_totalExento=_comprobante.percepciones_totalExento,
-                percepciones=_comprobante.percepciones,
+                percepciones=json.dumps(_comprobante.percepciones),
                 deducciones_totalGravado=_comprobante.deducciones_totalGravado,
                 deducciones_totalExento=_comprobante.deducciones_totalExento,
-                deducciones=_comprobante.deducciones,
-                horasExtras=_comprobante.horasExtras,
+                deducciones=json.dumps(_comprobante.deducciones),
+                horasExtras=json.dumps(_comprobante.horasExtras),
             )
             empresa = Empresa.objects.get(clave=_comprobante.empresa_clave)
             comprobante.empresa = empresa

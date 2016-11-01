@@ -8,6 +8,7 @@ from .models import FacturaProveedor
 from .models import FacturaCliente
 from .models import ComprobanteEmpleado
 from .models import Log
+from .models import Resumen
 
 
 class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
@@ -323,5 +324,30 @@ class LogSerializer(serializers.HyperlinkedModelSerializer):
     def get_operacion(self, obj):
         try:
             return obj.get_operacion_display()
+        except:
+            return ""
+
+
+class ResumenSerializer(serializers.HyperlinkedModelSerializer):
+
+    empresa = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Resumen
+        fields = (
+            'fecha',
+            'tipo',
+            'cantidad_guardadas',
+            'cantidad_validadas',
+            'total',
+            'empresa',
+            'created_date',
+            'updated_date',
+        )
+
+    def get_empresa(self, obj):
+
+        try:
+            return obj.empresa.clave
         except:
             return ""

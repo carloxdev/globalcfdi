@@ -1,5 +1,6 @@
 
 import os
+import djcelery
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,7 +38,9 @@ INSTALLED_APPS = [
     'facturas.apps.FacturasConfig',
     'rest_framework',
     'django.contrib.humanize',
-    'autorizacion.apps.AutorizacionConfig',
+    # 'autorizacion.apps.AutorizacionConfig',
+    'seguridad.apps.SeguridadConfig',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +73,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'SmartCFDI.wsgi.application'
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False
+}
+
+
+djcelery.setup_loader()
+
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Mexico_City'
 
 
 # Database

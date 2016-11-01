@@ -4,6 +4,7 @@
 import os
 import sys
 import time
+from datetime import datetime
 
 # Librerias de Terceros:
 from lxml import etree
@@ -194,10 +195,10 @@ class Comprobante(Archivo):
             self.noCertificado = Validator.convertToChar(
                 self.raiz.get('noCertificado')
             )
-            self.subTotal = Validator.convertToChar(
+            self.subTotal = Validator.convertToFloat(
                 self.raiz.get('subTotal')
             )
-            self.tipoCambio = Validator.convertToChar(
+            self.tipoCambio = Validator.convertToFloat(
                 self.raiz.get('TipoCambio'), 1
             )
             self.moneda = Validator.convertToChar(
@@ -206,7 +207,7 @@ class Comprobante(Archivo):
             self.sello = Validator.convertToChar(
                 self.raiz.get('sello')
             )
-            self.total = Validator.convertToChar(
+            self.total = Validator.convertToFloat(
                 self.raiz.get('total')
             )
             self.tipoDeComprobante = Validator.convertToChar(
@@ -246,10 +247,10 @@ class Comprobante(Archivo):
 
             # Obtener atributos
             self.emisor_rfc = Validator.convertToChar(
-                nodo.get('rfc')
+                nodo.get('rfc').upper()
             )
             self.emisor_nombre = Validator.convertToChar(
-                nodo.get('nombre')
+                nodo.get('nombre').upper()
             )
 
             return True
@@ -382,10 +383,10 @@ class Comprobante(Archivo):
             )
 
             self.receptor_rfc = Validator.convertToChar(
-                nodo.get('rfc')
+                nodo.get('rfc').upper()
             )
             self.receptor_nombre = Validator.convertToChar(
-                nodo.get('nombre')
+                nodo.get('nombre').upper()
             )
 
             return True
@@ -447,10 +448,10 @@ class Comprobante(Archivo):
 
             nodo = self.raiz.find('cfdi:Impuestos', self.name_spaces)
 
-            self.totalImpuestosTrasladados = Validator.convertToChar(
+            self.totalImpuestosTrasladados = Validator.convertToFloat(
                 nodo.get('totalImpuestosTrasladados')
             )
-            self.totalImpuestosRetenidos = Validator.convertToChar(
+            self.totalImpuestosRetenidos = Validator.convertToFloat(
                 nodo.get('totalImpuestosRetenidos')
             )
 
@@ -518,12 +519,18 @@ class Comprobante(Archivo):
             nodos = self.raiz.find('cfdi:Conceptos', self.name_spaces)
             for nodo in nodos:
                 item = {
-                    'cantidad': Validator.convertToChar(nodo.get('cantidad')),
-                    'unidad': Validator.convertToChar(nodo.get('unidad')),
-                    'noIdentificacion': Validator.convertToChar(nodo.get('noIdentificacion')),
-                    'descripcion': Validator.convertToChar(nodo.get('descripcion')),
-                    'valorUnitario': Validator.convertToChar(nodo.get('valorUnitario')),
-                    'importe': Validator.convertToChar(nodo.get('importe'))
+                    "cantidad": Validator.convertToChar(nodo.get('cantidad')),
+                    "unidad": Validator.convertToChar(nodo.get('unidad')),
+                    "noIdentificacion": Validator.convertToChar(
+                        nodo.get('noIdentificacion')
+                    ),
+                    "descripcion": Validator.convertToChar(
+                        nodo.get('descripcion')
+                    ),
+                    "valorUnitario": Validator.convertToChar(
+                        nodo.get('valorUnitario')
+                    ),
+                    "importe": Validator.convertToChar(nodo.get('importe'))
                 }
 
                 self.conceptos.append(item)
@@ -547,7 +554,7 @@ class Comprobante(Archivo):
             )
 
             self.uuid = Validator.convertToChar(
-                nodo.get('UUID')
+                nodo.get('UUID').upper()
             )
             self.fechaTimbrado = Validator.convertToDate(
                 nodo.get('FechaTimbrado')
@@ -651,20 +658,26 @@ class Comprobante(Archivo):
                 self.name_spaces
             ).find('nomina:Percepciones', self.name_spaces)
 
-            self.percepciones_totalGravado = Validator.convertToChar(
+            self.percepciones_totalGravado = Validator.convertToFloat(
                 nodos.get('TotalGravado')
             )
-            self.percepciones_totalExento = Validator.convertToChar(
+            self.percepciones_totalExento = Validator.convertToFloat(
                 nodos.get('TotalExento')
             )
 
             for nodo in nodos:
                 item = {
-                    'TipoPercepcion': Validator.convertToChar(nodo.get('TipoPercepcion')),
+                    'TipoPercepcion': Validator.convertToChar(
+                        nodo.get('TipoPercepcion')
+                    ),
                     'Clave': Validator.convertToChar(nodo.get('Clave')),
                     'Concepto': Validator.convertToChar(nodo.get('Concepto')),
-                    'ImporteGravado': Validator.convertToChar(nodo.get('ImporteGravado')),
-                    'ImporteExento': Validator.convertToChar(nodo.get('ImporteExento')),
+                    'ImporteGravado': Validator.convertToChar(
+                        nodo.get('ImporteGravado')
+                    ),
+                    'ImporteExento': Validator.convertToChar(
+                        nodo.get('ImporteExento')
+                    ),
                 }
 
                 self.percepciones.append(item)
@@ -686,20 +699,30 @@ class Comprobante(Archivo):
                 self.name_spaces
             ).find('nomina:Deducciones', self.name_spaces)
 
-            self.deducciones_totalGravado = Validator.convertToChar(
+            self.deducciones_totalGravado = Validator.convertToFloat(
                 nodos.get('TotalGravado')
             )
-            self.deducciones_totalExento = Validator.convertToChar(
+            self.deducciones_totalExento = Validator.convertToFloat(
                 nodos.get('TotalExento')
             )
 
             for nodo in nodos:
                 item = {
-                    'TipoDeduccion': Validator.convertToChar(nodo.get('TipoDeduccion')),
-                    'Clave': Validator.convertToChar(nodo.get('Clave')),
-                    'Concepto': Validator.convertToChar(nodo.get('Concepto')),
-                    'ImporteGravado': Validator.convertToChar(nodo.get('ImporteGravado')),
-                    'ImporteExento': Validator.convertToChar(nodo.get('ImporteExento')),
+                    'TipoDeduccion': Validator.convertToChar(
+                        nodo.get('TipoDeduccion')
+                    ),
+                    'Clave': Validator.convertToChar(
+                        nodo.get('Clave')
+                    ),
+                    'Concepto': Validator.convertToChar(
+                        nodo.get('Concepto')
+                    ),
+                    'ImporteGravado': Validator.convertToChar(
+                        nodo.get('ImporteGravado')
+                    ),
+                    'ImporteExento': Validator.convertToChar(
+                        nodo.get('ImporteExento')
+                    ),
                 }
 
                 self.deducciones.append(item)
@@ -724,8 +747,12 @@ class Comprobante(Archivo):
             for nodo in nodos:
                 item = {
                     'Dias': Validator.convertToChar(nodo.get('Dias')),
-                    'TipoHoras': Validator.convertToChar(nodo.get('TipoHoras')),
-                    'ImportePagado': Validator.convertToChar(nodo.get('ImportePagado')),
+                    'TipoHoras': Validator.convertToChar(
+                        nodo.get('TipoHoras')
+                    ),
+                    'ImportePagado': Validator.convertToChar(
+                        nodo.get('ImportePagado')
+                    ),
                 }
 
                 self.horasExtras.append(item)
@@ -747,7 +774,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo COMPROBANTE.............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo COMPROBANTE.............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo COMPROBANTE.............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del EMISOR
         try:
@@ -755,7 +784,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo EMISOR..................OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo EMISOR..................{}".format(error.mensaje)
+            print "Obtiendo datos del nodo EMISOR..................{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del EMISOR DIRECCION
         try:
@@ -763,7 +794,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo EMISOR DIRECCION........OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo EMISOR DIRECCION........{}".format(error.mensaje)
+            print "Obtiendo datos del nodo EMISOR DIRECCION........{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del modo EMISOR EXPEDIDO EN
         try:
@@ -771,7 +804,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo EMISOR EXPEDIDO EN......OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo EMISOR EXPEDIDO EN......{}".format(error.mensaje)
+            print "Obtiendo datos del nodo EMISOR EXPEDIDO EN......{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo EMISOR REGIMEN
         try:
@@ -779,7 +814,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo EMISOR REGIMEN..........OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo EMISOR REGIMEN..........{}".format(error.mensaje)
+            print "Obtiendo datos del nodo EMISOR REGIMEN..........{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo RECEPTOR
         try:
@@ -787,7 +824,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo RECEPTOR................OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo RECEPTOR................{}".format(error.mensaje)
+            print "Obtiendo datos del nodo RECEPTOR................{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo RECEPTOR DIRECCION
         try:
@@ -795,7 +834,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo RECEPTOR DIRECCION......OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo RECEPTOR DIRECCION......{}".format(error.mensaje)
+            print "Obtiendo datos del nodo RECEPTOR DIRECCION......{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo IMPUESTOS
         try:
@@ -803,7 +844,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo IMPUESTOS...............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo IMPUESTOS...............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo IMPUESTOS...............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo IMPUESTOS TRASLADADOS
         try:
@@ -811,7 +854,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo IMPUESTOS TRASLADADOS...OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo IMPUESTOS TRASLADADOS...{}".format(error.mensaje)
+            print "Obtiendo datos del nodo IMPUESTOS TRASLADADOS...{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo IMPUESTOS RETENIDOS
         try:
@@ -820,7 +865,9 @@ class Comprobante(Archivo):
 
         except Exception, error:
 
-            print "Obtiendo datos del nodo IMPUESTOS RETENIDOS.....{}".format(error.mensaje)
+            print "Obtiendo datos del nodo IMPUESTOS RETENIDOS.....{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo CONCEPTOS
         try:
@@ -828,7 +875,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo CONCEPTOS...............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo CONCEPTOS...............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo CONCEPTOS...............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo COMPLEMENTO
         try:
@@ -836,7 +885,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo COMPLEMENTO.............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo COMPLEMENTO.............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo COMPLEMENTO.............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo NOMINA
         try:
@@ -844,7 +895,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo NOMINA..................OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo NOMINA..................{}".format(error.mensaje)
+            print "Obtiendo datos del nodo NOMINA..................{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo PERCEPCIONES
         try:
@@ -852,7 +905,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo PERCEPCIONES............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo PERCEPCIONES............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo PERCEPCIONES............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo DEDUCCIONES
         try:
@@ -860,7 +915,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo DEDUCCIONES.............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo DEDUCCIONES.............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo DEDUCCIONES.............{}".format(
+                error.mensaje
+            )
 
         # Se obtienen datos del nodo HORAS EXTRAS
         try:
@@ -868,7 +925,9 @@ class Comprobante(Archivo):
             print "Obtiendo datos del nodo HORAS EXTRAS............OK"
 
         except Exception, error:
-            print "Obtiendo datos del nodo HORAS EXTRAS............{}".format(error.mensaje)
+            print "Obtiendo datos del nodo HORAS EXTRAS............{}".format(
+                error.mensaje
+            )
 
         if _tipo == "RECIBIDAS":
             self.resumen_tipo = "PROVEEDORES"
@@ -922,13 +981,16 @@ class Comprobante(Archivo):
             else:
                 raise ErrorValidacion(
                     "Comprobante.validate()",
-                    "Estado {}: No se establecio un tipo valido".format(self.resumen_tipo)
+                    "Estado {}: No se establecio un tipo valido".format(
+                        self.resumen_tipo
+                    )
                 )
 
             print "Estado en BD: {}".format(record.estadoSat)
 
             if estadoSAT != record.estadoSat:
                 record.estadoSat = estadoSAT
+                record.fecha_validacion = datetime.now().date()
                 record.save()
                 print "Se actualizo estado en la BD"
 
@@ -962,7 +1024,9 @@ class Comprobante(Archivo):
             else:
                 raise ErrorValidacion(
                     "Comprobante.save_toBD()",
-                    "Estado {}: No se establecio un tipo valido".format(self.resumen_tipo)
+                    "Estado {}: No se establecio un tipo valido".format(
+                        self.resumen_tipo
+                    )
                 )
 
             return 1
@@ -1018,10 +1082,9 @@ class Log(Archivo):
                 str(error)
             )
 
-    def end_capture(self, ):
+    def end_capture(self):
 
         try:
-
             logRecord = ModeloLog.get(self.nombre)
             logRecord.estado = self.estado
             logRecord.descripcion = self.resumen_text

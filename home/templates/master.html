@@ -47,7 +47,8 @@
 								<li><a href="{% url 'facturas.comprobantes_clientes' %}">Clientes</a></li>
 								<li><a href="{% url 'facturas.comprobantes_empleados' %}">Empleados</a></li>
 								<li><a href="{% url 'facturas.resumen' %}">Resumen</a></li>
-								<li><a href="{% url 'facturas.logs' %}">Logs</a></li>								
+								<li><a href="{% url 'facturas.logs' %}">Logs</a></li>
+								<li><a href="{% url 'facturas.obtener' %}">Obtener</a></li>
 							</ul>							
 						</li>
 						<li class="dropdown">
@@ -71,16 +72,16 @@
 							</a>
 							<ul class="dropdown-menu">
 								{% if user.is_staff %}
-								<li><a href="{% url 'home.usuario_lista' %}">Usuarios</a></li>
+								<li><a href="{% url 'seguridad.usuario_lista' %}">Usuarios</a></li>
 								{% endif%}									
-								<li><a href="{% url 'home.logout' %}">Salir</a></li>
+								<li><a href="{% url 'seguridad.logout' %}">Salir</a></li>
 							</ul>
 						</li>
 						{% else %}
 				        <li><a href="#">¿Quienes somos?</a></li>
 				        <li><a href="{% url 'home.servicios' %}">Servicios</a></li>
 				        <li><a href="#">Contactanos</a></li>
-						<li><a href="{% url 'home.login' %}">Login</a></li>
+						<li><a href="{% url 'seguridad.login' %}">Login</a></li>
 						{% endif %}
 					</ul>
 				</div>

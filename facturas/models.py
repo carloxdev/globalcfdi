@@ -32,6 +32,11 @@ LOG_OPERACION_TIPO = (
     ('VALIDATE', 'VALIDAR'),
 )
 
+PAGADO_ESTADO = {
+    ('PENDIENTE', 'PENDIENTE'),
+    ('PAGADO', 'PAGADO'),
+}
+
 
 class Resumen(models.Model):
 
@@ -108,11 +113,13 @@ class Factura(models.Model):
     )
     formaDePago = models.CharField(max_length=255, null=True, blank=True)
     noCertificado = models.CharField(max_length=255, null=True, blank=True)
-    subTotal = models.CharField(max_length=255, null=True, blank=True)
-    tipoCambio = models.CharField(max_length=255, null=True, blank=True)
+    subTotal = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
+    tipoCambio = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
     moneda = models.CharField(max_length=255, null=True, blank=True)
     sello = models.CharField(max_length=500, null=True, blank=True)
-    total = models.CharField(max_length=255, null=True, blank=True)
+    total = models.DecimalField(max_digits=20, decimal_places=4, default=0.0)
     tipoDeComprobante = models.CharField(max_length=255, null=True, blank=True)
     metodoDePago = models.CharField(max_length=255, null=True, blank=True)
     lugarExpedicion = models.CharField(max_length=255, null=True, blank=True)
@@ -193,12 +200,10 @@ class Factura(models.Model):
     conceptos = models.TextField(null=True, blank=True)
 
     # Impuestos
-    totalImpuestosTrasladados = models.CharField(
-        max_length=255, null=True, blank=True
-    )
-    totalImpuestosRetenidos = models.CharField(
-        max_length=255, null=True, blank=True
-    )
+    totalImpuestosTrasladados = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
+    totalImpuestosRetenidos = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
 
     # Impuestos Trasladados
     impuestos_trasladados = models.TextField(null=True, blank=True)
@@ -231,6 +236,19 @@ class Factura(models.Model):
     estadoSat = models.CharField(
         max_length=255, null=True, blank=True, default="SIN VALIDAR")
 
+    pago = models.CharField(
+        max_length=13,
+        choices=PAGADO_ESTADO,
+        default="PEDIENTE",
+        blank=True,
+        null=True
+    )
+    fecha_validacion = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
     created_date = models.DateTimeField(
         auto_now=False,
         auto_now_add=True,
@@ -309,21 +327,17 @@ class ComprobanteEmpleado(Factura):
     )
 
     # Nomina Percepciones
-    percepciones_totalGravado = models.CharField(
-        max_length=255, null=True, blank=True
-    )
-    percepciones_totalExento = models.CharField(
-        max_length=255, null=True, blank=True
-    )
+    percepciones_totalGravado = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
+    percepciones_totalExento = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
     percepciones = models.TextField(null=True, blank=True)
 
     # Nomina Deducciones
-    deducciones_totalGravado = models.CharField(
-        max_length=255, null=True, blank=True
-    )
-    deducciones_totalExento = models.CharField(
-        max_length=255, null=True, blank=True
-    )
+    deducciones_totalGravado = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
+    deducciones_totalExento = models.DecimalField(
+        max_digits=20, decimal_places=4, default=0.0)
     deducciones = models.TextField(null=True, blank=True)
 
     # Horas Extras

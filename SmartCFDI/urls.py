@@ -15,6 +15,7 @@ from facturas.views import FacturaProveedorAPI
 from facturas.views import FacturaClienteAPI
 from facturas.views import ComprobanteEmpleadoAPI
 from facturas.views import LogAPI
+from facturas.views import ResumenAPI
 
 router = routers.DefaultRouter()
 router.register(
@@ -37,13 +38,17 @@ router.register(
     LogAPI,
     'logs'
 )
-
+router.register(
+    r'resumenes',
+    ResumenAPI,
+    'resumenes'
+)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
     url(r'^', include('home.urls')),
-    url(r'^', include('autorizacion.urls')),
+    url(r'^', include('seguridad.urls')),
     url(r'^', include('configuracion.urls')),
     url(r'^', include('facturas.urls')),
 ]

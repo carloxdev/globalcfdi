@@ -1,6 +1,6 @@
 
-var card_filtros = null;
-var card_resultados = null;
+var card_filtros = null
+var card_resultados = null
 var url_dominio = window.location.protocol + '//' + window.location.host + '/'
 
 /*-----------------------------------------------*\
@@ -9,14 +9,71 @@ var url_dominio = window.location.protocol + '//' + window.location.host + '/'
 
 $(document).ready(function () {
 
-    // card_filtros = new TargetaFiltros();
-    card_resultados = new TargetaResultados();
+    card_filtros = new TargetaFiltros()
+    card_resultados = new TargetaResultados()
 
-    alertify.set('notifier', 'position', 'top-right');
-    alertify.set('notifier', 'delay', 10);
-});
+    alertify.set('notifier', 'position', 'top-right')
+    alertify.set('notifier', 'delay', 10)
+})
 
 
+/*-----------------------------------------------*\
+            OBJETO: TargetaFiltros
+\*-----------------------------------------------*/
+
+function TargetaFiltros() {
+
+    this.$empresa = $('#id_empresa')
+
+    this.$estado = $('#id_estado')
+    this.$operacion = $('#id_operacion')
+
+    this.$fecha_operacion_inicio = $('#id_fecha_operacion_inicio')
+    this.$fecha_operacion_fin = $('#id_fecha_operacion_final')
+
+    // Botones
+    this.$boton_buscar = $('#id_buscar')
+    this.$boton_limpiar = $('#id_limpiar')
+
+    // Iniciamos estilos y funcionalidad
+    this.init()
+}
+TargetaFiltros.prototype.init = function () {
+
+    var datepicker_init = {
+        autoSize: true,
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesMin: ['Dom', 'Lu', 'Ma', 'Mi', 'Je', 'Vi', 'Sa'],
+        firstDay: 1,
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+    }
+
+    this.$fecha_operacion_inicio.datepicker(datepicker_init)
+    this.$fecha_operacion_fin.datepicker(datepicker_init)
+
+    // Botones
+    this.$boton_buscar.on('click', this, this.click_BotonBuscar);
+    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
+}
+TargetaFiltros.prototype.click_BotonBuscar = function (e) {
+
+    e.preventDefault()
+    card_resultados.buscar()
+}
+TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
+
+    e.preventDefault()
+
+    e.data.$empresa.val("")
+    e.data.$estado.val("")
+    e.data.$operacion.val("")
+    e.data.$fecha_operacion_inicio.val("")
+    e.data.$fecha_operacion_fin.val("")
+}
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -24,16 +81,18 @@ $(document).ready(function () {
 
 function TargetaResultados() {
 
-    this.$divGrid = $('#resultados');
-    this.kFields = null;
-    this.kFuenteDatos = null;    
-    this.kRows = null;
-    this.kColumns = null;
-    this.kGrid = null;
+    this.$divGrid = $('#resultados')
+    this.kFields = null
+    this.kFuenteDatos = null    
+    this.kRows = null
+    this.kColumns = null
+    this.kGrid = null
 
-    this.Init();
+    this.init()
 }
-TargetaResultados.prototype.Init = function () {
+TargetaResultados.prototype.init = function () {
+
+    kendo.culture("es-MX")
 
     this.kFields = {
         empresa: { editable: false, type: "string" },
@@ -49,7 +108,6 @@ TargetaResultados.prototype.Init = function () {
 
     this.kFuenteDatos = new kendo.data.DataSource({
 
-        // serverFiltering: true,
         serverPaging: true,
         pageSize: 10,
         transport: {
@@ -59,25 +117,20 @@ TargetaResultados.prototype.Init = function () {
                 type: "GET",
                 dataType: "json",
             },
-            // parameterMap: function (data, action) {
-            //     if (action === "read") {
+            parameterMap: function (data, action) {
+                if (action === "read") {
 
-            //         return {
-            //             page: data.page,
-            //             pageSize: data.pageSize,
-            //             empresa__clave: cardFiltros.$empresa.val(),
-            //             min_fecha: cardFiltros.$fechaInicio.val(),
-            //             max_fecha: cardFiltros.$fechaFin.val(),
-            //             emisor_rfc: cardFiltros.$emisor_rfc.val(),
-            //             emisor_nombre: cardFiltros.$emisor_nombre.val(),
-            //             uuid: cardFiltros.$uuid.val(),
-            //             folio : cardFiltros.$folio.val(),
-            //             estado: cardFiltros.$estado.val(),
-            //             comprobacion: cardFiltros.$comprobacion.val(),
-            //             pdf_save: cardFiltros.$pdf.val()
-            //         };
-            //     }
-            // }
+                    return {
+                        page: data.page,
+                        pageSize: data.pageSize,
+                        empresa__clave: card_filtros.$empresa.val(),
+                        estado: card_filtros.$estado.val(),
+                        operacion: card_filtros.$operacion.val(),
+                        fecha_operacion_min: card_filtros.$fecha_operacion_inicio.val(),
+                        fecha_operacion_max: card_filtros.$fecha_operacion_fin.val(),
+                    }
+                }
+            }
         },
         schema: {
             data: "results",
@@ -87,45 +140,42 @@ TargetaResultados.prototype.Init = function () {
             }
         },
         error: function (e) {
-			alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown);
+			alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
         },
-    });
+    })
 
     this.kColumns = [
-        { field: "empresa", title: "empresa", width: "200px" },
-        { field: "nombre", title: "nombre", width: "200px" },
-        { field: "estado", title: "estado", width: "200px" },
-        { field: "operacion", title: "operacion", width: "200px" },
-        { field: "fecha_operacion", title: "fecha_operacion", width: "200px" },
-        { field: "descripcion", title: "descripcion", width: "200px" },
-        { field: "url", title: "url", width: "200px" },
-        { field: "created_date", title: "created_date", width: "200px" },
-        { field: "updated_date", title: "updated_date", width: "200px" },
-
-           // {
-           //     command: {
-           //         text: "Archivo XML",
-           //         click: this.Click_DescargarArchivoXML
-           //     },
-           //     title: " ",
-           //     width: "160px"
-           // },
-           // {
-           //     command: {
-           //         text: "Archivo PDF",
-           //         click: this.Click_DescargarArchivoPDF
-           //     },
-           //     title: " ",
-           //     width: "160px"
-           // },
-           // {
-	          //  command: {
-	          //      text: "Validar",
-	          //      click: this.Click_BotonValidar
-	          //  },
-	          //  title: " ",
-	          //  width: "160px"
-           //  },
+        { field: "empresa", title: "Empresa", width: "120px" },
+        { field: "nombre", title: "Nombre", width: "250px" },
+        { field: "estado", title: "Estado", width: "100px" },
+        { field: "operacion", title: "Operacion", width: "100px" },
+        { 
+            field: "fecha_operacion", 
+            title: "Fecha Operacion", 
+            width: "130px", 
+            template: "#= kendo.toString(kendo.parseDate(fecha_operacion, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        { field: "descripcion", title: "Descripcion", width: "150px" },
+        { 
+            field: "created_date", 
+            title: "Creado el", 
+            width: "120px",
+            template: "#= kendo.toString(kendo.parseDate(created_date, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        { 
+            field: "updated_date", 
+            title: "Actualizado el", 
+            width: "120px",
+            template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        {
+           command: {
+               text: "Log",
+               click: this.descargar_Log
+           },
+           title: " ",
+           width: "90px"
+        },
     ]
 
     this.kGrid = this.$divGrid.kendoGrid({
@@ -133,17 +183,24 @@ TargetaResultados.prototype.Init = function () {
         columnMenu: true,
         groupable: false,
         sortable: true,
+        resizable: true,
         pageable: true,
         selectable: true,
-        editable: "inline",
+        editable: false,
         scrollable: true,
         columns: this.kColumns,
-    });
+    })
 
 }
-TargetaResultados.prototype.Buscar = function (e) {
+TargetaResultados.prototype.buscar = function (e) {
 
-    this.kFuenteDatos.page(1);
+    this.kFuenteDatos.page(1)
 }
-
+TargetaResultados.prototype.descargar_Log = function (e) {
+    e.preventDefault()
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    var url = url_dominio + "media/" + fila.url
+    var win = window.open(url, '_blank')
+    win.focus()
+}
 
