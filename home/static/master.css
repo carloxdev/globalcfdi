@@ -3,6 +3,11 @@ html, body {
   height: 100%;
 }
 
+a, a:hover, a:focus {
+    color: #E10703;
+    text-decoration: none;
+}
+
 .page-header {
     border-bottom: 1px solid transparent;
     margin: 30px 0 0;
@@ -38,7 +43,35 @@ html, body {
     color: #000;
 }
 
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: #E10703;
+    color: #ffffff;
+}
 
+.dropdown-menu {
+    border: 0px solid;
+}
+
+.dropdown-menu > li > a {
+    color: #000000;
+}
+
+.dropdown-menu > li > a:focus {
+    color: #ffffff;
+}
+
+.dropdown-menu > li> a:hover, .dropdown-menu> li > a:focus{ 
+	background-color:#E10703;
+	color:#fff;
+}
+
+.navbar-default .navbar-nav> li> a:hover, .navbar-default .navbar-nav> li > a:focus {
+	color:#E10703;
+}
+
+.navbar-nav .open .dropdown-menu{
+	background-color: #ffffff;
+}
 
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
 	background-color: #FD1D17;
@@ -49,16 +82,22 @@ html, body {
 }
 
 
-
-
+.breadcrumb {
+    background-color: #494949;
+    border-radius: 0px;
+}
+.breadcrumb > .active {
+    color: #cccccc;
+}
 .footer {
-	background-color: #E10703;
+	background-color: #494949;
 	color: #fff;
 	position: relative;
 	margin-top: -100px; /* negative value of footer height */
 	height: 100px;
 	clear:both;
 	padding-top:20px;
+	border-top: medium solid #e10703;
 }
 
 .titulo {
