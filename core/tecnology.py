@@ -5,6 +5,7 @@
 from datetime import date
 from datetime import timedelta
 
+
 # Librerias Propias:
 from slaves import Contador
 from tools.comunicacion import Postman
@@ -42,7 +43,11 @@ class Cfdineitor(object):
         self.get_Invoices_ByMonths(esclavo, "RECIBIDAS", lista_meses)
         self.get_Invoices_ByMonths(esclavo, "EMITIDAS", lista_meses)
 
-    def get_Invoices_AllCompanies(self):
+    # def get_Invoices_Company_ByRange(self, _empresa_clave, _fecha_inicio, _fecha_final):
+
+        
+
+    def get_Invoices_AllCompanies_Last3Days(self):
 
         lista_empresas = ModeloEmpresa.get_Activas()
 
@@ -51,7 +56,7 @@ class Cfdineitor(object):
             self.get_Invoices_LastThreeDays(esclavo, "RECIBIDAS")
             self.get_Invoices_LastThreeDays(esclavo, "EMITIDAS")
 
-    def get_Invoices_LastThreeDays(self, _esclavo, _tipo):
+    def get_Invoices_Last3Days(self, _esclavo, _tipo):
 
         ahora = date.today()
 
@@ -73,7 +78,7 @@ class Cfdineitor(object):
 
         for mes in _lista_meses:
 
-            dias = Chronos.getDays(mes, anio)
+            dias = Chronos.getDays_ByMonth(mes, anio)
             for dia in dias:
                 fecha = date(anio, mes, dia)
                 log = _esclavo.get_Invoices_ByDay(_tipo, fecha)
