@@ -9,6 +9,12 @@ html, body {
     padding-bottom: 0;
 }
 
+
+.logoapp {
+	height: 60px;
+	text-align: center
+}
+
 #wrap {
   min-height: 100%;
 }
@@ -23,10 +29,31 @@ html, body {
 	margin-bottom: 0px;
 }
 
+.navbar-default {
+    background-color: #ffffff;
+    border-color: transparent;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #000;
+}
+
+
+
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+	background-color: #FD1D17;
+ }
+.navbar-default .navbar-toggle {
+    border-color: #E10703;
+    background-color: #E10703;
+}
+
+
+
 
 .footer {
-	background-color: #EE8A11;
-	color: white;
+	background-color: #E10703;
+	color: #fff;
 	position: relative;
 	margin-top: -100px; /* negative value of footer height */
 	height: 100px;
@@ -62,3 +89,5 @@ html, body {
 table a:not(.btn), .table a:not(.btn) {
     text-decoration: none;
 }
+
+
