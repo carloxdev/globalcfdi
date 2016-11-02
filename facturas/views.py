@@ -176,14 +176,12 @@ class Obtener(View):
         formulario = ObtenerForm(request.POST, username=request.user)
 
         if formulario.is_valid():
+            datos_formulario = formulario.cleaned_data
 
-            # run_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'Sitio'))
-            # print run_path
-            # app = Cfdineitor("PRODUCCION", run_path)
-            # app.get_Invoices_Company("LSV")
-            imprimir_Datos.delay()
-            imprimir_Datos.delay()
-            self.mensaje = "Ejemplo"
+            # imprimir_Datos.delay(
+            #     datos_formulario.get('fecha_inicio'),
+            #     datos_formulario.get('fecha_final')
+            # )
 
         contexto = {
             'form': formulario,

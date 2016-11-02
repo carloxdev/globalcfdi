@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 from datetime import datetime
+from datetime import timedelta
 
 # Librerias Propias
 from mistakes import ErrorEjecucion
@@ -53,7 +54,7 @@ class Chronos(object):
         time.sleep(sec)
 
     @classmethod
-    def getDays(self, month, year):
+    def getDays_ByMonth(self, month, year):
 
         days = []
 
@@ -64,6 +65,20 @@ class Chronos(object):
                     days.append(day)
 
         return days
+
+    @classmethod
+    def getDays_FromRange(self, _init_date, _end_date):
+
+        delta = _end_date - _init_date
+
+        lista_fechas = []
+
+        for i in range(delta.days + 1):
+
+            fecha = _init_date + timedelta(days=i)
+            lista_fechas.append(fecha)
+
+        return lista_fechas
 
 
 class Filtro(object):
