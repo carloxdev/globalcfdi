@@ -2,6 +2,7 @@
 var card_filtros = null
 var card_resultados = null
 var url_dominio = window.location.protocol + '//' + window.location.host + '/'
+var url_grid = url_dominio + "api/comprobantes_empleado/"
 
 /*-----------------------------------------------*\
             LOAD
@@ -210,7 +211,7 @@ TargetaResultados.prototype.init = function () {
         transport: {
             read: {
 
-                url: url_dominio + "api/comprobantes_empleado/",
+                url: url_grid,
                 type: "GET",
                 dataType: "json",
             },
@@ -451,8 +452,33 @@ TargetaResultados.prototype.init = function () {
     }).data("kendoWindow");    
     this.kWindow_retenidos.element.attr('style', 'padding: 1px');
 }
+TargetaResultados.prototype.llenar_Grid = function (e) {
+
+    e.preventDefault()
+
+    var data = this.dataItems()
+
+    $.each(data, function (indice, elemento) {
+        
+        if (elemento.tiene_pdf == "false") {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')
+        }
+        if (elemento.totalImpuestosTrasladados == 0) {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+        }
+        if (elemento.totalImpuestosRetenidos == 0) {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+        }       
+    })
+}
 TargetaResultados.prototype.buscar = function (e) {
+
+    e.preventDefault()
     this.kFuenteDatos.page(1)
+}
+TargetaResultados.prototype.validar_XML = function (e) {
+    e.preventDefault()
+    alertify.notify("Se esta validando")
 }
 TargetaResultados.prototype.descargar_XML = function (e) {
     e.preventDefault()
@@ -461,9 +487,19 @@ TargetaResultados.prototype.descargar_XML = function (e) {
     var win = window.open(url, '_blank')
     win.focus()
 }
-TargetaResultados.prototype.validar_XML = function (e) {
+TargetaResultados.prototype.descargar_PDF = function (e) {
+    
     e.preventDefault()
-    alertify.notify("Se esta validando")
+
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+
+    var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
+
+    var url = url_dominio + "media/" + ruta_archivo;
+
+    var win = window.open(url, '_blank')
+
+    win.focus()
 }
 TargetaResultados.prototype.ver_Conceptos = function (e) {
     e.preventDefault()
@@ -650,6 +686,80 @@ TargetaResultados.prototype.ver_Retenidos = function (e) {
         json_lista.push(JSON.parse(elemento_formateado))
     })
     kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
+}
+TargetaResultados.prototype.exportar_Datos = function (e) {
+
+    e.preventDefault();
+
+    if (card_filtros.validar_Filtros() == true) {
+        var filas_excel = [{
+            cell: [
+                { value: 'serie' },
+                { value: 'folio' },
+                { value: 'fecha' },
+                { value: 'formaDePago' },
+                { value: 'noCertificado' },
+                { value: 'subTotal' },
+                { value: 'tipoCambio' },
+                { value: 'moneda' },
+                { value: 'sello' },
+                { value: 'total' },
+                { value: 'tipoDeComprobante' },
+                { value: 'metodoDePago' },
+                { value: 'lugarExpedicion' },
+                { value: 'numCtaPago' },
+                { value: 'condicionesDePago' },
+                { value: 'emisor_rfc' },
+                { value: 'emisor_nombre' },
+                { value: 'emisor_calle' },
+                { value: 'emisor_noExterior' },
+                { value: 'emisor_noInterior' },
+                { value: 'emisor_colonia' },
+                { value: 'emisor_localidad' },
+                { value: 'emisor_municipio' },
+                { value: 'emisor_estado' },
+                { value: 'emisor_pais' },
+                { value: 'emisor_codigoPostal' },
+                { value: 'emisor_expedidoEn_calle' },
+                { value: 'emisor_expedidoEn_noExterior' },
+                { value: 'emisor_expedidoEn_noInterior' },
+                { value: 'emisor_expedidoEn_colonia' },
+                { value: 'emisor_expedidoEn_municipio' },
+                { value: 'emisor_expedidoEn_estado' },
+                { value: 'emisor_expedidoEn_pais' },
+                { value: 'emisor_regimen' },
+                { value: 'receptor_rfc' },
+                { value: 'receptor_nombre' },
+                { value: 'receptor_calle' },
+                { value: 'receptor_noExterior' },
+                { value: 'receptor_noInterior' },
+                { value: 'receptor_colonia' },
+                { value: 'receptor_localidad' },
+                { value: 'receptor_municipio' },
+                { value: 'receptor_estado' },
+                { value: 'receptor_pais' },
+                { value: 'receptor_codigoPostal' },
+                { value: 'conceptos' },
+                { value: 'totalImpuestosTrasladados' },
+                { value: 'totalImpuestosRetenidos' },
+                { value: 'impuestos_trasladados' },
+                { value: 'impuestos_retenidos' },
+                { value: 'uuid' },
+                { value: 'fechaTimbrado' },
+                { value: 'noCertificadoSAT' },
+                { value: 'selloSAT' },
+                { value: 'empresa' },
+                { value: 'comentarios' },
+                { value: 'comprobacion' },
+                { value: 'url' },
+                { value: 'tiene_pdf' },
+                { value: 'estadoSat' },
+            ]
+        }]
+    }
+    else {
+        alertify.notify("Favor de seleccionar al menos un filtro");
+    }      
 }
 
 
