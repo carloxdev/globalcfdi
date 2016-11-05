@@ -189,8 +189,8 @@ TargetaResultados.prototype.init = function () {
         editable: false,
         scrollable: true,
         columns: this.kColumns,
+        dataBound: this.llenar_Grid,
     })
-
 }
 TargetaResultados.prototype.buscar = function (e) {
 
@@ -203,4 +203,46 @@ TargetaResultados.prototype.descargar_Log = function (e) {
     var win = window.open(url, '_blank')
     win.focus()
 }
+TargetaResultados.prototype.llenar_Grid = function (e) {
 
+    e.preventDefault()
+
+    $('td').each( function () {
+        if($(this).text()=='EXITO'){ 
+
+            $(this).addClass('cell--exito')
+        }
+        else if($(this).text()=='DETALLES'){ 
+            $(this).addClass('cell--detalle')
+        }
+        else if($(this).text()=='ERROR'){ 
+            $(this).addClass('cell--error')
+        }
+        else if($(this).text()=='PROCESANDO'){
+            $(this).addClass('cell--procesando')
+        } 
+    })
+
+
+    
+
+    // var row = this.dataItems()
+
+    // $.each(row, function (indice, elemento) {
+        
+    //     if (elemento.estado == "EXITO") {
+    //         // card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')
+    //         row.cells[3].bgColor = "#1C9E39";
+    //     }
+    //     else if (elemento.estado == "DETALLES") {
+    //         row.cells[3].bgColor = "#FBE40C";
+    //     }
+    //     else if (elemento.estado == "ERROR") {
+    //         row.cells[3].bgColor = "#F60009";
+    //     }
+    //     else {
+    //         row.cells[3].bgColor = "#FDFEFD";   
+    //     }
+   
+    // })
+}

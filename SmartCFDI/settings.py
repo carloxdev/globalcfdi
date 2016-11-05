@@ -138,9 +138,7 @@ USE_L10N = True
 USE_TZ = False
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.10/howto/static-files/
-
+# CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = '/static/'
 STATIC_ROOT = os.sep.join(
     os.path.abspath(__file__).split(os.sep)[:-2] + ['static']

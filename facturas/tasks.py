@@ -2,6 +2,7 @@
 
 # Librerias Python:
 import os
+from datetime import datetime
 
 # Librerias de Terceros
 from celery import task
@@ -11,9 +12,24 @@ from core.tecnology import Cfdineitor
 
 
 @task
-def imprimir_Datos():
-    run_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'Sitio'))
-    app = Cfdineitor("PRODUCCION", run_path)
-    app.get_Invoices_Company("LSV")
+def obtener_facturas(_empresa_clave, _fecha_inicio, _fecha_final):
 
-    # print "HOla"
+    print _empresa_clave
+    print _fecha_inicio
+    fecha_inicio = datetime.strptime(_fecha_inicio, "%Y-%m-%d")
+    fecha_final = datetime.strptime(_fecha_final, "%Y-%m-%d")
+
+    run_path = os.path.abspath(
+        os.path.join(os.getcwd(), os.pardir, 'Sitio')
+    )
+    app = Cfdineitor("PRODUCCION", run_path)
+    app.get_Invoices_Company_ByRange("LSV", fecha_inicio, fecha_final)
+
+#
+
+# print fecha_inicio
+# print fecha_final
+
+# 
+
+# print "HOla"

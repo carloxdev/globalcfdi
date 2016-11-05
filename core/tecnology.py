@@ -39,13 +39,21 @@ class Cfdineitor(object):
 
         empresa = ModeloEmpresa.get(_empresa_clave)
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-        lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        # lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        lista_meses = [1,]
         self.get_Invoices_ByMonths(esclavo, "RECIBIDAS", lista_meses)
         self.get_Invoices_ByMonths(esclavo, "EMITIDAS", lista_meses)
 
-    # def get_Invoices_Company_ByRange(self, _empresa_clave, _fecha_inicio, _fecha_final):
+    def get_Invoices_Company_ByRange(self, _empresa_clave, _fecha_inicio, _fecha_final):
 
-        
+        fechas = Chronos.getDays_FromRange(_fecha_inicio, _fecha_final)
+
+        empresa = ModeloEmpresa.get(_empresa_clave)
+        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+
+        for fecha in fechas:
+            log = esclavo.get_Invoices_ByDay("RECIBIDAS", fecha)
+            self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
 
     def get_Invoices_AllCompanies_Last3Days(self):
 

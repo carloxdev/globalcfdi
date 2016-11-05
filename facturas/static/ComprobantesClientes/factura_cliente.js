@@ -2,6 +2,9 @@
 var card_filtros = null
 var card_resultados = null
 var url_dominio = window.location.protocol + '//' + window.location.host + '/'
+var url_grid = url_dominio + "api/facturas_cliente/"
+
+
 
 /*-----------------------------------------------*\
             LOAD
@@ -14,7 +17,7 @@ $(document).ready(function () {
 
     alertify.set('notifier', 'position', 'top-right')
     alertify.set('notifier', 'delay', 10)
-});
+})
 
 
 /*-----------------------------------------------*\
@@ -64,8 +67,8 @@ TargetaFiltros.prototype.init = function () {
     this.$fecha_timbrado_fin.datepicker(datepicker_init)  
 
     // Botones
-    this.$boton_buscar.on('click', this, this.click_BotonBuscar);
-    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
+    this.$boton_buscar.on('click', this, this.click_BotonBuscar)
+    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar)
 }
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
@@ -210,7 +213,7 @@ TargetaResultados.prototype.init = function () {
         transport: {
             read: {
 
-                url: url_dominio + "api/facturas_cliente/",
+                url: url_grid,
                 type: "GET",
                 dataType: "json",
             },
@@ -247,7 +250,7 @@ TargetaResultados.prototype.init = function () {
         error: function (e) {
             alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
         },
-    });
+    })
 
     this.kColumns = [
         {
@@ -269,7 +272,7 @@ TargetaResultados.prototype.init = function () {
         {
            command: {
                text: "PDF",
-               // click: this.Click_DescargarArchivoPDF
+               click: this.descargar_PDF
            },
            title: " ",
            width: "90px"
@@ -292,8 +295,8 @@ TargetaResultados.prototype.init = function () {
         { field: "folio", title: "Folio", width: "120px" },
         { field: "estadoSat", title: "Estado SAT", width: "130px" },
         { field: "comprobacion", title: "Comprobacion", width: "140px" },        
-        { field: "emisor_rfc", title: "Emisor RFC", width: "140px" },
-        { field: "emisor_nombre", title: "Emisor Nombre", width: "350px" },
+        { field: "receptor_rfc", title: "Receptor RFC", width: "140px" },
+        { field: "receptor_nombre", title: "Receptor Nombre", width: "350px" },
         {
            command: {
                text: "ver",
@@ -363,6 +366,8 @@ TargetaResultados.prototype.init = function () {
         { field: "lugarExpedicion", title: "Lugar Expedicion", width: "200px", hidden: true },
         { field: "numCtaPago", title: "Num Cta Pago", width: "200px", hidden: true },
         { field: "condicionesDePago", title: "Condiciones Pago", width: "200px", hidden: true },
+        { field: "emisor_rfc", title: "Receptor RFC", width: "200px", hidden: true },
+        { field: "emisor_nombre", title: "Receptor Nombre", width: "200px", hidden: true },        
         { field: "emisor_calle", title: "Emisor Calle", width: "200px", hidden: true },
         { field: "emisor_noExterior", title: "Emisor no Exterior", width: "200px", hidden: true },
         { field: "emisor_noInterior", title: "Emisor no Interior", width: "200px", hidden: true },
@@ -380,8 +385,6 @@ TargetaResultados.prototype.init = function () {
         { field: "emisor_expedidoEn_estado", title: "Emisor Expedido En_estado", width: "200px", hidden: true },
         { field: "emisor_expedidoEn_pais", title: "Emisor Expedido En_pais", width: "200px", hidden: true },
         { field: "emisor_regimen", title: "Emisor Regimen", width: "200px", hidden: true },
-        { field: "receptor_rfc", title: "Receptor RFC", width: "200px", hidden: true },
-        { field: "receptor_nombre", title: "Receptor Nombre", width: "200px", hidden: true },
         { field: "receptor_calle", title: "Receptor Calle", width: "200px", hidden: true },
         { field: "receptor_noExterior", title: "Receptor noExterior", width: "200px", hidden: true },
         { field: "receptor_noInterior", title: "Receptor noInterior", width: "200px", hidden: true },
@@ -405,9 +408,9 @@ TargetaResultados.prototype.init = function () {
         editable: false,
         scrollable: true,
         columns: this.kColumns,
-        // dataBound: this.FillGrid,
+        dataBound: this.llenar_Grid,
         mobile: true
-    });
+    })
 
     this.kWindow_conceptos = this.$popup_conceptos.kendoWindow({
         title: "Conceptos",
@@ -420,8 +423,8 @@ TargetaResultados.prototype.init = function () {
             "Close"
         ],        
         resizable: true,
-    }).data("kendoWindow");    
-    this.kWindow_conceptos.element.attr('style', 'padding: 1px');
+    }).data("kendoWindow")    
+    this.kWindow_conceptos.element.attr('style', 'padding: 1px')
 
     this.kWindow_trasladados = this.$popup_trasladados.kendoWindow({
         title: "Impuestos Trasladados",
@@ -434,8 +437,8 @@ TargetaResultados.prototype.init = function () {
             "Close"
         ],        
         resizable: true,
-    }).data("kendoWindow");    
-    this.kWindow_trasladados.element.attr('style', 'padding: 1px');
+    }).data("kendoWindow")    
+    this.kWindow_trasladados.element.attr('style', 'padding: 1px')
 
     this.kWindow_retenidos = this.$popup_retenidos.kendoWindow({
         title: "Impuestos Retenidos",
@@ -448,11 +451,36 @@ TargetaResultados.prototype.init = function () {
             "Close"
         ],        
         resizable: true,
-    }).data("kendoWindow");    
-    this.kWindow_retenidos.element.attr('style', 'padding: 1px');
+    }).data("kendoWindow")    
+    this.kWindow_retenidos.element.attr('style', 'padding: 1px')
+}
+TargetaResultados.prototype.llenar_Grid = function (e) {
+
+    e.preventDefault()
+
+    var data = this.dataItems()
+
+    $.each(data, function (indice, elemento) {
+        
+        if (elemento.tiene_pdf == "false") {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')
+        }
+        if (elemento.totalImpuestosTrasladados == 0) {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+        }
+        if (elemento.totalImpuestosRetenidos == 0) {
+            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+        }       
+    })
 }
 TargetaResultados.prototype.buscar = function (e) {
+
+    e.preventDefault()
     this.kFuenteDatos.page(1)
+}
+TargetaResultados.prototype.validar_XML = function (e) {
+    e.preventDefault()
+    alertify.notify("Se esta validando")
 }
 TargetaResultados.prototype.descargar_XML = function (e) {
     e.preventDefault()
@@ -461,9 +489,19 @@ TargetaResultados.prototype.descargar_XML = function (e) {
     var win = window.open(url, '_blank')
     win.focus()
 }
-TargetaResultados.prototype.validar_XML = function (e) {
+TargetaResultados.prototype.descargar_PDF = function (e) {
+    
     e.preventDefault()
-    alertify.notify("Se esta validando")
+
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+
+    var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
+
+    var url = url_dominio + "media/" + ruta_archivo;
+
+    var win = window.open(url, '_blank')
+
+    win.focus()
 }
 TargetaResultados.prototype.ver_Conceptos = function (e) {
     e.preventDefault()
@@ -651,5 +689,77 @@ TargetaResultados.prototype.ver_Retenidos = function (e) {
     })
     kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
 }
+TargetaResultados.prototype.exportar_Datos = function (e) {
 
+    e.preventDefault();
 
+    if (card_filtros.validar_Filtros() == true) {
+        var filas_excel = [{
+            cell: [
+                { value: 'serie' },
+                { value: 'folio' },
+                { value: 'fecha' },
+                { value: 'formaDePago' },
+                { value: 'noCertificado' },
+                { value: 'subTotal' },
+                { value: 'tipoCambio' },
+                { value: 'moneda' },
+                { value: 'sello' },
+                { value: 'total' },
+                { value: 'tipoDeComprobante' },
+                { value: 'metodoDePago' },
+                { value: 'lugarExpedicion' },
+                { value: 'numCtaPago' },
+                { value: 'condicionesDePago' },
+                { value: 'emisor_rfc' },
+                { value: 'emisor_nombre' },
+                { value: 'emisor_calle' },
+                { value: 'emisor_noExterior' },
+                { value: 'emisor_noInterior' },
+                { value: 'emisor_colonia' },
+                { value: 'emisor_localidad' },
+                { value: 'emisor_municipio' },
+                { value: 'emisor_estado' },
+                { value: 'emisor_pais' },
+                { value: 'emisor_codigoPostal' },
+                { value: 'emisor_expedidoEn_calle' },
+                { value: 'emisor_expedidoEn_noExterior' },
+                { value: 'emisor_expedidoEn_noInterior' },
+                { value: 'emisor_expedidoEn_colonia' },
+                { value: 'emisor_expedidoEn_municipio' },
+                { value: 'emisor_expedidoEn_estado' },
+                { value: 'emisor_expedidoEn_pais' },
+                { value: 'emisor_regimen' },
+                { value: 'receptor_rfc' },
+                { value: 'receptor_nombre' },
+                { value: 'receptor_calle' },
+                { value: 'receptor_noExterior' },
+                { value: 'receptor_noInterior' },
+                { value: 'receptor_colonia' },
+                { value: 'receptor_localidad' },
+                { value: 'receptor_municipio' },
+                { value: 'receptor_estado' },
+                { value: 'receptor_pais' },
+                { value: 'receptor_codigoPostal' },
+                { value: 'conceptos' },
+                { value: 'totalImpuestosTrasladados' },
+                { value: 'totalImpuestosRetenidos' },
+                { value: 'impuestos_trasladados' },
+                { value: 'impuestos_retenidos' },
+                { value: 'uuid' },
+                { value: 'fechaTimbrado' },
+                { value: 'noCertificadoSAT' },
+                { value: 'selloSAT' },
+                { value: 'empresa' },
+                { value: 'comentarios' },
+                { value: 'comprobacion' },
+                { value: 'url' },
+                { value: 'tiene_pdf' },
+                { value: 'estadoSat' },
+            ]
+        }]
+    }
+    else {
+        alertify.notify("Favor de seleccionar al menos un filtro");
+    }      
+}
