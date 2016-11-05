@@ -130,7 +130,7 @@ class FacturaProveedorFormFiltros(forms.Form):
 
     def obtener_Empresas(self, _usuario):
 
-        empresa = [('', 'Todas'), ]
+        empresa = []
 
         registros = Empresa.objects.filter(usuario=_usuario)
 

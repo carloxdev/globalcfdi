@@ -49,7 +49,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
 # Tasks
-from .tasks import imprimir_Datos
+from .tasks import obtener_facturas
 
 # import os
 # from core.tecnology import Cfdineitor
@@ -178,10 +178,21 @@ class Obtener(View):
         if formulario.is_valid():
             datos_formulario = formulario.cleaned_data
 
-            # imprimir_Datos.delay(
-            #     datos_formulario.get('fecha_inicio'),
-            #     datos_formulario.get('fecha_final')
-            # )
+            empresa = datos_formulario.get('empresa')
+            fecha_inicio = str(datos_formulario.get('fecha_inicio'))
+            fecha_fin = str(datos_formulario.get('fecha_final'))
+
+            print fecha_inicio
+            print fecha_fin
+
+            try:
+                obtener_facturas.delay(
+                    empresa,
+                    fecha_inicio,
+                    fecha_fin
+                )
+            except Exception as e:
+                self.mensaje = str(e)
 
         contexto = {
             'form': formulario,
@@ -193,7 +204,6 @@ class Obtener(View):
 
 
 class FacturaProveedorAPI(viewsets.ModelViewSet):
-    # queryset = FacturaProveedor
     serializer_class = FacturaProveedorSerializer
     pagination_class = GenericPagination
 
@@ -210,7 +220,6 @@ class FacturaProveedorAPI(viewsets.ModelViewSet):
 
 
 class FacturaClienteAPI(viewsets.ModelViewSet):
-    # queryset = FacturaCliente.objects.all()
     serializer_class = FacturaClienteSerializer
     pagination_class = GenericPagination
 
@@ -223,7 +232,6 @@ class FacturaClienteAPI(viewsets.ModelViewSet):
 
 
 class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
-    # queryset = ComprobanteEmpleado.objects.all()
     serializer_class = ComprobanteEmpleadoSerializer
     pagination_class = GenericPagination
 
@@ -236,8 +244,9 @@ class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
 
 
 class LogAPI(viewsets.ModelViewSet):
-    queryset = Log.objects.all()
+    queryset = Log.objects.all().order_by('-fecha_operacion',)
     serializer_class = LogSerializer
+
     pagination_class = GenericPagination
 
     filter_backends = (filters.DjangoFilterBackend,)
