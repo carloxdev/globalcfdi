@@ -376,15 +376,19 @@ TargetaResultados.prototype.init = function () {
         { field: "comentarios", title: "Comentarios", width: "200px", hidden: true },
         { field: "estadoSat", title: "Estado SAT", width: "130px" },
         { field: "comprobacion", title: "Comprobacion", width: "140px" },
+        { 
+            title: " ", 
+            template:'<a href="#=receptor_estado#" class="fa fa-file"></a>',
+            width: "50px"
+        },        
         {
            command: {
-               text: "Validar",
-               click: this.validar_XML
+               text: "&nbsp;",
+               click: this.validar_XML,
+               className: "fa fa-file"
            },
            title: " ",
-           width: "110px",
-           imageClass: "k-copy-icon"
-
+           width: "110px"
         },
         {
            command: {
@@ -770,4 +774,7 @@ TargetaResultados.prototype.exportar_Datos = function (e) {
     else {
         alertify.notify("Favor de seleccionar al menos un filtro");
     }      
+}
+TargetaResultados.prototype.hola = function (e) {
+    alertify.notify("Hola")
 }
