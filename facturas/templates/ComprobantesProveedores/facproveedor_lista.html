@@ -49,27 +49,18 @@
 						<div id="filtros_id" class="panel-collapse collapse">
 					  		<div class="panel-body">
 					
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
-										{{ form.empresa }}
+										<label for="{{ form.empresa.id_for_label }}">Folio:</label>
+										{{ form.folio }}
 									</div>
+								</div>
 
+								<div class="col-md-3">
 									<div class="form-group filtros">
-									    <label for="{{ form.emisor_rfc.id_for_label }}">Emisor RFC:</label>			  
-										{{ form.emisor_rfc }}					
-									</div>
-
-									<div class="form-group filtros">
-									    <label for="{{ form.emisor_nombre.id_for_label }}">Emisor Nombre:</label>
-										{{ form.emisor_nombre }}
-									</div>
-
-									<div class="form-group filtros">
-									    <label for="{{ form.estadoSat.id_for_label }}">Estado SAT:</label>									
-										{{ form.estadoSat }}
+										<label for="{{ form.empresa.id_for_label }}">Serie:</label>
+										{{ form.serie }}
 									</div>	
-
 									<div class="form-group filtros">
 										
 										<div class="row">
@@ -90,27 +81,11 @@
 									</div>
 								</div>
 
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<div class="form-group filtros">
 										<label for="{{ form.empresa.id_for_label }}">UUID:</label>
 										{{ form.uuid }}
 									</div>
-
-									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Serie:</label>
-										{{ form.serie }}
-									</div>	
-
-									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Folio:</label>
-										{{ form.folio }}
-									</div>
-
-									<div class="form-group filtros">
-									    <label for="{{ form.comprobacion.id_for_label }}">Comprobacion:</label>									
-										{{ form.comprobacion }}
-									</div>										
-
 									<div class="form-group filtros">
 
 										<div class="row">
@@ -128,18 +103,81 @@
 											</div>
 										</div>
 
+									</div>
+								</div>
+
+
+								<div class="col-md-3">
+									<div class="form-group filtros">
+									    <label for="{{ form.estadoSat.id_for_label }}">Estado SAT:</label>									
+										{{ form.estadoSat }}
+									</div>	
+										<button type="button" class="btn btn-primary" id="id_buscar">
+						  				Buscar
+						  			</button>
+							  		<button type="button" class="btn btn-default" id="id_limpiar">
+							  			Limpiar
+						  			</button>
+								</div>
+								
+							</div>
+								
+									
+								<!-- <div class="form-group filtros">
+										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
+										{{ form.empresa }}
+									</div>
+									<div class="form-group filtros">
+									    <label for="{{ form.emisor_rfc.id_for_label }}">Emisor RFC:</label>			  
+										{{ form.emisor_rfc }}					
+									</div>
+
+									<div class="form-group filtros">
+									    <label for="{{ form.emisor_nombre.id_for_label }}">Emisor Nombre:</label>
+										{{ form.emisor_nombre }}
+									</div>
+
+									
+									<div class="form-group filtros">
+																			
+
+										<div class="row">
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_inicio }}
+											</div>
+
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_final }}
+											</div>
+										</div>																				
+									</div>
+								</div>
+
+								<div class="col-md-3">														
+
+									<div class="form-group filtros">
+									    <label for="{{ form.comprobacion.id_for_label }}">Comprobacion:</label>									
+										{{ form.comprobacion }}
+									</div>										
+
+									<div class="form-group filtros">
+
+										
+										
+										<div class="row">
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_timbrado_inicio }}
+											</div>
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_timbrado_final }}
+											</div>
+										</div>
+
 									</div>										
 								</div>
 							
-							</div>
-						  	<div class="panel-footer">
-						  		<button type="button" class="btn btn-primary" id="id_buscar">
-						  			Buscar
-						  		</button>
-						  		<button type="button" class="btn btn-default" id="id_limpiar">
-						  			Limpiar
-						  		</button>						  		
-						  	</div>
+							</div>-->
+						  	
 						</div>
 					</div>	
 				</div>
