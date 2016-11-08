@@ -80,9 +80,9 @@
 							</ul>
 						</li>
 						{% else %}
-				        <li><a href="#">¿Quienes somos?</a></li>
+				        <li><a href="{% url 'home.quienessomos' %}">¿Quienes somos?</a></li>
 				        <li><a href="{% url 'home.servicios' %}">Servicios</a></li>
-				        <li><a href="#">Contactanos</a></li>
+				        <li><a href="{% url 'home.contactanos' %}">Contactanos</a></li>
 						<li><a href="{% url 'seguridad.login' %}">Login</a></li>
 						{% endif %}
 					</ul>

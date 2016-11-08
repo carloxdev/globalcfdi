@@ -110,3 +110,20 @@ class Servicios(View):
 
     def get(self, request):
         return render(request, self.template_name, {})
+
+
+class Contactanos(View):
+
+    def __init__(self):
+        self.template_name = 'home/contactanos.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
+
+class Quienessomos(View):
+
+    def __init__(self):
+        self.template_name = 'home/quienessomos.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
