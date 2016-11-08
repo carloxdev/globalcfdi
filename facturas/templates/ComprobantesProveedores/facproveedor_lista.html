@@ -15,8 +15,13 @@
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
 <!-- jQuery UI --> 
 <link rel="stylesheet" href="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.css' %}"/>
+
+<!-- Custom --> 
+<link rel="stylesheet" href="{% static 'ComprobantesProveedores/factura_proveedor.css' %}" />
 
 {% endblock css %}
 
@@ -26,7 +31,6 @@
 	<li><a href="{% url 'home.index' %}">Inicio</a></li>
 	<li class="active">Comprobantes Proveedor</li>
 </ol>
-
 
 <div class="container-fluid">
 	<div class="row">
