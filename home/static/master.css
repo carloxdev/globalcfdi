@@ -118,7 +118,7 @@ a, a:hover, a:focus {
 
 
 .navbar-collapse.collapse {
-    display: block !important;
+    
     height: auto !important;
     overflow: visible !important;
     padding-bottom: 0;
