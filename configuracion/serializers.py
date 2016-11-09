@@ -14,6 +14,7 @@ class EmpresaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Empresa
         fields = (
+            'pk',
             'clave',
             'razon_social',
             'logo',

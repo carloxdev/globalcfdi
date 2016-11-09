@@ -101,15 +101,31 @@ TargetaResultados.prototype.init = function () {
         // { field: "logo", title: "logo", width: "200px" },
         { field: "rfc", title: "RFC", width: "150px" },
         { field: "ciec", title: "CIEC", width: "150px" },
-        { field: "activa", title: "Activa", width: "50px" },
+        { 
+            field: "activa", 
+            title: "Estado", 
+            width: "80px",
+            template: "#= activa ? 'Activa' : 'Inactiva' #"
+        },
         { field: "usuario", title: "Usuario", width: "150px" },
         { field: "email", title: "Email", width: "150px" },
-        { field: "created_date", title: "Creado por", width: "180px" },
-        { field: "updated_date", title: "Actualizado por", width: "180px" },
+        { 
+            field: "created_date", 
+            title: "Creado por", 
+            width: "100px",
+            template: "#= kendo.toString(kendo.parseDate(created_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+        },
+        { 
+            field: "updated_date", 
+            title: "Actualizado por", 
+            width: "100px",
+            template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+
+        },
         {
            command: {
                text: "Editar",
-               // click: this.validar_XML,
+               click: this.editar_Registro,
            },
            title: " ",
            width: "110px"
@@ -134,4 +150,11 @@ TargetaResultados.prototype.buscar = function (e) {
 
     e.preventDefault()
     this.kFuenteDatos.page(1)
+}
+TargetaResultados.prototype.editar_Registro = function (e) {
+
+    e.preventDefault()
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    window.location.href = url_dominio + "empresas/editar/" + fila.pk;
+
 }
