@@ -7,6 +7,8 @@ from django.conf.urls import url
 from .views import Index
 from .views import Dashboard
 from .views import Servicios
+from .views import Contactanos
+from .views import Quienessomos
 
 
 urlpatterns = [
@@ -29,5 +31,15 @@ urlpatterns = [
         r'^servicios/$',
         Servicios.as_view(),
         name='home.servicios'
+    ),
+    url(
+        r'^contactanos/$',
+        Contactanos.as_view(),
+        name='home.contactanos'
+    ),
+    url(
+        r'^quienessomos/$',
+        Quienessomos.as_view(),
+        name='home.quienessomos'
     ),
 ]

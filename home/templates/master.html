@@ -80,9 +80,9 @@
 							</ul>
 						</li>
 						{% else %}
-				        <li><a href="#">¿Quienes somos?</a></li>
+				        <li><a href="{% url 'home.quienessomos' %}">¿Quienes somos?</a></li>
 				        <li><a href="{% url 'home.servicios' %}">Servicios</a></li>
-				        <li><a href="#">Contactanos</a></li>
+				        <li><a href="{% url 'home.contactanos' %}">Contactanos</a></li>
 						<li><a href="{% url 'seguridad.login' %}">Login</a></li>
 						{% endif %}
 					</ul>
@@ -100,13 +100,20 @@
  	<footer class="footer">
  		<div class="container">
  			<div class="row">
- 				<div class="col-sm-6">
+ 				<div class="col-sm-4">
+ 					<p> Terminos y Condiciones </p>
+ 					<p> Aviso de privacidad</p>
  					<p> Desarrollado por Oktosys S.A. de C. V. </p>
  				</div>
- 				<div class="col-sm-6">
- 					<p>
- 						XXX-XXX-XXX
- 					</p>
+ 				<div class="col-sm-4">
+ 					<p> Solicite soporte</p>
+ 					<p> Preguntas frecuentes</p>
+ 					</br>
+ 					<p> Contáctanos </p>
+ 					<p> smartcfdi@oktosys.com.mx </p>
+ 				</div>
+ 				<div class="col-sm-4">
+ 					<p>	Siguenos en:</p>
  				</div>
  			</div>
  		</div>
