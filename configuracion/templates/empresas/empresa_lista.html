@@ -7,6 +7,16 @@
 
 {% block css %}
 
+<!-- Kendo -->
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+
+<!-- Alertifyjs --> 
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
+
+
 {% endblock css %}
 
 {% block contenido %}
@@ -26,73 +36,34 @@
 		</div>
 	</div>
 
-	<ul class="nav nav-pills barra-tareas">
-	  <li class="active">
-	    <a href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
-	  </li>
-	</ul>
+	<div class="col-md-12">
 
-	{% if empresas %}
-	<div class="table-responsive">
-		<table class="table table-striped table-bordered table-hover table-condensed">
-			<tr>
-				{% if user.username == 'root' %} <th>Usuario</th> {% endif %}
-				<th>Clave</th> 
-				<th>Razon Social</th> 
-				<th>RFC</th> 
-				<th>CIEC</th> 
-				<th>Estado</th> 
-				<th>Email</th> 
-				<th></th> 
-			</tr>
-			{% for empresa in empresas %}
-			<tr>
-				<td> {{ empresa.clave }} </td> 
-				{% if user.username == 'root' %} <th> {{ empresa.usuario.username }} </th> {% endif %}
-				<td> {{ empresa.razon_social }} </td> 
-				<td> {{ empresa.rfc }} </td> 
-				<td> {{ empresa.ciec }} </td> 
-				<td> {% if empresa.activa %} ACTIVA {% else %} DESHABILITADA {% endif %}</td> 
-				<td> {{ empresa.email }} </td> 
-				<td> 
-					<a href="{% url 'configuracion.empresa_editar' empresa.pk %}" class="btn btn-default btn-xs">Editar</a> 
-				</td> 
-
-			</tr>
-			{% endfor %}
-		</table>		
-
-	</div>
-
-	<div class="row">
-		<div class="col-md-12">
-			<nav>
-				{% if empresas.paginator.count > 10 %}
-			        <ul class="pagination">
-			            {% if empresas.has_previous %}
-			                <li><a href="?page={{ empresas.previous_page_number }}">&laquo;</a></li>
-			            {% endif %}
-
-			            {% for i in empresas.paginator.page_range %}
-			                <li {% if empresas.number == i %} class="active" {% endif %}>
-			                    <a href="?page={{i}}">{{ i }}</a>
-			                </li>
-			            {% endfor %}
-
-			            {% if empresas.has_next %}
-			                <li><a href="?page={{ empresas.next_page_number }}">&raquo;</a></li>
-			            {% endif %}
-			        </ul>
-			    {% endif %}
-			</nav>
-		</div>
-	</div>
-
-	{% else %}
-	<h3 class="sin-resultados">No se encontraron empresas</h3>
-	{% endif %}
+		<ul class="nav nav-pills barra-tareas">
+		  <li class="active">
+		    <a href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
+		  </li>
+		</ul>
+		
+		<div id="resultados" class="grid" >
+		</div>			
+	</div>	
 
 </div>
 
 
 {% endblock contenido %}
+
+
+{% block scripts %}
+
+<!-- Alertifyjs -->
+<script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Kendo Js-->
+<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+
+<!-- Js del Sitio -->
+<script src="{% static 'empresas/empresa_lista.js' %}"></script>
+
+{% endblock scripts %}

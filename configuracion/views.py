@@ -11,17 +11,24 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-
 from django.core.urlresolvers import reverse
 
 # Django Generic Views
 from django.views.generic.base import View
+
+# API Rest:
+from rest_framework import viewsets
 
 # Django Paginacion:
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
+# Serializadores:
+from .serializers import EmpresaSerializer
+
+# Paginadores:
+from .pagination import GenericPagination
 
 # Modelos
 from .models import Empresa
@@ -43,30 +50,30 @@ class EmpresaListView(View):
     def get(self, request):
 
         # Buscar Empresavb
-        if request.user.is_staff:
-            empresas_list = Empresa.objects.all()
-        else:
-            empresas_list = Empresa.objects.filter(usuario=request.user)
+        # if request.user.is_staff:
+        #     empresas_list = Empresa.objects.all()
+        # else:
+        #     empresas_list = Empresa.objects.filter(usuario=request.user)
 
-        paginador = Paginator(empresas_list, 10)
+        # paginador = Paginator(empresas_list, 10)
 
-        pagina = request.GET.get('page')
+        # pagina = request.GET.get('page')
 
-        try:
-            empresas = paginador.page(pagina)
+        # try:
+        #     empresas = paginador.page(pagina)
 
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            empresas = paginador.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of
-            # results.
-            empresas = paginador.page(paginador.num_pages)
+        # except PageNotAnInteger:
+        #     # If page is not an integer, deliver first page.
+        #     empresas = paginador.page(1)
+        # except EmptyPage:
+        #     # If page is out of range (e.g. 9999), deliver last page of
+        #     # results.
+        #     empresas = paginador.page(paginador.num_pages)
 
-        contexto = {
-            'empresas': empresas
-        }
-        return render(request, self.template_name, contexto)
+        # contexto = {
+        #     'empresas': empresas
+        # }
+        return render(request, self.template_name, {})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -181,3 +188,16 @@ class EmpresaUpdateView(View):
             'clave': self.clave
         }
         return render(request, self.template_name, contexto)
+
+
+# ----------------- API REST ----------------- #
+
+
+class EmpresaAPI(viewsets.ModelViewSet):
+    serializer_class = EmpresaSerializer
+    pagination_class = GenericPagination
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+
+        return empresas
