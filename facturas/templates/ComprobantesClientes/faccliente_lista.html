@@ -46,16 +46,22 @@
 					
 								<div class="col-md-3">
 									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Folio:</label>
-										{{ form.folio }}
+										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
+										{{ form.empresa }}
 									</div>
+									<div class="form-group filtros">
+									    <label for="{{ form.estadoSat.id_for_label }}">Estado SAT:</label>									
+										{{ form.estadoSat }}
+									</div>	
+
 								</div>
 
 								<div class="col-md-3">
 									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Serie:</label>
-										{{ form.serie }}
-									</div>	
+										<label for="{{ form.empresa.id_for_label }}">Folio:</label>
+										{{ form.folio }}
+									</div>
+									
 									<div class="form-group filtros">
 										
 										<div class="row">
@@ -78,9 +84,10 @@
 
 								<div class="col-md-3">
 									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">UUID:</label>
-										{{ form.uuid }}
-									</div>
+										<label for="{{ form.empresa.id_for_label }}">Serie:</label>
+										{{ form.serie }}
+									</div>	
+									
 									<div class="form-group filtros">
 
 										<div class="row">
@@ -104,10 +111,12 @@
 
 								<div class="col-md-3">
 									<div class="form-group filtros">
-									    <label for="{{ form.estadoSat.id_for_label }}">Estado SAT:</label>									
-										{{ form.estadoSat }}
-									</div>	
-										<button type="button" class="btn btn-primary" id="id_buscar">
+										<label for="{{ form.empresa.id_for_label }}">UUID:</label>
+										{{ form.uuid }}
+									</div>
+
+
+									<button type="button" class="btn btn-primary" id="id_buscar">
 						  				Buscar
 						  			</button>
 							  		<button type="button" class="btn btn-default" id="id_limpiar">
