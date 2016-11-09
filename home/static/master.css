@@ -17,7 +17,7 @@ a, a:hover, a:focus {
 
 .page-header {
     border-bottom: 1px solid transparent;
-    margin: 30px 0 0;
+    margin: 50px 0 0;
     padding-bottom: 0;
 }
 
@@ -233,3 +233,8 @@ table a:not(.btn), .table a:not(.btn) {
     border-color: #494949;
     color: #ffffff;
 } 
+
+.btn-xs, .btn-group-xs > .btn {
+    border-radius: 4px;
+    padding: 5px;
+}
