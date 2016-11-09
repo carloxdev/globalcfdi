@@ -17,7 +17,7 @@ a, a:hover, a:focus {
 
 .page-header {
     border-bottom: 1px solid transparent;
-    margin: 30px 0 0;
+    margin: 50px 0 0;
     padding-bottom: 0;
 }
 
@@ -129,16 +129,7 @@ a, a:hover, a:focus {
 .breadcrumb > .active {
     color: #cccccc;
 }
-.footer {
-	background-color: #494949;
-	color: #fff;
-	position: relative;
-	margin-top: -100px; /* negative value of footer height */
-	height: 100px;
-	clear:both;
-	padding-top:20px;
-	border-top: medium solid #e10703;
-}
+
 
 .titulo {
 	margin-top: -40px;
@@ -155,6 +146,7 @@ a, a:hover, a:focus {
 .mensaje--center {
 	text-align: center;
 }
+
 
 .grid {
 	font-size: .8em;
@@ -233,3 +225,33 @@ table a:not(.btn), .table a:not(.btn) {
     border-color: #494949;
     color: #ffffff;
 } 
+
+.btn-xs, .btn-group-xs > .btn {
+    border-radius: 4px;
+    padding: 5px;
+}
+
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border-top: 1px solid #ecf0f1;
+    line-height: 1.429;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+.footer {
+	background-color: #494949;
+	color: #fff;
+	font-size: 12px;
+	position: relative;
+	margin-top: -100px; /* negative value of footer height */
+	height: 110px;
+	clear:both;
+	padding-top:10px;
+	border-top: 7px solid #e10703;
+}
+
+.footer p {
+    margin: 0;
+
+}
