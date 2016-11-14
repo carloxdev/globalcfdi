@@ -8,6 +8,7 @@ from configuracion.models import Empresa
 from facturas.models import COMPROBACION_ESTADOS
 from facturas.models import LOG_ESTADOS
 from facturas.models import LOG_OPERACION_TIPO
+from facturas.models import RESUMEN_TIPOS
 
 ESTADOSAT_OPCIONES = (
     ('', 'Todos'),
@@ -183,3 +184,52 @@ class ObtenerForm(forms.Form):
             )
 
         return empresa
+
+
+class ResumenFormFiltros(forms.Form):
+
+    empresa = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    fecha_inicio = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    fecha_final = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    tipo = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    def __init__(self, _usuario, *args, **kwargs):
+        super(ResumenFormFiltros, self).__init__(*args, **kwargs)
+        self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
+        self.fields['tipo'].choices = self.obtener_ResumenTipos(
+            RESUMEN_TIPOS
+        )
+
+    def obtener_Empresas(self, _usuario):
+
+        empresa = []
+
+        registros = Empresa.objects.filter(usuario=_usuario)
+
+        for registro in registros:
+            empresa.append(
+                (registro.clave, registro.razon_social)
+            )
+
+        return empresa
+
+    def obtener_ResumenTipos(self, _tipos):
+
+        opciones = [('', 'Todos'), ]
+
+        for tipo in _tipos:
+            opciones.append(
+                tipo
+            )
+
+        return opciones

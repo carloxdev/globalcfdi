@@ -8,7 +8,7 @@ from django.db import models
 from configuracion.models import Empresa
 
 
-RESUMEN_TIPO = (
+RESUMEN_TIPOS = (
     ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
     ('CLIENTES', 'FACTURAS DE CLIENTES'),
     ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
@@ -43,7 +43,7 @@ class Resumen(models.Model):
     fecha = models.DateField()
     tipo = models.CharField(
         max_length=12,
-        choices=RESUMEN_TIPO
+        choices=RESUMEN_TIPOS
     )
     cantidad_guardadas = models.IntegerField(default=0)
     cantidad_validadas = models.IntegerField(default=0)

@@ -253,9 +253,7 @@ TargetaResultados.prototype.init = function () {
     this.kColumns = [
         { field: "emisor_rfc", title: "Emisor RFC", width: "140px" },
         { field: "emisor_nombre", title: "Emisor Nombre", width: "350px" },    
-        { field: "uuid", title: "UUID", width: "290px" },
-        { field: "serie", title: "Serie", width: "100px" },
-        { field: "folio", title: "Folio", width: "120px" },        
+        { field: "uuid", title: "UUID", width: "290px" },       
         {   
             field: "fecha", 
             title: "Fecha", 
@@ -294,7 +292,13 @@ TargetaResultados.prototype.init = function () {
             attributes:{style:"text-align:right;"},
             hidden: true
         },
-        { field: "moneda", title: "Moneda", width: "120px", },
+        { field: "moneda", title: "Moneda", width: "120px", hidden:true },
+        {
+            title: "Moneda",
+            template: "#= (tipoCambio == 1) ? 'MXP' : moneda #",
+            width: "70px",
+
+        },        
         { 
             field: "totalImpuestosTrasladados",
             title: "Impuestos Trasladados", 
@@ -328,16 +332,16 @@ TargetaResultados.prototype.init = function () {
            title: "",
            width: "85px",
            hidden: true    
-        },         
+        }, 
         { 
             field: "total", 
             title: "Total", 
-            width: "150px", 
+            width: "130px", 
             format: '{0:c}',
             attributes:{style:"text-align:right;"}
         },
-        {  title: "Pago", width: "50px" },       
-        
+        { field: "serie", title: "Serie", width: "100px" },
+        { field: "folio", title: "Folio", width: "120px" },         
         { field: "formaDePago", title: "Forma Pago", width: "200px", hidden: true },
         
         { field: "tipoDeComprobante", title: "Tipo Comprobante", width: "200px", hidden: true },
@@ -376,19 +380,14 @@ TargetaResultados.prototype.init = function () {
         { field: "comentarios", title: "Comentarios", width: "200px", hidden: true },
         { field: "estadoSat", title: "Estado SAT", width: "130px" },
         { field: "comprobacion", title: "Comprobacion", width: "140px" },
-        { 
-            title: " ", 
-            template:'<a href="#=receptor_estado#" class="fa fa-file"></a>',
-            width: "50px"
-        },        
+        {  title: "Pago", width: "50px" },       
         {
            command: {
-               text: "&nbsp;",
+               text: "Validar",
                click: this.validar_XML,
-               className: "fa fa-file"
            },
            title: " ",
-           width: "110px"
+           width: "100px"
         },
         {
            command: {
@@ -405,7 +404,7 @@ TargetaResultados.prototype.init = function () {
            },
            title: " ",
            width: "90px"
-        },         
+        },              
     ]
 
     this.kGrid = this.$divGrid.kendoGrid({
@@ -414,13 +413,16 @@ TargetaResultados.prototype.init = function () {
         groupable: false,
         sortable: true,
         resizable: true,
-        pageable: true,
         selectable: true,
         editable: false,
         scrollable: true,
         columns: this.kColumns,
         dataBound: this.llenar_Grid,
-        mobile: true
+        mobile: true,
+        scrollable: {
+            virtual: true
+        },
+        pageable: true,
     })
 
     this.kWindow_conceptos = this.$popup_conceptos.kendoWindow({
@@ -568,9 +570,7 @@ TargetaResultados.prototype.ver_Conceptos = function (e) {
         selectable: true,
         editable: false,
         scrollable: true,
-        mobile: true,
-        // pageable: true,
-    })
+        mobile: true,    })
 
     card_resultados.kWindow_conceptos.center().maximize().open()
 
