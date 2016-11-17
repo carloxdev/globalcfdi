@@ -8,7 +8,7 @@ from .models import Log
 from .models import FacturaProveedor
 from .models import FacturaCliente
 from .models import ComprobanteEmpleado
-# from .models import Resumen
+from .models import Resumen
 
 
 def filtra_FechaOperacion_Min(queryset, value):
@@ -49,7 +49,7 @@ class LogFilter(filters.FilterSet):
 
 def filtra_Fecha_Min(queryset, value):
 
-    valor = "{}T00:00:00".format(value)
+    valor = "{}T00:00:00".format(value.encode("utf-8"))
 
     if not value:
         return queryset
@@ -60,12 +60,30 @@ def filtra_Fecha_Min(queryset, value):
 
 def filtra_Fecha_Max(queryset, value):
 
-    valor = "{}T23:59:59".format(value)
+    valor = "{}T23:59:59".format(value.encode("utf-8"))
 
     if not value:
         return queryset
     else:
         consulta = queryset.filter(fecha__lte=valor)
+        return consulta
+
+
+def filtra_Resumen_Fecha_Min(queryset, value):
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(fecha__gte=value)
+        return consulta
+
+
+def filtra_Resumen_Fecha_Max(queryset, value):
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(fecha__lte=value)
         return consulta
 
 
@@ -229,4 +247,19 @@ class ComprobanteEmpleadoFilter(filters.FilterSet):
             'fechaTimbrado_max',
             'comprobacion',
             'tiene_pdf',
+        ]
+
+
+class ResumenFilter(filters.FilterSet):
+
+    fecha_min = django_filters.CharFilter(action=filtra_Resumen_Fecha_Min)
+    fecha_max = django_filters.CharFilter(action=filtra_Resumen_Fecha_Max)
+
+    class Meta:
+        model = Resumen
+        fields = [
+            'empresa__clave',
+            'fecha_min',
+            'fecha_max',
+            'tipo',
         ]

@@ -3,29 +3,33 @@
 # Librerias Python:
 import os
 import sys
-import datetime
 import json
+
+# Librerias Django
+from django.db import connection
+from django.core.wsgi import get_wsgi_application
 
 # Librerias Propias:
 from tools.mistakes import ErrorEjecucion
 
 
 # Conectando con la configuracion del sitio
-# import ipdb; ipdb.set_trace() 
 if __name__ == 'sitio':
     project_abspath = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 else:
     project_abspath = os.getcwd()
 
-print "Programa que ejecuta: {}".format(__name__)
-print "Ruta de proyeto: {} \n".format(project_abspath)
+print ("Programa que ejecuta: {}".format(__name__))
+print ("Ruta programa que ejecuta: {}".format(project_abspath))
 
+"""
+    La ruta correcta para ejecutar debiera ser algo como lo siguiente:
+    /Users/Carlos/Files/Trabajo/Sintaxys/Proyectos/PuebloRecuerda/Sitio
+"""
+
+# Agregar path a las variables del sistema:
 sys.path.append(project_abspath)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "SmartCFDI.settings")
-
-# Librerias Django
-from django.db import connection
-from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()
 # from django.conf import settings

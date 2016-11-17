@@ -30,17 +30,17 @@ urlpatterns = [
         name='facturas.comprobantes_empleados'
     ),
     url(
-        r'^resumen/$',
+        r'^comprobantes/resumen/$',
         ResumenList.as_view(),
         name='facturas.resumen'
     ),
     url(
-        r'^logs/$',
+        r'^comprobantes/logs/$',
         LogsList.as_view(),
         name='facturas.logs'
     ),
     url(
-        r'^obtener/$',
+        r'^comprobantes/obtener/$',
         Obtener.as_view(),
         name='facturas.obtener'
     ),

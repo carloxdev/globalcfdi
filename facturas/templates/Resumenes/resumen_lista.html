@@ -6,6 +6,25 @@
 
 {% block css %}
 
+<!-- Kendo -->
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+
+<!-- Alertifyjs --> 
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
+
+
+<!-- Font Awesome --> 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+<!-- jQuery UI --> 
+<link rel="stylesheet" href="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.css' %}"/>
+
+<!-- Custom --> 
+<link rel="stylesheet" href="{% static 'ComprobantesProveedores/factura_proveedor.css' %}" />
+
 {% endblock css %}
 
 {% block contenido %}
@@ -17,90 +36,96 @@
 
 <div class="container-fluid">
 
-	<div class="row titulo">
-		<div class="col-md-12">
-			<div class="page-header">
-				<h3>Resumen:</h3>
-			</div>
-		</div>
-	</div>
-
-
 	<div class="row">
-		
-		<div class="col-md-8">
+		<div class="col-md-12">
+			<form action="">
+				<div class="panel-group">
+					<div class="panel panel-default">
+					  	<div class="panel-heading">
+					      <h3 class="panel-title">
+					      	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					        <a data-toggle="collapse" href="#filtros_id">Filtros
+							  
+					        </a>
+					      </h3>
+					  	</div>
+						<div id="filtros_id" class="panel-collapse collapse">
+					  		<div class="panel-body">
+					
+								<div class="col-md-3">
+									<div class="form-group filtros">
+										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
+										{{ form.empresa }}
+									</div>
 
-			{% if resumenes %}
-			<div class="table-responsive">
-				<table class="table table-striped table-bordered table-hover table-condensed">
-					<tr>
-						<th>Fecha</th> 
-						<th>Tipo</th> 
-						<th>Guardadas</th> 
-						<th>Validadas</th> 
-						<th>Total</th> 
-						<th>Empresa</th> 
-						<th>Creado el</th> 
-						<th>Actualizado el</th> 
-					</tr>
-					{% for resumen in resumenes %}
-					<tr>
-						<td> {{ resumen.fecha }} </td>
-						<td> {{ resumen.tipo }} </td>
-						<td> {{ resumen.cantidad_guardadas }} </td>
-						<td> {{ resumen.cantidad_validadas }} </td>
-						<td> {{ resumen.total }} </td>
-						<td> {{ resumen.empresa }} </td>
-						<td> {{ resumen.created_date }} </td>
-						<td> {{ resumen.updated_date }} </td>
-					</tr>
-					{% endfor %}
-				</table>		
 
-			</div>
+									<div class="form-group filtros">
+									    <label for="{{ form.tipo.id_for_label }}">Tipos:</label>									
+										{{ form.tipo }}
+									</div>
 
-			<div class="row">
-				<div class="col-md-12">
-					<nav>
-						{% if resumenes.paginator.count > 15 %}
-						<ul class="pagination">
-							{% if resumenes.has_previous %}
-						    <li>
-						        <a href="?page={{ resumenes.previous_page_number }}">&laquo;</a>
-						    </li>
-							{% endif %}
-						    
-						    <li class="">
-						        <span>Page {{ resumenes.number }} of {{ resumenes.paginator.num_pages }}</span>
-						    </li>
-							
-							{% if resumenes.has_next %}
-						    <li>
-						        <a href="?page={{ resumenes.next_page_number }}">&raquo;</a>
-						    </li>
-							{% endif %}
-						</ul>
-					    {% endif %}
-					</nav>
+								</div>
+
+								<div class="col-md-3">
+
+									<div class="form-group filtros">
+										
+										<div class="row">
+											<div class="col-sm-12 col-md-12 col-lg-12">
+												<label>Fecha:</label>
+											</div>
+										</div>
+
+										<div class="row">
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_inicio }}
+											</div>
+
+											<div class="col-sm-6 col-md-6 col-lg-6">
+												{{ form.fecha_final }}
+											</div>
+										</div>																				
+									</div>
+
+									<button type="button" class="btn btn-primary" id="id_buscar">
+						  				Buscar
+						  			</button>
+							  		<button type="button" class="btn btn-default" id="id_limpiar">
+							  			Limpiar
+						  			</button>
+								</div>
+								
+							</div>
+
+
+								
+						</div>
+					</div>	
 				</div>
-			</div>
-
-			{% else %}
-			<h3 class="sin-resultados">No se encontraron resumenes</h3>
-			{% endif %}	
-
+			</form>
 		</div>
 
-		<div class="col-md-4">
-			<div class="panel panel-default">
-			  <div class="panel-heading">Filtros</div>
-			  <div class="panel-body">Aqui van los filtros</div>
-			</div>			
-		</div>
-
-	</div>
-
+		<div class="col-md-12">
+	    	<div id="resultados" class="grid"></div>
+	    </div>
 </div>
 
 {% endblock contenido %}
+
+{% block scripts %}
+
+<!-- Alertifyjs -->
+<script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Kendo Js-->
+<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+
+<!-- jQuery-UI -->
+<script type="text/javascript" src="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
+<!-- Js del Sitio -->
+<script src="{% static 'Resumenes/resumen.js' %}"></script>
+
+{% endblock scripts %}
 

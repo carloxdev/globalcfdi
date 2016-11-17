@@ -29,6 +29,7 @@ from .filters import LogFilter
 from .filters import FacturaProveedorFilter
 from .filters import FacturaClienteFilter
 from .filters import ComprobanteEmpleadoFilter
+from .filters import ResumenFilter
 
 # Modelos
 from .models import FacturaProveedor
@@ -41,11 +42,12 @@ from .models import Resumen
 from .forms import FacturaProveedorFormFiltros
 from .forms import ObtenerForm
 from .forms import LogFormFiltros
+from .forms import ResumenFormFiltros
 
 # Django Paginacion:
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
+# from django.core.paginator import Paginator
+# from django.core.paginator import EmptyPage
+# from django.core.paginator import PageNotAnInteger
 
 # Tasks
 from .tasks import obtener_facturas
@@ -114,26 +116,33 @@ class ResumenList(View):
     def get(self, request):
         # Buscar Empresavb
 
-        resumenes_list = Resumen.objects.all()
+        # resumenes_list = Resumen.objects.all()
 
-        paginador = Paginator(resumenes_list, 15)
+        # paginador = Paginator(resumenes_list, 15)
 
-        pagina = request.GET.get('page')
+        # pagina = request.GET.get('page')
 
-        try:
-            resumenes = paginador.page(pagina)
+        # try:
+        #     resumenes = paginador.page(pagina)
 
-        except PageNotAnInteger:
-            # If page is not an integer, deliver first page.
-            resumenes = paginador.page(1)
-        except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of
-            # results.
-            resumenes = paginador.page(paginador.num_pages)
+        # except PageNotAnInteger:
+        #     # If page is not an integer, deliver first page.
+        #     resumenes = paginador.page(1)
+        # except EmptyPage:
+        #     # If page is out of range (e.g. 9999), deliver last page of
+        #     # results.
+        #     resumenes = paginador.page(paginador.num_pages)
+
+        # contexto = {
+        #     'resumenes': resumenes
+        # }
+
+        formulario = ResumenFormFiltros(request.user)
 
         contexto = {
-            'resumenes': resumenes
+            'form': formulario
         }
+
         return render(request, self.template_name, contexto)
 
 
@@ -245,7 +254,6 @@ class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
 class LogAPI(viewsets.ModelViewSet):
     queryset = Log.objects.all().order_by('-fecha_operacion',)
     serializer_class = LogSerializer
-
     pagination_class = GenericPagination
 
     filter_backends = (filters.DjangoFilterBackend,)
@@ -253,6 +261,9 @@ class LogAPI(viewsets.ModelViewSet):
 
 
 class ResumenAPI(viewsets.ModelViewSet):
-    queryset = Resumen.objects.all()
+    queryset = Resumen.objects.all().order_by('fecha',)
     serializer_class = ResumenSerializer
     pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ResumenFilter
