@@ -157,6 +157,19 @@ a, a:hover, a:focus {
 	font-size: .8em;	
 }
 
+
+
+.center-orange-text {color: #E10703; }
+
+.titulo-planes { 
+	background: #e10703 none repeat scroll 0 0;
+    color: #ffffff;
+    font-size: 18px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+
 table a:not(.btn), .table a:not(.btn) {
     text-decoration: none;
 }
@@ -240,15 +253,15 @@ table a:not(.btn), .table a:not(.btn) {
 }
 
 .footer {
-	background-color: #494949;
-	color: #fff;
-	font-size: 12px;
-	position: relative;
-	margin-top: -100px; /* negative value of footer height */
-	height: 9em;
-	clear:both;
-	padding-top:10px;
-	border-top: 7px solid #e10703;
+    background-color: #494949;
+    border-top: 7px solid #e10703;
+    clear: both;
+    color: #fff;
+    font-size: 12px;
+    margin-top: -10px;
+    padding-top: 15px;
+    padding-bottom: 20px;
+    position: relative;
 }
 
 .footer p {

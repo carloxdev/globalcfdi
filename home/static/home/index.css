@@ -22,3 +22,104 @@ h2, .h2 {
 	text-align: center;	
 }
 
+.center-orange-text {color: #E10703; }
+
+.titulo-planes { 
+	background: #e10703 none repeat scroll 0 0;
+    color: #ffffff;
+    font-size: 18px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+/* Create three columns of equal width */
+.columns {
+    float: left;
+    width: 33.3%;
+    padding: 8px;
+}
+
+/* Style the list */
+.price {
+    list-style-type: none;
+    border: 1px solid #eee;
+    margin: 0;
+    padding: 0;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+}
+
+/* Add shadows on hover */
+.price:hover {
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.2)
+}
+
+/* Pricing header */
+.price .header {
+    background-color: #E10703;
+    color: white;
+    font-size: 20px;
+}
+
+/* List items */
+.price li {
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    text-align: center;
+    font-size: 12px;
+}
+
+
+.price .descripcion {
+    background-color: #eee;
+    font-size: 14px;
+}
+
+.price .costo {
+    background-color: #E10703;
+    font-size: 50px;
+    font-weight: bold;
+    color: #ffffff;
+}
+.price .costo p {
+    font-size: 10px;
+}
+
+/* Grey list item */
+.price .grey {
+    background-color: #eee;
+    font-size: 20px;
+}
+
+.price .orange {
+    background-color: #AD0101;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+
+
+
+/* The "Sign Up" button */
+.button {
+    background-color: #AD0101;
+    border: none;
+    color: white;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* Change the width of the three columns to 100%
+(to stack horizontally on small screens) */
+@media only screen and (max-width: 600px) {
+    .columns {
+        width: 100%;
+    }
+}
