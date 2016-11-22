@@ -19,7 +19,7 @@ ALLOWED_HOSTS = ['localhost', '10.10.3.31', 'SVR-NOMI', 'contabilidad.nuvoil.com
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'seguridad.login'
 
 # Application definition
 
