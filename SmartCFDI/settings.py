@@ -15,7 +15,7 @@ SECRET_KEY = '7qup9@_uzz%9v#r^xywy)@=*_&6buk!mpjw#5#&)an!frj_+!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '10.10.3.31', '187.216.253.27', 'SVR-NOMI', 'nuve.nuvoil.com', '*']
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
@@ -24,9 +24,9 @@ LOGIN_URL = '/login/'
 # Application definition
 
 INSTALLED_APPS = [
-    'material',
-    'material.frontend',
-    'material.admin',
+    # 'material',
+    # 'material.frontend',
+    # 'material.admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -96,7 +96,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'smartcfdidb',
-        'USER': 'root',
+        'USER': 'smartuser',
         'PASSWORD': '12345',
         # Empty for localhost through domain sockets or '127.0.0.1' for
         # localhost through TCP.
@@ -137,9 +137,10 @@ USE_L10N = True
 
 USE_TZ = False
 
+DOMINIO = 'http://187.216.253.27:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
-STATIC_URL = '/static/'
+STATIC_URL = DOMINIO + '/static/'
 STATIC_ROOT = os.sep.join(
     os.path.abspath(__file__).split(os.sep)[:-2] + ['static']
 )
@@ -148,5 +149,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-MEDIA_URL = '/media/'
+MEDIA_URL = DOMINIO + '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
