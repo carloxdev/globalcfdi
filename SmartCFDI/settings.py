@@ -15,7 +15,7 @@ SECRET_KEY = '7qup9@_uzz%9v#r^xywy)@=*_&6buk!mpjw#5#&)an!frj_+!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '10.10.3.31', '187.216.253.27', 'SVR-NOMI', 'nuve.nuvoil.com', '*']
+ALLOWED_HOSTS = ['localhost', '10.10.3.31', 'SVR-NOMI', 'contabilidad.nuvoil.com', '*']
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     # 'autorizacion.apps.AutorizacionConfig',
     'seguridad.apps.SeguridadConfig',
     'djcelery',
+    'corsheaders',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,7 +52,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+   # Middlewares de Terceros:
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'SmartCFDI.urls'
 
@@ -137,7 +144,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-DOMINIO = 'http://187.216.253.27:8080/smart'
+DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = DOMINIO + '/static/'
