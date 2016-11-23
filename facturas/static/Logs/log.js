@@ -1,7 +1,15 @@
 
 var card_filtros = null
 var card_resultados = null
-var url_dominio = window.location.protocol + '//' + window.location.host + '/'
+var url = window.location
+var url_grid = ""
+
+if (url.pathname.search("smart") > 0) {
+    url_grid = url.origin + "/smart/api/logs/"
+}
+else {
+    url_grid = url.origin + "/api/logs/"
+}
 
 /*-----------------------------------------------*\
             LOAD
@@ -113,7 +121,7 @@ TargetaResultados.prototype.init = function () {
         transport: {
             read: {
 
-                url: url_dominio + "api/logs/",
+                url: url_grid,
                 type: "GET",
                 dataType: "json",
             },

@@ -15,7 +15,7 @@ SECRET_KEY = '7qup9@_uzz%9v#r^xywy)@=*_&6buk!mpjw#5#&)an!frj_+!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '10.10.3.31', 'SVR-NOMI', 'contabilidad.nuvoil.com', '*']
+ALLOWED_HOSTS = ['localhost', '10.10.3.31', 'SVR-NOMI', 'contabilidad.nuvoil.com', '187.216.253.27', '*']
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
@@ -144,6 +144,7 @@ USE_L10N = True
 
 USE_TZ = False
 
+# DOMINIO = 'http://187.216.253.27:8080/smart'
 DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS

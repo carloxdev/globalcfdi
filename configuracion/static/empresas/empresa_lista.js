@@ -1,8 +1,15 @@
 
 var card_filtros = null
 var card_resultados = null
-var url_dominio = window.location.protocol + '//' + window.location.host + '/'
-var url_grid = url_dominio + "api/empresas/"
+var url = window.location
+var url_grid = ""
+
+if (url.pathname.search("smart") > 0) {
+    url_grid = url.origin + "/smart/api/empresas/"
+}
+else {
+    url_grid = url.origin + "/api/empresas/"
+}
 
 /*-----------------------------------------------*\
             LOAD
