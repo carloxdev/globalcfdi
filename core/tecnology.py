@@ -35,12 +35,21 @@ class Cfdineitor(object):
             app_config.smtp_server
         )
 
+    def get_Invoices_ofValidCompanies(self):
+
+        empresas = ModeloEmpresa.get_Activas()
+
+        for empresa in empresas:
+            esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+            self.get_Invoices_Last3Days(esclavo, "RECIBIDAS")
+            self.get_Invoices_Last3Days(esclavo, "EMITIDAS")
+
     def get_Invoices_Company(self, _empresa_clave):
 
         empresa = ModeloEmpresa.get(_empresa_clave)
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-        # lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        lista_meses = [1,]
+        lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        # lista_meses = [1, ]
         self.get_Invoices_ByMonths(esclavo, "RECIBIDAS", lista_meses)
         self.get_Invoices_ByMonths(esclavo, "EMITIDAS", lista_meses)
 

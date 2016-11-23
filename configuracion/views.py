@@ -97,6 +97,8 @@ class EmpresaCreateView(View):
 
         formulario = EmpresaCreateForm(request.POST, username=request.user)
 
+        import ipdb; ipdb.set_trace()
+
         if formulario.is_valid():
 
             datos_formulario = formulario.cleaned_data

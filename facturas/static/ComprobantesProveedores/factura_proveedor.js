@@ -46,18 +46,6 @@ function TargetaFiltros() {
 }
 TargetaFiltros.prototype.init = function () {
 
-    var datepicker_init = {
-        autoSize: true,
-        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        dayNamesMin: ['Dom', 'Lu', 'Ma', 'Mi', 'Je', 'Vi', 'Sa'],
-        firstDay: 1,
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-    }
-
     this.$fecha_inicio.datepicker(datepicker_init)
     this.$fecha_fin.datepicker(datepicker_init)
 
@@ -141,69 +129,6 @@ TargetaResultados.prototype.init = function () {
 
     kendo.culture("es-MX")
     
-    this.kFields = {
-        serie: { editable: false, type: "string" },
-        folio: { editable: false, type: "string" },
-        fecha: { editable: false, type: "string" },
-        formaDePago: { editable: false, type: "string" },
-        noCertificado: { editable: false, type: "string" },
-        subTotal: { type: "number" },
-        tipoCambio: { type: "number" },
-        moneda: { editable: false, type: "string" },
-        sello: { editable: false, type: "string" },
-        total: { editable: true, type: "number" },
-        tipoDeComprobante: { editable: false, type: "string" },
-        metodoDePago: { editable: false, type: "string" },
-        lugarExpedicion: { editable: false, type: "string" },
-        numCtaPago: { editable: false, type: "string" },
-        condicionesDePago: { editable: false, type: "string" },
-        emisor_rfc: { editable: false, type: "string" },
-        emisor_nombre: { editable: false, type: "string" },
-        emisor_calle: { editable: false, type: "string" },
-        emisor_noExterior: { editable: false, type: "string" },
-        emisor_noInterior: { editable: false, type: "string" },
-        emisor_colonia: { editable: false, type: "string" },
-        emisor_localidad: { editable: false, type: "string" },
-        emisor_municipio: { editable: false, type: "string" },
-        emisor_estado: { editable: false, type: "string" },
-        emisor_pais: { editable: false, type: "string" },
-        emisor_codigoPostal: { editable: false, type: "string" },
-        emisor_expedidoEn_calle: { editable: false, type: "string" },
-        emisor_expedidoEn_noExterior: { editable: false, type: "string" },
-        emisor_expedidoEn_noInterior: { editable: false, type: "string" },
-        emisor_expedidoEn_colonia: { editable: false, type: "string" },
-        emisor_expedidoEn_municipio: { editable: false, type: "string" },
-        emisor_expedidoEn_estado: { editable: false, type: "string" },
-        emisor_expedidoEn_pais: { editable: false, type: "string" },
-        emisor_regimen: { editable: false, type: "string" },
-        receptor_rfc: { editable: false, type: "string" },
-        receptor_nombre: { editable: false, type: "string" },
-        receptor_calle: { editable: false, type: "string" },
-        receptor_noExterior: { editable: false, type: "string" },
-        receptor_noInterior: { editable: false, type: "string" },
-        receptor_colonia: { editable: false, type: "string" },
-        receptor_localidad: { editable: false, type: "string" },
-        receptor_municipio: { editable: false, type: "string" },
-        receptor_estado: { editable: false, type: "string" },
-        receptor_pais: { editable: false, type: "string" },
-        receptor_codigoPostal: { editable: false, type: "string" },
-        conceptos: { editable: false, type: "string" },
-        totalImpuestosTrasladados: { type: "number" },
-        totalImpuestosRetenidos: { type: "number" },
-        impuestos_trasladados: { editable: false, type: "string" },
-        impuestos_retenidos: { editable: false, type: "string" },
-        uuid: { editable: false, type: "string" },
-        fechaTimbrado: { editable: false, type: "string" },
-        noCertificadoSAT: { editable: false, type: "string" },
-        selloSAT: { editable: false, type: "string" },
-        empresa: { editable: false, type: "string" },
-        comentarios: { editable: false, type: "string" },
-        comprobacion: { editable: false, type: "string" },
-        url: { editable: false, type: "string" },
-        tiene_pdf: { editable: false, type: "string" },
-        estadoSat: { editable: false, type: "string" },
-    }
-
     this.kFuenteDatos = new kendo.data.DataSource({
 
         serverPaging: true,
@@ -242,7 +167,7 @@ TargetaResultados.prototype.init = function () {
             total: "count",
             model: {
                 id: "uuid",    
-                fields: this.kFields    
+                fields: kFields_comprobantes
             }
         },
         error: function (e) {
@@ -425,46 +350,13 @@ TargetaResultados.prototype.init = function () {
         pageable: true,
     })
 
-    this.kWindow_conceptos = this.$popup_conceptos.kendoWindow({
-        title: "Conceptos",
-        modal: true,
-        visible: false,
-        width: "100%",
-        autofocus: true,
-        actions: [
-            "Maximize",
-            "Close"
-        ],        
-        resizable: true,
-    }).data("kendoWindow")    
+    this.kWindow_conceptos = this.$popup_conceptos.kendoWindow(kWindow_init).data("kendoWindow")    
     this.kWindow_conceptos.element.attr('style', 'padding: 1px')
 
-    this.kWindow_trasladados = this.$popup_trasladados.kendoWindow({
-        title: "Impuestos Trasladados",
-        modal: true,
-        visible: false,
-        width: "100%",
-        autofocus: true,
-        actions: [
-            "Maximize",
-            "Close"
-        ],        
-        resizable: true,
-    }).data("kendoWindow")    
+    this.kWindow_trasladados = this.$popup_trasladados.kendoWindow(kWindow_init).data("kendoWindow")    
     this.kWindow_trasladados.element.attr('style', 'padding: 1px')
 
-    this.kWindow_retenidos = this.$popup_retenidos.kendoWindow({
-        title: "Impuestos Retenidos",
-        modal: true,
-        visible: false,
-        width: "100%",
-        autofocus: true,
-        actions: [
-            "Maximize",
-            "Close"
-        ],        
-        resizable: true,
-    }).data("kendoWindow")    
+    this.kWindow_retenidos = this.$popup_retenidos.kendoWindow(kWindow_init).data("kendoWindow")    
     this.kWindow_retenidos.element.attr('style', 'padding: 1px')
 
 }
@@ -527,14 +419,7 @@ TargetaResultados.prototype.ver_Conceptos = function (e) {
         dataSource : {
             schema: {
                 model:{
-                    fields: {
-                        cantidad: { type: "string" },
-                        valorUnitario: { type: "string" },
-                        noIdentificacion: { type: "string" },
-                        descripcion: { type: "string" },
-                        unidad: { type: "string" },
-                        importe: { type: "string" },
-                    }
+                    fields: kFields_conceptos
                 }
             },
             // pageSize: 10,
@@ -595,11 +480,7 @@ TargetaResultados.prototype.ver_Trasladados = function (e) {
         dataSource : {
             schema: {
                 model:{
-                    fields: {
-                        tasa: { type: "string" },
-                        impuesto: { type: "string" },
-                        importe: { type: "string" },
-                    }
+                    fields: kFields_impuestos
                 }
             },
             // pageSize: 10,
@@ -653,11 +534,7 @@ TargetaResultados.prototype.ver_Retenidos = function (e) {
         dataSource : {
             schema: {
                 model:{
-                    fields: {
-                        tasa: { type: "string" },
-                        impuesto: { type: "string" },
-                        importe: { type: "string" },
-                    }
+                    fields: kFields_impuestos
                 }
             },
             // pageSize: 10,
