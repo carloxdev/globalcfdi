@@ -144,8 +144,8 @@ USE_L10N = True
 
 USE_TZ = False
 
-# DOMINIO = 'http://187.216.253.27:8080/smart'
-DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
+DOMINIO = 'http://187.216.253.27:8080/smart'
+# DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = DOMINIO + '/static/'
