@@ -147,7 +147,8 @@ USE_TZ = False
 DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
-STATIC_URL = DOMINIO + '/static/'
+STATIC_URL = '/static/'
+# STATIC_URL = DOMINIO + '/static/'
 STATIC_ROOT = os.sep.join(
     os.path.abspath(__file__).split(os.sep)[:-2] + ['static']
 )
@@ -156,5 +157,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-MEDIA_URL = DOMINIO + '/media/'
+MEDIA_URL = '/media/'
+# MEDIA_URL = DOMINIO + '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
