@@ -40,6 +40,7 @@ class Cfdineitor(object):
         empresas = ModeloEmpresa.get_Activas()
 
         for empresa in empresas:
+            print "Creando Contador......"
             esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
             self.get_Invoices_Last3Days(esclavo, "RECIBIDAS")
             self.get_Invoices_Last3Days(esclavo, "EMITIDAS")
