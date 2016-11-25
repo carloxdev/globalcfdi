@@ -15,6 +15,22 @@ a, a:hover, a:focus {
     text-decoration: none;
 }
 
+.h1, h1{
+    text-align: center;
+    color: #AD0101;
+    font-size: 30px;
+}
+
+.h2, h2 {
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.h3, h3 {
+    font-size: 17px;
+}
+
+
 .page-header {
     border-bottom: 1px solid transparent;
     margin: 0;
@@ -33,7 +49,7 @@ a, a:hover, a:focus {
 
 #main {
   overflow:auto;
-  padding-bottom:100px; /* this needs to be bigger than footer height*/
+  
 }
 
 .navbar {
@@ -159,15 +175,7 @@ a, a:hover, a:focus {
 
 
 
-.center-orange-text {color: #E10703; }
 
-.titulo-planes { 
-	background: #e10703 none repeat scroll 0 0;
-    color: #ffffff;
-    font-size: 18px;
-    padding-bottom: 8px;
-    padding-top: 8px;
-}
 
 
 table a:not(.btn), .table a:not(.btn) {
@@ -258,13 +266,15 @@ table a:not(.btn), .table a:not(.btn) {
     clear: both;
     color: #fff;
     font-size: 12px;
-    margin-top: -10px;
+    
     padding-top: 15px;
     padding-bottom: 20px;
     position: relative;
 }
 
 .footer p {
+    color: #ffffff;
+    font-family: sans-serif;
     margin: 0;
 
 }

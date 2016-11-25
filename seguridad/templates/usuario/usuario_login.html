@@ -1,4 +1,4 @@
-{% extends 'master.html' %}
+{% extends 'master_login.html' %}
 
 {% load static from staticfiles %}
 
@@ -12,24 +12,16 @@
 
 {% block contenido %}
 
-<ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active">Login</li>
-</ol>
 
-<div class="container">
+<div class="container-fluid"> 
+
 
 	<div class="row">
-		<div class="col-md-12">
-			<div class="page-header">
-				<h2>Bienvenido Administrador</h2>
-			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-xs-12 col-xs-offset-2 col-sm-10 col-sm-offset-3 col-md-6 col-md-offset-4">	
-
+		<div class="col-xs-12 col-md-5 col-md-offset-1 ">	
+			<img src="{% static 'images/smartCFDI.jpg' %}" class="logoapp" alt="SmartCFDI"> 
+			<h2>Bienvenido Administrador</h2>
+			
 			<form method="POST" action="" role="form" class="form">
 				{% csrf_token %}
 				
@@ -71,7 +63,17 @@
 			</form>
 
 		</div>
-	</div>		
+		
+
+
+		<div class="col-md-6 seccion-orange-login clearfix hidden-xs hidden-sm">
+		imagen
+		</div>
+			
+	</div>
+
+	
+		
 	
 </div>
 

@@ -103,7 +103,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'smartcfdidb',
-        'USER': 'smartuser',
+        'USER': 'root',
         'PASSWORD': '12345',
         # Empty for localhost through domain sockets or '127.0.0.1' for
         # localhost through TCP.
