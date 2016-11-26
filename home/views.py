@@ -120,10 +120,11 @@ class Contactanos(View):
     def get(self, request):
         return render(request, self.template_name, {})
 
-class Quienessomos(View):
+
+class QuienesSomos(View):
 
     def __init__(self):
-        self.template_name = 'home/quienessomos.html'
+        self.template_name = 'home/quienes_somos.html'
 
     def get(self, request):
         return render(request, self.template_name, {})

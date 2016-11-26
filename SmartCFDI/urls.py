@@ -55,10 +55,10 @@ router.register(
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    url(r'^', include('home.urls')),
-    url(r'^', include('seguridad.urls')),
-    url(r'^', include('configuracion.urls')),
-    url(r'^', include('facturas.urls')),
+    url(r'', include('home.urls')),
+    url(r'', include('seguridad.urls')),
+    url(r'', include('configuracion.urls')),
+    url(r'', include('facturas.urls')),
 ]
 
 

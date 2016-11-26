@@ -20,7 +20,7 @@ from .views import UsuarioEditView
 urlpatterns = [
 
 
-    # ----------------- USUARIO ----------------- #
+    # ----------------- SEGURIDAD ----------------- #
 
     url(
         r'^login/$',
@@ -33,6 +33,10 @@ urlpatterns = [
         {'next_page': settings.LOGIN_URL},
         name='seguridad.logout'
     ),
+
+
+    # ----------------- USUARIO ----------------- #
+
     url(
         r'^usuarios/$',
         UsuarioListView.as_view(),

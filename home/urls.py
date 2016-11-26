@@ -8,7 +8,7 @@ from .views import Index
 from .views import Dashboard
 from .views import Servicios
 from .views import Contactanos
-from .views import Quienessomos
+from .views import QuienesSomos
 
 
 urlpatterns = [
@@ -39,7 +39,7 @@ urlpatterns = [
     ),
     url(
         r'^quienessomos/$',
-        Quienessomos.as_view(),
-        name='home.quienessomos'
+        QuienesSomos.as_view(),
+        name='home.quienes_somos'
     ),
 ]

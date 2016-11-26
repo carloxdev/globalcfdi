@@ -9,7 +9,7 @@ from .views import FacturaClienteList
 from .views import ComprobanteEmpleadoList
 from .views import ResumenList
 from .views import LogsList
-from .views import Obtener
+from .views import ObtenerFacturas
 
 
 # ----------------- FACTURAS PROVEEDORES ----------------- #
@@ -17,31 +17,31 @@ urlpatterns = [
     url(
         r'^comprobantes/proveedores/$',
         FacturaProveedorList.as_view(),
-        name='facturas.comprobantes_proveedores'
+        name='facturas.factura_proveedor_lista'
     ),
     url(
         r'^comprobantes/clientes/$',
         FacturaClienteList.as_view(),
-        name='facturas.comprobantes_clientes'
+        name='facturas.factura_cliente_lista'
     ),
     url(
         r'^comprobantes/empleados/$',
         ComprobanteEmpleadoList.as_view(),
-        name='facturas.comprobantes_empleados'
+        name='facturas.comprobante_empleado_lista'
     ),
     url(
         r'^comprobantes/resumen/$',
         ResumenList.as_view(),
-        name='facturas.resumen'
+        name='facturas.resumen_lista'
     ),
     url(
         r'^comprobantes/logs/$',
         LogsList.as_view(),
-        name='facturas.logs'
+        name='facturas.log_lista'
     ),
     url(
         r'^comprobantes/obtener/$',
-        Obtener.as_view(),
-        name='facturas.obtener'
+        ObtenerFacturas.as_view(),
+        name='facturas.obtener_facturas'
     ),
 ]

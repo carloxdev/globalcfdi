@@ -1,0 +1,71 @@
+
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %} Empresas {% endblock title %}
+
+{% block css %}
+
+<!-- Kendo -->
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+
+<!-- Alertifyjs --> 
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
+<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
+
+<!-- Font Awesome --> 
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+{% endblock css %}
+
+{% block contenido %}
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active">Empresas</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row titulo">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h3>Lista de Empresas:</h3>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-12">
+
+		<ul class="nav nav-pills barra-tareas">
+		  <li class="active">
+		    <a href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
+		  </li>
+		</ul>
+
+		<div id="resultados" class="grid" >
+		</div>			
+	</div>	
+
+</div>
+
+
+{% endblock contenido %}
+
+
+{% block scripts %}
+
+<!-- Alertifyjs -->
+<script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Kendo Js-->
+<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+
+<!-- Js del Sitio -->
+<script src="{% static 'empresa/empresa_lista.js' %}"></script>
+
+{% endblock scripts %}
