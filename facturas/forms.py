@@ -51,7 +51,10 @@ class LogFormFiltros(forms.Form):
 
         empresa = [('', 'Todas'), ]
 
-        registros = Empresa.objects.filter(usuario=_usuario)
+        if _usuario.is_staff:
+            registros = Empresa.objects.all()
+        else:
+            registros = Empresa.objects.filter(usuario=_usuario)
 
         for registro in registros:
             empresa.append(
@@ -133,7 +136,10 @@ class FacturaProveedorFormFiltros(forms.Form):
 
         empresa = []
 
-        registros = Empresa.objects.filter(usuario=_usuario)
+        if _usuario.is_staff:
+            registros = Empresa.objects.all()
+        else:
+            registros = Empresa.objects.filter(usuario=_usuario)
 
         for registro in registros:
             empresa.append(
@@ -214,7 +220,10 @@ class ResumenFormFiltros(forms.Form):
 
         empresa = []
 
-        registros = Empresa.objects.filter(usuario=_usuario)
+        if _usuario.is_staff:
+            registros = Empresa.objects.all()
+        else:
+            registros = Empresa.objects.filter(usuario=_usuario)
 
         for registro in registros:
             empresa.append(

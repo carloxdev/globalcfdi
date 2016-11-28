@@ -44,7 +44,7 @@ from .forms import EmpresaEditForm
 class EmpresaListView(View):
 
     def __init__(self):
-        self.template_name = 'empresas/empresa_lista.html'
+        self.template_name = 'empresa/empresa_lista.html'
         self.mensaje = ''
 
     def get(self, request):
@@ -80,7 +80,7 @@ class EmpresaListView(View):
 class EmpresaCreateView(View):
 
     def __init__(self):
-        self.template_name = 'empresas/empresa_nuevo.html'
+        self.template_name = 'empresa/empresa_nuevo.html'
 
     def get(self, request):
 
@@ -129,7 +129,7 @@ class EmpresaCreateView(View):
 class EmpresaUpdateView(View):
 
     def __init__(self):
-        self.template_name = 'empresas/empresa_editar.html'
+        self.template_name = 'empresa/empresa_editar.html'
         self.clave = ''
 
     def get(self, request, pk):
@@ -190,14 +190,15 @@ class EmpresaUpdateView(View):
         return render(request, self.template_name, contexto)
 
 
-# ----------------- API REST ----------------- #
-
-
 class EmpresaAPI(viewsets.ModelViewSet):
     serializer_class = EmpresaSerializer
     pagination_class = GenericPagination
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
+
+        if self.request.user.is_staff:
+            empresas = Empresa.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
 
         return empresas
