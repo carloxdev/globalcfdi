@@ -5,6 +5,13 @@
 
 {% block title %} Usuarios {% endblock title %}
 
+{% block css %}
+
+<!-- APP -->
+<link rel="stylesheet" href="{% static 'empresa/empresa_lista.css' %}" />
+
+{% endblock css %}
+
 {% block contenido %}
 
 <ol class="breadcrumb">
@@ -14,19 +21,17 @@
 
 <div class="container-fluid">
 
-	<div class="row titulo">
+<!-- 	<div class="row titulo">
 		<div class="col-md-12">
 			<div class="page-header">
-				<h3>Lista de Usuarios:</h3>
+				<h3 class="">Lista de Usuarios:</h3>
+
+				
 			</div>
 		</div>
-	</div>
+	</div> -->
 
-	<ul class="nav nav-pills barra-tareas">
-	  <li class="active">
-	    <a href="{% url 'seguridad.usuario_nuevo' %}">Nuevo Usuario</a>
-	  </li>
-	</ul>
+	<a class="btn btn-primary btn-sm app-nuevo" href="{% url 'seguridad.usuario_nuevo' %}">Nuevo</a>
 
 	{% if usuarios %}
 	<div class="table-responsive">
@@ -51,7 +56,7 @@
 				<td> {% if usuario.last_login %} {{ usuario.last_login }} {% else %} - {% endif %} </td>
 				<td> {{ usuario.date_joined }} </td> 
 				<td> 
-                    <a href="{% url 'seguridad.usuario_editar' usuario.pk %}" class="btn btn-default btn-xs">Editar</a> 
+                    <a href="{% url 'seguridad.usuario_editar' usuario.pk %}" class="btn btn-primary btn-xs">Editar</a> 
                 </td> 
 			</tr>
 			{% endfor %}

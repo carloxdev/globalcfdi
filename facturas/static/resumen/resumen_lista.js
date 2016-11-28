@@ -2,13 +2,16 @@
 var card_filtros = null
 var card_resultados = null
 var url = window.location
-var url_grid = ""
+var url_consulta = ""
+var url_archivos = ""
 
 if (url.pathname.search("smart") > 0) {
-    url_grid = url.origin + "/smart/api/resumenes/"
+    url_consulta = url.origin + "/smart/api/resumenes/"
+    url_archivos = url.origin + "/smart/media/"
 }
 else {
-    url_grid = url.origin + "/api/resumenes/"
+    url_consulta = url.origin + "/api/resumenes/"
+    url_archivos = url.origin + "/media/"
 }
 
 /*-----------------------------------------------*\
@@ -24,6 +27,11 @@ $(document).ready(function () {
     alertify.set('notifier', 'delay', 10)
 })
 
+
+$(window).resize(function() {
+
+    card_resultados.kGrid.data("kendoGrid").resize()
+})
 
 /*-----------------------------------------------*\
             OBJETO: TargetaFiltros
@@ -126,11 +134,11 @@ TargetaResultados.prototype.init = function () {
     this.kFuenteDatos = new kendo.data.DataSource({
 
         serverPaging: true,
-        pageSize: 10,
+        pageSize: 20,
         transport: {
             read: {
 
-                url: url_grid,
+                url: url_consulta,
                 type: "GET",
                 dataType: "json",
             },

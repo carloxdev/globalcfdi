@@ -2,13 +2,16 @@
 var card_filtros = null
 var card_resultados = null
 var url = window.location
-var url_grid = ""
+var url_consulta = ""
+var url_archivos = ""
 
 if (url.pathname.search("smart") > 0) {
-    url_grid = url.origin + "/smart/api/logs/"
+    url_consulta = url.origin + "/smart/api/logs/"
+    url_archivos = url.origin + "/smart/media/"
 }
 else {
-    url_grid = url.origin + "/api/logs/"
+    url_consulta = url.origin + "/api/logs/"
+    url_archivos = url.origin + "/media/"
 }
 
 /*-----------------------------------------------*\
@@ -117,11 +120,11 @@ TargetaResultados.prototype.init = function () {
     this.kFuenteDatos = new kendo.data.DataSource({
 
         serverPaging: true,
-        pageSize: 10,
+        pageSize: 20,
         transport: {
             read: {
 
-                url: url_grid,
+                url: url_consulta,
                 type: "GET",
                 dataType: "json",
             },
@@ -207,7 +210,7 @@ TargetaResultados.prototype.buscar = function (e) {
 TargetaResultados.prototype.descargar_Log = function (e) {
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    var url = url_dominio + "media/" + fila.url
+    var url = url_archivos + fila.url
     var win = window.open(url, '_blank')
     win.focus()
 }

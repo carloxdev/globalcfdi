@@ -83,12 +83,14 @@ class FacturaProveedorAPI(viewsets.ModelViewSet):
     filter_class = FacturaProveedorFilter
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
 
-        for empresa in empresas:
-            print empresa.clave
+        if self.request.user.is_staff:
+            facturas = FacturaProveedor.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
 
-        return FacturaProveedor.objects.filter(empresa__in=empresas)
+        return facturas
 
 
 # ----------------- FACTURA CLIENTE ----------------- #

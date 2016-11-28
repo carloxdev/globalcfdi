@@ -31,17 +31,19 @@
 </ol>
 
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
 
+	<div class="row">
+
+		<!-- Filtros -->
+		<div class="col-md-12">
 			<form action="">
 				<div class="panel-group">
 					<div class="panel panel-default">
 					  	<div class="panel-heading">
 					      <h3 class="panel-title">
 					      	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					        <a data-toggle="collapse" href="#filtros_id">Filtros
-							  
+					        <a data-toggle="collapse" href="#filtros_id">
+					        	Filtros
 					        </a>
 					      </h3>
 					  	</div>
@@ -107,16 +109,14 @@
 					</div>				
 				</div>
 			</form>
-
-
 		</div>
-
-		<div class="col-md-12">
-		    <div id="resultados" class="grid" >
-		    </div>
-		</div>
-
 	</div>
+
+</div>
+
+<div class="container-fluid contenedor">
+	<div id="resultados" class="grid" >
+	</div>			
 </div>
 
 {% endblock contenido %}

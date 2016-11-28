@@ -27,10 +27,10 @@ from .forms import UsuarioCreateForm
 from .forms import UsuarioEditForm
 
 
-class UsuarioLogin(View):
+class Login(View):
 
     def __init__(self):
-        self.template_name = 'usuario/usuario_login.html'
+        self.template_name = 'login.html'
 
     def get(self, request):
 

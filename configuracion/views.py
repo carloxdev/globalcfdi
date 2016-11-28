@@ -195,6 +195,10 @@ class EmpresaAPI(viewsets.ModelViewSet):
     pagination_class = GenericPagination
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
+
+        if self.request.user.is_staff:
+            empresas = Empresa.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
 
         return empresas

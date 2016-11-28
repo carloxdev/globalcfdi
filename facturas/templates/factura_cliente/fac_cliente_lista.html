@@ -28,16 +28,20 @@
 </ol>
 
 <div class="container-fluid">
+
 	<div class="row">
+
+		<!-- Filtros -->
 		<div class="col-md-12">
 			<form action="">
 				<div class="panel-group">
+
 					<div class="panel panel-default">
 					  	<div class="panel-heading">
 					      <h3 class="panel-title">
 					      	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					        <a data-toggle="collapse" href="#filtros_id">Filtros
-							  
+					        <a data-toggle="collapse" href="#filtros_id">
+								Filtros
 					        </a>
 					      </h3>
 					  	</div>
@@ -110,48 +114,63 @@
 
 
 								<div class="col-md-3">
+
 									<div class="form-group filtros">
 										<label for="{{ form.empresa.id_for_label }}">UUID:</label>
 										{{ form.uuid }}
 									</div>
 
+									<div class="form-group">
 
-									<button type="button" class="btn btn-primary" id="id_buscar">
-						  				Buscar
-						  			</button>
-							  		<button type="button" class="btn btn-default" id="id_limpiar">
-							  			Limpiar
-						  			</button>
+										<div class="row">
+											<div class="col-sm-12 col-md-12 col-lg-12">
+												<label>&nbsp;</label>	
+											</div>											
+										</div>
+
+										<div class="row">
+											<div class="col-sm-12 col-md-12 col-lg-12">
+												<button type="button" class="btn btn-primary btn-sm" id="id_buscar">
+									  				Buscar
+									  			</button>
+										  		<button type="button" class="btn btn-default btn-sm" id="id_limpiar">
+										  			Limpiar
+									  			</button>									  			
+											</div>
+										</div>
+									</div>
+
 								</div>
 								
 							</div>
-
-
-								
+														  	
 						</div>
 					</div>	
 				</div>
 			</form>
 		</div>
-
-		<div class="col-md-12">
-	    	<div id="resultados" class="grid"></div>
-	    </div>
-
-		<div id="id_conceptos">
-			<div id="grid_conceptos" class="grid"></div>
-		</div>
-
-		<div id="id_trasladados">
-			<div id="grid_trasladados" class="grid"></div>
-		</div>
-
-		<div id="id_retenidos">
-			<div id="grid_retenidos" class="grid"></div>
-		</div>
-
+	</div>
 </div>
 
+<div class="container-fluid contenedor">
+	<div id="resultados" class="grid" >
+	</div>			
+</div>
+
+<!-- Conceptos -->
+<div id="id_conceptos">
+	<div id="grid_conceptos" class="grid"></div>
+</div>
+
+<!-- Impuestos Trasladados -->
+<div id="id_trasladados">
+	<div id="grid_trasladados" class="grid"></div>
+</div>
+
+<!-- Impuestos Retenidos -->
+<div id="id_retenidos">
+	<div id="grid_retenidos" class="grid"></div>
+</div>				
 
 
 {% endblock contenido %}

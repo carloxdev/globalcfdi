@@ -2,14 +2,18 @@
 var card_filtros = null
 var card_resultados = null
 var url = window.location
-var url_grid = ""
+var url_consulta = ""
+var url_editar = ""
 
 if (url.pathname.search("smart") > 0) {
-    url_grid = url.origin + "/smart/api/empresas/"
+    url_consulta = url.origin + "/smart/api/empresas/"
+    url_editar = url.origin + "/smart/empresas/editar/"
 }
 else {
-    url_grid = url.origin + "/api/empresas/"
+    url_consulta = url.origin + "/api/empresas/"
+    url_editar = url.origin + "/empresas/editar/"
 }
+
 
 /*-----------------------------------------------*\
             LOAD
@@ -23,6 +27,9 @@ $(document).ready(function () {
     alertify.set('notifier', 'delay', 10)
 })
 
+$(window).resize(function() {
+    card_resultados.kGrid.data("kendoGrid").resize()
+})
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -35,6 +42,7 @@ function TargetaResultados() {
     this.kFuenteDatos = null
     this.kRows = null
     this.kColumns = null
+    this.kToolbar = null
     this.kGrid = null
 
     this.init()
@@ -59,11 +67,11 @@ TargetaResultados.prototype.init = function () {
     this.kFuenteDatos = new kendo.data.DataSource({
 
         serverPaging: true,
-        pageSize: 10,
+        pageSize: 20,
         transport: {
             read: {
 
-                url: url_grid,
+                url: url_consulta,
                 type: "GET",
                 dataType: "json",
             },
@@ -102,6 +110,16 @@ TargetaResultados.prototype.init = function () {
         },
     })
 
+    this.kToolbar = [
+        {
+            name: "copyRows",
+            text: "Copy Rows",
+            click: function (e) {
+                alert('test');
+            }
+        },
+    ]
+
     this.kColumns = [
         { field: "clave", title: "Clave", width: "100px" },
         { field: "razon_social", title: "Razon Social", width: "200px" },
@@ -125,7 +143,7 @@ TargetaResultados.prototype.init = function () {
         { 
             field: "updated_date", 
             title: "Actualizado por", 
-            width: "100px",
+            width: "110px",
             template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
 
         },
@@ -145,23 +163,20 @@ TargetaResultados.prototype.init = function () {
         groupable: false,
         sortable: true,
         resizable: true,
+        editable: true,
         pageable: true,
         selectable: true,
-        editable: false,
         scrollable: true,
         columns: this.kColumns,
     })
 
 }
 TargetaResultados.prototype.buscar = function (e) {
-
-    e.preventDefault()
     this.kFuenteDatos.page(1)
 }
 TargetaResultados.prototype.editar_Registro = function (e) {
 
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    window.location.href = url_dominio + "empresas/editar/" + fila.pk;
-
+    window.location.href = url_editar + fila.pk;
 }

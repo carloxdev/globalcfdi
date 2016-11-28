@@ -2,13 +2,16 @@
 var card_filtros = null
 var card_resultados = null
 var url = window.location
-var url_grid = ""
+var url_consulta = ""
+var url_archivos = ""
 
 if (url.pathname.search("smart") > 0) {
-    url_grid = url.origin + "/smart/api/facturas_cliente/"
+    url_consulta = url.origin + "/smart/api/facturas_cliente/"
+    url_archivos = url.origin + "/smart/media/"
 }
 else {
-    url_grid = url.origin + "/api/facturas_cliente/"
+    url_consulta = url.origin + "/api/facturas_cliente/"
+    url_archivos = url.origin + "/media/"
 }
 
 
@@ -25,6 +28,11 @@ $(document).ready(function () {
     alertify.set('notifier', 'delay', 10)
 })
 
+
+$(window).resize(function() {
+
+    card_resultados.kGrid.data("kendoGrid").resize()
+})
 
 /*-----------------------------------------------*\
             OBJETO: TargetaFiltros
@@ -215,11 +223,11 @@ TargetaResultados.prototype.init = function () {
     this.kFuenteDatos = new kendo.data.DataSource({
 
         serverPaging: true,
-        pageSize: 10,
+        pageSize: 20,
         transport: {
             read: {
 
-                url: url_grid,
+                url: url_consulta,
                 type: "GET",
                 dataType: "json",
             },
@@ -481,7 +489,6 @@ TargetaResultados.prototype.llenar_Grid = function (e) {
 }
 TargetaResultados.prototype.buscar = function (e) {
 
-    e.preventDefault()
     this.kFuenteDatos.page(1)
 }
 TargetaResultados.prototype.validar_XML = function (e) {
@@ -491,7 +498,7 @@ TargetaResultados.prototype.validar_XML = function (e) {
 TargetaResultados.prototype.descargar_XML = function (e) {
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    var url = url_dominio + "media/" + fila.url
+    var url = url_archivos + fila.url
     var win = window.open(url, '_blank')
     win.focus()
 }
@@ -503,7 +510,7 @@ TargetaResultados.prototype.descargar_PDF = function (e) {
 
     var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
 
-    var url = url_dominio + "media/" + ruta_archivo;
+    var url = url_archivos + ruta_archivo;
 
     var win = window.open(url, '_blank')
 

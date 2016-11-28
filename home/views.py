@@ -40,10 +40,16 @@ class Dashboard(View):
 
     def get(self, request):
 
-        empresas = Empresa.objects.filter(
-            usuario=request.user,
-            activa=True
-        )
+        if request.user.is_staff:
+            empresas = Empresa.objects.filter(
+                activa=True
+            )
+
+        else:
+            empresas = Empresa.objects.filter(
+                usuario=request.user,
+                activa=True
+            )
 
         lista = []
         cantidad_nomina = 0
@@ -128,3 +134,15 @@ class QuienesSomos(View):
 
     def get(self, request):
         return render(request, self.template_name, {})
+
+
+# class Ejemplo(View):
+
+#     def __init__(self):
+#         self.template_name = 'ejemplo.html'
+
+#     def get(self, request):
+#         return render(request, self.template_name, {})
+
+#     def post(self, request):
+#         return render(request, self.template_name, {})

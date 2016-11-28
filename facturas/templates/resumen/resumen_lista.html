@@ -54,13 +54,6 @@
 										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
 										{{ form.empresa }}
 									</div>
-
-
-									<div class="form-group filtros">
-									    <label for="{{ form.tipo.id_for_label }}">Tipos:</label>									
-										{{ form.tipo }}
-									</div>
-
 								</div>
 
 								<div class="col-md-3">
@@ -83,28 +76,51 @@
 											</div>
 										</div>																				
 									</div>
+								</div>
 
-									<button type="button" class="btn btn-primary" id="id_buscar">
-						  				Buscar
-						  			</button>
-							  		<button type="button" class="btn btn-default" id="id_limpiar">
-							  			Limpiar
-						  			</button>
+								<div class="col-md-3">
+									<div class="form-group filtros">
+									    <label for="{{ form.tipo.id_for_label }}">Tipos:</label>									
+										{{ form.tipo }}
+									</div>									
+								</div>
+
+								<div class="col-md-3">
+									
+									<div class="form-group">
+
+										<div class="row">
+											<div class="col-sm-12 col-md-12 col-lg-12">
+												<label>&nbsp;</label>	
+											</div>											
+										</div>
+
+										<div class="row">
+											<div class="col-sm-12 col-md-12 col-lg-12">
+												<button type="button" class="btn btn-primary btn-sm" id="id_buscar">
+									  				Buscar
+									  			</button>
+										  		<button type="button" class="btn btn-default btn-sm" id="id_limpiar">
+										  			Limpiar
+									  			</button>									  			
+											</div>
+										</div>
+									</div>									
 								</div>
 								
 							</div>
-
-
-								
 						</div>
 					</div>	
 				</div>
 			</form>
 		</div>
+	</div>
 
-		<div class="col-md-12">
-	    	<div id="resultados" class="grid"></div>
-	    </div>
+</div>
+
+<div class="container-fluid contenedor">
+	<div id="resultados" class="grid" >
+	</div>			
 </div>
 
 {% endblock contenido %}

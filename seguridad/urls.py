@@ -11,8 +11,8 @@ from django.conf import settings
 # Autentificacion
 from django.contrib.auth import views as auth_views
 
-# Vistas de Usuario
-from .views import UsuarioLogin
+# Vistas
+from .views import Login
 from .views import UsuarioListView
 from .views import UsuarioCreateView
 from .views import UsuarioEditView
@@ -24,7 +24,7 @@ urlpatterns = [
 
     url(
         r'^login/$',
-        UsuarioLogin.as_view(),
+        Login.as_view(),
         name='seguridad.login'
     ),
     url(

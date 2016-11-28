@@ -19,6 +19,9 @@
 <!-- Font Awesome --> 
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
+<!-- APP -->
+<link rel="stylesheet" href="{% static 'empresa/empresa_lista.css' %}" />
+
 {% endblock css %}
 
 {% block contenido %}
@@ -29,32 +32,19 @@
 </ol>
 
 <div class="container-fluid">
-
 	<div class="row titulo">
 		<div class="col-md-12">
-			<div class="page-header">
-				<h3>Lista de Empresas:</h3>
-			</div>
+			<a class="btn btn-primary btn-sm app-nuevo" href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
 		</div>
 	</div>
-
-	<div class="col-md-12">
-
-		<ul class="nav nav-pills barra-tareas">
-		  <li class="active">
-		    <a href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
-		  </li>
-		</ul>
-
-		<div id="resultados" class="grid" >
-		</div>			
-	</div>	
-
 </div>
 
+<div class="container-fluid contenedor">
+	<div id="resultados" class="grid" >
+	</div>			
+</div>
 
 {% endblock contenido %}
-
 
 {% block scripts %}
 
@@ -65,7 +55,7 @@
 <script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
 <script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
 
-<!-- Js del Sitio -->
+<!-- APP -->
 <script src="{% static 'empresa/empresa_lista.js' %}"></script>
 
 {% endblock scripts %}
