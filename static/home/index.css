@@ -18,9 +18,6 @@
 	text-align: center;
 }
 
-h2, .h2 {
-	text-align: center;	
-}
 
 .center-orange-text {color: #E10703; }
 
@@ -52,6 +49,7 @@ h2, .h2 {
     padding: 0;
     -webkit-transition: 0.3s;
     transition: 0.3s;
+    background: #ffffff none repeat scroll 0 0;
 }
 
 /* Add shadows on hover */
@@ -133,6 +131,12 @@ h2, .h2 {
    color: #ffffff;
 }
 
+.seccion-orange-login {
+    background-color: #e10703;
+    color: #ffffff;
+    min-height: 650px;
+}
+
 .logoindex{
 	margin-top: 40px;
 	margin-bottom: 50px;
@@ -144,5 +148,5 @@ h2, .h2 {
    margin-right: auto;
    max-width: initial;
    background-color: #F0F0F0;
-   
+   padding-bottom: 50px;
 }

@@ -15,9 +15,25 @@ a, a:hover, a:focus {
     text-decoration: none;
 }
 
+.h1, h1{
+    text-align: center;
+    color: #AD0101;
+    font-size: 30px;
+}
+
+.h2, h2 {
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.h3, h3 {
+    font-size: 17px;
+}
+
+
 .page-header {
     border-bottom: 1px solid transparent;
-    margin: 30px 0 0;
+    margin: 0;
     padding-bottom: 0;
 }
 
@@ -33,7 +49,7 @@ a, a:hover, a:focus {
 
 #main {
   overflow:auto;
-  padding-bottom:100px; /* this needs to be bigger than footer height*/
+  
 }
 
 .navbar {
@@ -118,7 +134,7 @@ a, a:hover, a:focus {
 
 
 .navbar-collapse.collapse {
-    display: block !important;
+    
     height: auto !important;
     overflow: visible !important;
     padding-bottom: 0;
@@ -129,19 +145,10 @@ a, a:hover, a:focus {
 .breadcrumb > .active {
     color: #cccccc;
 }
-.footer {
-	background-color: #494949;
-	color: #fff;
-	position: relative;
-	margin-top: -100px; /* negative value of footer height */
-	height: 100px;
-	clear:both;
-	padding-top:20px;
-	border-top: medium solid #e10703;
-}
+
 
 .titulo {
-	margin-top: -40px;
+	margin-top: 0px;
 }
 
 .sin-resultados {
@@ -156,6 +163,7 @@ a, a:hover, a:focus {
 	text-align: center;
 }
 
+
 .grid {
 	font-size: .8em;
 	margin-bottom: 2em;
@@ -164,6 +172,11 @@ a, a:hover, a:focus {
 .filtros {
 	font-size: .8em;	
 }
+
+
+
+
+
 
 table a:not(.btn), .table a:not(.btn) {
     text-decoration: none;
@@ -233,3 +246,35 @@ table a:not(.btn), .table a:not(.btn) {
     border-color: #494949;
     color: #ffffff;
 } 
+
+.btn-xs, .btn-group-xs > .btn {
+    border-radius: 4px;
+    padding: 5px;
+}
+
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border-top: 1px solid #ecf0f1;
+    line-height: 1.429;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+.footer {
+    background-color: #494949;
+    border-top: 7px solid #e10703;
+    clear: both;
+    color: #fff;
+    font-size: 12px;
+    
+    padding-top: 15px;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.footer p {
+    color: #ffffff;
+    font-family: sans-serif;
+    margin: 0;
+
+}
