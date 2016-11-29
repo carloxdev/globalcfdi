@@ -254,9 +254,17 @@ a, a:hover, a:focus {
     min-height: 650px;
 }
 
+.login-billboard-image {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+}
+
 .logoindex{
 	margin-top: 40px;
 	margin-bottom: 50px;
+	
 }
 
 .seccion-grey {

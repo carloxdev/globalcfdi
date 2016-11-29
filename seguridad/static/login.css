@@ -10,7 +10,7 @@ body {
 }
 
 a, a:hover, a:focus {
-    color: #ffffff;
+    color: #DE0D06;
     text-decoration: none;
 }
 
@@ -42,12 +42,15 @@ a, a:hover, a:focus {
 }
 
 .form {
-	width: 60%;
+    padding-left: 10px;
+    width: 90%;
+    padding-top: 40px;
 }
 
-.logoapp {
-    height: 60px;
-    text-align: center
+.logologin {
+    height: 100px;
+    text-align: center;
+    margin: 80px 25% 1em;
 }
 
 .page-header {
