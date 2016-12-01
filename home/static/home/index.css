@@ -9,26 +9,83 @@ body {
     line-height: 1.42857;
 }
 
+.container-fluid {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 15px;
+}
+
+
+.navbar {
+    border: 1px solid transparent;
+    margin-bottom: 20px;
+    min-height: 100px;
+    position: relative;
+}
+
+.navbar-right {
+    float: right !important;
+    margin-right: -15px;
+    margin-top: 30px;
+}
+
 a, a:hover, a:focus {
     color: #ffffff;
     text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+}
+
+p {
+	font-size: 17px;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .h1, h1{
     text-align: center;
-    color: #AD0101;
+    color: #e10703;
     font-size: 30px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .h2, h2 {
     color: #ffffff;
     font-size: 26px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .h3, h3 {
     font-size: 17px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+    color: #232323;
+    font-weight: bold;
 }
 
+.h4, h4 {
+    font-size: 30px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+    color: #E10703;
+    line-height: 33px;
+}
+
+.h5, h5 {
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: left;
+    color: #242424;
+}
+
+ul {
+	font-family: 'Open Sans', sans-serif;
+}
+
+
+li{
+font-family: 'Open Sans', sans-serif;
+
+}
 .jumbotron h1 {
 	text-align: center;
 }
@@ -49,6 +106,15 @@ a, a:hover, a:focus {
     height: 60px;
     text-align: center
 }
+
+
+img.imgcenter{
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border:none;
+      }
+
 
 .page-header {
 	text-align: center;
@@ -187,7 +253,7 @@ a, a:hover, a:focus {
 }
 
 .price .descripcion {
-    background-color: #eee;
+    background-color: #ffffff;
     font-size: 14px;
 }
 
@@ -200,6 +266,7 @@ a, a:hover, a:focus {
 
 .price .costo p {
     font-size: 10px;
+    color: #ffffff;
 }
 
 /* Grey list item */
@@ -261,10 +328,17 @@ a, a:hover, a:focus {
     height: 100%;
 }
 
-.logoindex{
+.logoservicios{
 	margin-top: 40px;
 	margin-bottom: 50px;
 	
+}
+
+.logoindex{
+	height: 80px;
+    margin-top: 5px;
+    padding-left: 100px;
+    
 }
 
 .seccion-grey {
@@ -277,23 +351,50 @@ a, a:hover, a:focus {
 }
 
 
+.carousel-control.left {
+    background-image: none!important;
+    background-repeat: repeat-x;
+}
+
+.carousel-caption {
+    bottom: 200px;
+    color: #fff;
+    left: 55%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    position: absolute;
+    right: 15%;
+    text-shadow: none!important;
+    z-index: 10;
+}
+
+
+
+
+.carousel-control.right{
+    background-image: none!important;
+    background-repeat: repeat-x;
+}
+
+
+
 .footer {
     background-color: #494949;
     border-top: 7px solid #e10703;
     clear: both;
     color: #fff;
     font-size: 12px;
-    
     padding-top: 15px;
     padding-bottom: 20px;
     position: relative;
+
 }
 
 .footer p {
     color: #ffffff;
-    font-family: sans-serif;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
-
-}
+	}
 
 
