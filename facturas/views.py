@@ -2,6 +2,7 @@
 
 # Librerias Django:
 from django.shortcuts import render
+from django.http import HttpResponse
 
 # Django Login
 from django.utils.decorators import method_decorator
@@ -9,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 
 # Django Generic Views
 from django.views.generic.base import View
+
+# Librerias Python:
+import json
 
 # API Rest:
 from rest_framework import viewsets
@@ -51,12 +55,147 @@ from .forms import ResumenFormFiltros
 
 # Tasks
 from .tasks import obtener_facturas
+from core.sat import WebServiceSAT
 
-# import os
-# from core.tecnology import Cfdineitor
 
+class ValidarFactura(View):
+
+    def get(self, request, type, uuid):
+
+        satweb = WebServiceSAT()
+
+        estado = ""
+        mensaje = ""
+
+        try:
+
+            if type == "proveedor":
+                documento = FacturaProveedor.objects.get(uuid=uuid)
+
+            elif type == "cliente":
+                documento = FacturaCliente.objects.get(uuid=uuid)
+
+            elif type == "empleado":
+                documento = ComprobanteEmpleado.objects.get(uuid=uuid)
+
+            else:
+                documento = None
+
+            if documento is not None:
+
+                estado = satweb.get_Estado(
+                    documento.emisor_rfc,
+                    documento.receptor_rfc,
+                    documento.total,
+                    documento.uuid
+                )
+
+                if estado != documento.estadoSat:
+                    documento.estadoSat = estado
+                    documento.save()
+                    mensaje = "Estado actualizado a:"
+                else:
+                    mensaje = "El estado no a cambiado en la BD"
+
+            else:
+                mensaje = "Favor de especificar un tipo"
+
+        except Exception, error:
+            mensaje = "Error: {} ".format(str(error))
+
+        msg = {
+            "estado": estado,
+            "mensaje": mensaje
+        }
+
+        data = json.dumps(msg)
+
+        return HttpResponse(data, content_type='application/json')
+
+
+class MarcarPago(View):
+
+    def get(self, request, type, uuid, value):
+
+        mensaje = ""
+
+        try:
+
+            if type == "proveedor":
+                documento = FacturaProveedor.objects.get(uuid=uuid)
+
+            elif type == "cliente":
+                documento = FacturaCliente.objects.get(uuid=uuid)
+
+            elif type == "empleado":
+                documento = ComprobanteEmpleado.objects.get(uuid=uuid)
+
+            else:
+                documento = None
+
+            if documento is not None:
+
+                documento.pago = value
+                documento.save()
+                mensaje = "Se actualizo el registro"
+
+            else:
+                mensaje = "Favor de especificar un tipo"
+
+        except Exception, error:
+            mensaje = "Error: {} ".format(str(error))
+
+        msg = {
+            "mensaje": mensaje
+        }
+
+        data = json.dumps(msg)
+
+        return HttpResponse(data, content_type='application/json')
+
+
+class ReconocerFactura(View):
+
+    def get(self, request, type, uuid, value):
+
+        mensaje = ""
+
+        try:
+
+            if type == "proveedor":
+                documento = FacturaProveedor.objects.get(uuid=uuid)
+
+            elif type == "cliente":
+                documento = FacturaCliente.objects.get(uuid=uuid)
+
+            elif type == "empleado":
+                documento = ComprobanteEmpleado.objects.get(uuid=uuid)
+
+            else:
+                documento = None
+
+            if documento is not None:
+
+                documento.comprobacion = value
+                documento.save()
+                mensaje = "Se actualizo el registro"
+
+            else:
+                mensaje = "Favor de especificar un tipo"
+
+        except Exception, error:
+            mensaje = "Error: {} ".format(str(error))
+
+        msg = {
+            "mensaje": mensaje
+        }
+
+        data = json.dumps(msg)
+
+        return HttpResponse(data, content_type='application/json')
 
 # ----------------- FACTURA PROVEEDOR ----------------- #
+
 
 @method_decorator(login_required, name='dispatch')
 class FacturaProveedorList(View):

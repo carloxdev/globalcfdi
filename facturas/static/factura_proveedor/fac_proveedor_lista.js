@@ -1,18 +1,33 @@
+/*-----------------------------------------------*\
+            GLOBAL VARIABLES
+\*-----------------------------------------------*/
 
-var card_filtros = null
-var card_resultados = null
+// URLS:
 var url = window.location
 var url_consulta = ""
 var url_archivos = ""
+var url_validar_factura = ""
+var url_marcar_pago = ""
+var url_reconocer_factura = ""
 
 if (url.pathname.search("smart") > 0) {
     url_consulta = url.origin + "/smart/api/facturas_proveedor/"
     url_archivos = url.origin + "/smart/media/"
+    url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/proveedor/"
+    url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/proveedor/"
+    url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/proveedor/"
 }
 else {
     url_consulta = url.origin + "/api/facturas_proveedor/"
     url_archivos = url.origin + "/media/"
+    url_validar_factura  = url.origin + "/comprobantes/validar_factura/proveedor/"
+    url_marcar_pago = url.origin + "/comprobantes/marcar_pago/proveedor/"
+    url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/proveedor/"
 }
+
+// OBJS:
+var card_filtros = null
+var card_resultados = null
 
 
 /*-----------------------------------------------*\
@@ -21,16 +36,18 @@ else {
 
 $(document).ready(function () {
 
+    // Inicializar objetos
     card_filtros = new TargetaFiltros()
     card_resultados = new TargetaResultados()
+    pagina = new Pagina()
 
-    alertify.set('notifier', 'position', 'top-right')
-    alertify.set('notifier', 'delay', 10)
+    // Inicializar Alertify
+    pagina.init_Alertify()
 })
 
 $(window).resize(function() {
 
-    card_resultados.kGrid.data("kendoGrid").resize()
+    card_resultados.grid.kGrid.data("kendoGrid").resize()
 })
 
 
@@ -75,7 +92,7 @@ TargetaFiltros.prototype.init = function () {
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
     e.preventDefault()
-    card_resultados.buscar()
+    card_resultados.grid.buscar()
 }
 TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
 
@@ -122,75 +139,65 @@ TargetaFiltros.prototype.validar_Filtros = function () {
 
 function TargetaResultados() {
 
-    this.$divGrid = $('#resultados')
-    this.kFields = null
-    this.kFuenteDatos = null
-    this.kRows = null
-    this.kColumns = null
-    this.kGrid = null
+    this.grid = new GridResultados()
 
-    this.$popup_conceptos = $('#id_conceptos')
-    this.kWindow_conceptos = null
+    // this.$popup_conceptos = $('#id_conceptos')
+    // this.kWindow_conceptos = null
 
-    this.$popup_trasladados = $('#id_trasladados')
-    this.kWindow_trasladados = null
+    // this.$popup_trasladados = $('#id_trasladados')
+    // this.kWindow_trasladados = null
 
-    this.$popup_retenidos = $('#id_retenidos')
-    this.kWindow_retenidos = null
+    // this.$popup_retenidos = $('#id_retenidos')
+    // this.kWindow_retenidos = null
 
     this.init()
 }
 TargetaResultados.prototype.init = function () {
 
+    // this.kWindow_conceptos = this.$popup_conceptos.kendoWindow(kWindow_init).data("kendoWindow")    
+    // this.kWindow_conceptos.element.attr('style', 'padding: 1px')
+
+    // this.kWindow_trasladados = this.$popup_trasladados.kendoWindow(kWindow_init).data("kendoWindow")    
+    // this.kWindow_trasladados.element.attr('style', 'padding: 1px')
+
+    // this.kWindow_retenidos = this.$popup_retenidos.kendoWindow(kWindow_init).data("kendoWindow")    
+    // this.kWindow_retenidos.element.attr('style', 'padding: 1px')
+}
+
+
+/*-----------------------------------------------*\
+            OBJETO: Grid Resultados
+\*-----------------------------------------------*/
+
+function GridResultados() {
+
+    this.$id = $("#resultados")
+    this.kFuenteDatos = null
+    this.kGrid = null
+    this.init()
+}
+GridResultados.prototype.init = function (e) {
+
     kendo.culture("es-MX")
-    
-    this.kFuenteDatos = new kendo.data.DataSource({
 
-        serverPaging: true,
-        pageSize: 20,
-        transport: {
-            read: {
+    this.kFuenteDatos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-                url: url_consulta,
-                type: "GET",
-                dataType: "json",
-            },
-            parameterMap: function (data, action) {
-                if (action === "read") {
-
-                    return {
-                        page: data.page,
-                        pageSize: data.pageSize,
-                        empresa__clave: card_filtros.$empresa.val(),
-                        fecha_min: card_filtros.$fecha_inicio.val(),
-                        fecha_max: card_filtros.$fecha_fin.val(),
-                        emisor_rfc: card_filtros.$emisor_rfc.val(),
-                        emisor_nombre: card_filtros.$emisor_nombre.val(),
-                        uuid: card_filtros.$uuid.val(),
-                        estadoSat: card_filtros.$estado_sat.val(),
-                        folio: card_filtros.$folio.val(),
-                        serie: card_filtros.$serie.val(),
-                        fechaTimbrado_min: card_filtros.$fecha_timbrado_inicio.val(),
-                        fechaTimbrado_max: card_filtros.$fecha_timbrado_fin.val(),
-                        comprobacion: card_filtros.$comprobacion.val(),
-                    }
-                }
-            }
-        },
-        schema: {
-            data: "results",
-            total: "count",
-            model: {
-                id: "uuid",    
-                fields: kFields_comprobantes
-            }
-        },
-        error: function (e) {
-			alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
-        },
+    this.kGrid = this.$id.kendoGrid({
+        dataSource: this.kFuenteDatos,
+        columnMenu: true,
+        groupable: false,
+        sortable: true,
+        resizable: true,
+        selectable: true,
+        editable: true,
+        scrollable: true,
+        columns: this.get_Columnas(),
+        dataBound: this.llenar,
+        pageable: true,
     })
-
-    this.kColumns = [
+}
+GridResultados.prototype.get_Columnas = function (e) {
+    return [
         { field: "emisor_rfc", title: "Emisor RFC", width: "140px" },
         { field: "emisor_nombre", title: "Emisor Nombre", width: "350px" },    
         { field: "uuid", title: "UUID", width: "290px" },       
@@ -318,64 +325,100 @@ TargetaResultados.prototype.init = function () {
         { field: "receptor_pais", title: "Receptor Pais", width: "200px", hidden: true },
         { field: "receptor_codigoPostal", title: "Receptor CodigoPostal", width: "200px", hidden: true },
         { field: "comentarios", title: "Comentarios", width: "200px", hidden: true },
-        { field: "estadoSat", title: "Estado SAT", width: "130px" },
-        { field: "comprobacion", title: "Comprobacion", width: "140px" },
-        {  title: "Pago", width: "50px" },       
-        {
-           command: {
-               text: "Validar",
-               click: this.validar_XML,
-           },
-           title: " ",
-           width: "100px"
+        { field: "estadoSat", title: "Estado SAT", width: "100px" },
+        { 
+            field: "comprobacion", 
+            title: "Comprobacion", 
+            width: "140px",           
+            values: [
+                { text: "RECONOCIDO",  value : "RECONOCIDO" },
+                { text: "NO Reconocido",  value : "NO_RECONOCIDO" },                
+            ]
+        },
+        { 
+            field: "pago", 
+            title: "Pago", 
+            width: "100px",
+            values: [
+                { text: "PAGADO",  value : "PAGADO" },
+                { text: "Pendiente",  value : "PENDIENTE" },
+            ]
         },
         {
-           command: {
-               text: "XML",
-               click: this.descargar_XML
-           },
-           title: " ",
-           width: "90px"
-        },
-        {
-           command: {
-               text: "PDF",
-               click: this.descargar_PDF
-           },
-           title: " ",
-           width: "90px"
+            command: [
+                { text: "Validar", click: this.validar_XML },
+                { text: "XML", click: this.descargar_XML },
+                { text: "PDF", click: this.descargar_PDF },
+            ],
+            title: " ",
+            width: "230px"
         },              
     ]
-
-    this.kGrid = this.$divGrid.kendoGrid({
-        dataSource: this.kFuenteDatos,
-        columnMenu: true,
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        selectable: true,
-        editable: false,
-        scrollable: true,
-        columns: this.kColumns,
-        dataBound: this.llenar_Grid,
-        // mobile: true,
-        // scrollable: {
-        //     virtual: true
-        // },
-        pageable: true,
-    })
-
-    this.kWindow_conceptos = this.$popup_conceptos.kendoWindow(kWindow_init).data("kendoWindow")    
-    this.kWindow_conceptos.element.attr('style', 'padding: 1px')
-
-    this.kWindow_trasladados = this.$popup_trasladados.kendoWindow(kWindow_init).data("kendoWindow")    
-    this.kWindow_trasladados.element.attr('style', 'padding: 1px')
-
-    this.kWindow_retenidos = this.$popup_retenidos.kendoWindow(kWindow_init).data("kendoWindow")    
-    this.kWindow_retenidos.element.attr('style', 'padding: 1px')
-
 }
-TargetaResultados.prototype.llenar_Grid = function (e) {
+GridResultados.prototype.get_FuenteDatosConfig = function (e) {
+    return {
+
+        serverPaging: true,
+        pageSize: 20,
+        transport: {
+            read: {
+
+                url: url_consulta,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
+
+                    return {
+                        page: data.page,
+                        pageSize: data.pageSize,
+                        empresa__clave: card_filtros.$empresa.val(),
+                        fecha_min: card_filtros.$fecha_inicio.val(),
+                        fecha_max: card_filtros.$fecha_fin.val(),
+                        emisor_rfc: card_filtros.$emisor_rfc.val(),
+                        emisor_nombre: card_filtros.$emisor_nombre.val(),
+                        uuid: card_filtros.$uuid.val(),
+                        estadoSat: card_filtros.$estado_sat.val(),
+                        folio: card_filtros.$folio.val(),
+                        serie: card_filtros.$serie.val(),
+                        fechaTimbrado_min: card_filtros.$fecha_timbrado_inicio.val(),
+                        fechaTimbrado_max: card_filtros.$fecha_timbrado_fin.val(),
+                        comprobacion: card_filtros.$comprobacion.val(),
+                    }
+                }
+            }
+        },
+        schema: {
+            data: "results",
+            total: "count",
+            model: {
+                id: "uuid",    
+                fields: kFields_comprobantes
+            }
+        },
+        change: function (e) {
+
+            if (e.action == "itemchange" && e.field == "pago") {
+
+                var uuid = e.items[0].uuid
+                var valor = e.items[0].pago
+                card_resultados.grid.marcar_Pago(uuid, valor)
+            }
+
+            if (e.action == "itemchange" && e.field == "comprobacion") { 
+
+                var uuid = e.items[0].uuid
+                var valor = e.items[0].comprobacion
+                card_resultados.grid.reconocer_Factura(uuid, valor)
+            }
+        },
+        error: function (e) {
+            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+        },
+    }
+}
+GridResultados.prototype.llenar = function (e) {
 
     e.preventDefault()
 
@@ -384,215 +427,71 @@ TargetaResultados.prototype.llenar_Grid = function (e) {
     $.each(data, function (indice, elemento) {
         
         if (elemento.tiene_pdf == "false") {
-            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
+            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
         }
         if (elemento.totalImpuestosTrasladados == 0) {
-            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
         }
         if (elemento.totalImpuestosRetenidos == 0) {
-            card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
-        }       
+            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+        }
     })
 }
-TargetaResultados.prototype.buscar = function (e) {
-
+GridResultados.prototype.buscar = function () {
     this.kFuenteDatos.page(1)
 }
-TargetaResultados.prototype.validar_XML = function (e) {
+GridResultados.prototype.validar_XML = function (e) {
     e.preventDefault()
-    alertify.notify("Se esta validando")
-}
-TargetaResultados.prototype.descargar_XML = function (e) {
-    e.preventDefault()
+    
+    alertify.notify("Validando......")
+
+    // Obteniedo informacion del registro
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    var url = url_dominio + "media/" + fila.url
+
+    $.ajax({
+        url: url_validar_factura + fila.uuid + "/",
+        data: "",
+        dataType: "json",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+
+        success: function (e) {
+            alertify.warning(e.mensaje + " " + e.estado)
+            card_resultados.grid.kGrid.find("tr[data-uid='" + fila.uid + "'] td:eq(52)").text(e.estado); 
+        },
+        error: function (e) {
+
+            alertify.error(e.mensaje)
+        }
+
+    })
+}
+GridResultados.prototype.descargar_XML = function (e) {
+    e.preventDefault()
+
+    // Obteniedo informacion del registro
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+
+    var url = url_archivos + fila.url
     var win = window.open(url, '_blank')
     win.focus()
 }
-TargetaResultados.prototype.descargar_PDF = function (e) {
+GridResultados.prototype.descargar_PDF = function (e) {
     
     e.preventDefault()
 
+    // Obteniedo informacion del registro
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
 
     var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
 
-    var url = url_dominio + "media/" + ruta_archivo;
+    var url = url_archivos + ruta_archivo;
 
     var win = window.open(url, '_blank')
 
     win.focus()
 }
-TargetaResultados.prototype.ver_Conceptos = function (e) {
-    e.preventDefault()
-    var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    
-    conceptos = fila.conceptos.replace('[','').replace(']','')
-
-    kGrid_concepto = $('#grid_conceptos').kendoGrid({
-        dataSource : {
-            schema: {
-                model:{
-                    fields: kFields_conceptos
-                }
-            },
-            // pageSize: 10,
-        },
-        columns: [
-            { 
-                field: "cantidad", 
-                title: "Cantidad", 
-                width: "80px",
-                attributes:{style:"text-align:right;"}
-            },
-            { 
-                field: "valorUnitario", 
-                title: "Valor Unitario", 
-                width: "100px",
-                format: '{0:c}',
-                attributes:{style:"text-align:right;"}
-            },
-            { field: "noIdentificacion", title: "#Identificacion", width: "110px" },
-            { field: "descripcion", title: "Descripcion", width: "300px" },
-            { field: "unidad", title: "Unidad", width: "100px" },
-            { 
-                field: "importe", 
-                title: "Importe", 
-                width: "100px",
-                format: '{0:c}',
-                attributes:{style:"text-align:right;"}
-            },
-        ],
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        selectable: true,
-        editable: false,
-        scrollable: true,
-        mobile: true,    })
-
-    card_resultados.kWindow_conceptos.center().maximize().open()
-
-    var lista = conceptos.split('},')
-
-    json_lista = []
-
-    $.each(lista ,function (indice, elemento) {
-        elemento_formateado = elemento.replace("{","").replace("}","")
-        elemento_formateado = "{" + elemento_formateado + "}"
-        json_lista.push(JSON.parse(elemento_formateado))
-    })
-    kGrid_concepto.data('kendoGrid').dataSource.data(json_lista)
-}
-TargetaResultados.prototype.ver_Trasladados = function (e) {
-    e.preventDefault()
-    var fila = this.dataItem($(e.currentTarget).closest('tr'))
-
-    trasladados = fila.impuestos_trasladados.replace('[','').replace(']','')
-
-    kGrid_trasladados = $('#grid_trasladados').kendoGrid({
-        dataSource : {
-            schema: {
-                model:{
-                    fields: kFields_impuestos
-                }
-            },
-            // pageSize: 10,
-        },
-        columns: [
-            { 
-                field: "tasa", 
-                title: "Tasa", 
-                width: "80px",
-                attributes:{style:"text-align:right;"}
-            },
-            { field: "impuesto", title: "Impuesto", width: "110px" },
-            { 
-                field: "importe", 
-                title: "Importe", 
-                width: "100px",
-                format: '{0:c}',
-                attributes:{style:"text-align:right;"}
-            },
-        ],
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        selectable: true,
-        editable: false,
-        scrollable: true,
-        mobile: true,
-        // pageable: true,
-    })
-
-    card_resultados.kWindow_trasladados.center().maximize().open()
-
-    var lista = trasladados.split('},')
-
-    json_lista = []
-
-    $.each(lista ,function (indice, elemento) {
-        elemento_formateado = elemento.replace("{","").replace("}","")
-        elemento_formateado = "{" + elemento_formateado + "}"
-        json_lista.push(JSON.parse(elemento_formateado))
-    })
-    kGrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
-}
-TargetaResultados.prototype.ver_Retenidos = function (e) {
-    e.preventDefault()
-    var fila = this.dataItem($(e.currentTarget).closest('tr'))
-
-    retenidos = fila.impuestos_retenidos.replace('[','').replace(']','')
-
-    kGrid_retenidos = $('#grid_retenidos').kendoGrid({
-        dataSource : {
-            schema: {
-                model:{
-                    fields: kFields_impuestos
-                }
-            },
-            // pageSize: 10,
-        },
-        columns: [
-            { 
-                field: "tasa", 
-                title: "Tasa", 
-                width: "80px",
-                attributes:{style:"text-align:right;"}
-            },
-            { field: "impuesto", title: "Impuesto", width: "110px" },
-            { 
-                field: "importe", 
-                title: "Importe", 
-                width: "100px",
-                format: '{0:c}',
-                attributes:{style:"text-align:right;"}
-            },
-        ],
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        selectable: true,
-        editable: false,
-        scrollable: true,
-        mobile: true,
-        // pageable: true,
-    })
-
-    card_resultados.kWindow_retenidos.center().maximize().open()
-
-    var lista = retenidos.split('},')
-
-    json_lista = []
-
-    $.each(lista ,function (indice, elemento) {
-        elemento_formateado = elemento.replace("{","").replace("}","")
-        elemento_formateado = "{" + elemento_formateado + "}"
-        json_lista.push(JSON.parse(elemento_formateado))
-    })
-    kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
-}
-TargetaResultados.prototype.exportar_Datos = function (e) {
+GridResultados.prototype.exportar_Datos = function (e) {
 
     e.preventDefault();
 
@@ -666,3 +565,213 @@ TargetaResultados.prototype.exportar_Datos = function (e) {
         alertify.notify("Favor de seleccionar al menos un filtro");
     }      
 }
+GridResultados.prototype.marcar_Pago = function (_uuid, _valor) {
+
+    $.ajax({
+
+        url: url_marcar_pago + _uuid + "/" + _valor + "/",
+        data : "",
+        dataType: "json",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+
+        success: function (e) {
+            alertify.warning(e.mensaje)
+        },
+        error: function (e) {
+            alertify.error(e.mensaje)
+        }
+    })    
+}
+GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
+    $.ajax({
+
+        url: url_reconocer_factura + _uuid + "/" + _valor + "/",
+        data : "",
+        dataType: "json",
+        type: "GET",
+        contentType: "application/json; charset=utf-8",
+
+        success: function (e) {
+            alertify.warning(e.mensaje)
+        },
+        error: function (e) {
+            alertify.error(e.mensaje)
+        }
+    })    
+}
+
+/*-----------------------------------------------*\
+            OBJETO: Grid Resultados
+\*-----------------------------------------------*/
+
+// GridResultados.prototype.ver_Conceptos = function (e) {
+//     e.preventDefault()
+//     var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    
+//     conceptos = fila.conceptos.replace('[','').replace(']','')
+
+//     kGrid_concepto = $('#grid_conceptos').kendoGrid({
+//         dataSource : {
+//             schema: {
+//                 model:{
+//                     fields: kFields_conceptos
+//                 }
+//             },
+//             // pageSize: 10,
+//         },
+//         columns: [
+//             { 
+//                 field: "cantidad", 
+//                 title: "Cantidad", 
+//                 width: "80px",
+//                 attributes:{style:"text-align:right;"}
+//             },
+//             { 
+//                 field: "valorUnitario", 
+//                 title: "Valor Unitario", 
+//                 width: "100px",
+//                 format: '{0:c}',
+//                 attributes:{style:"text-align:right;"}
+//             },
+//             { field: "noIdentificacion", title: "#Identificacion", width: "110px" },
+//             { field: "descripcion", title: "Descripcion", width: "300px" },
+//             { field: "unidad", title: "Unidad", width: "100px" },
+//             { 
+//                 field: "importe", 
+//                 title: "Importe", 
+//                 width: "100px",
+//                 format: '{0:c}',
+//                 attributes:{style:"text-align:right;"}
+//             },
+//         ],
+//         groupable: false,
+//         sortable: true,
+//         resizable: true,
+//         selectable: true,
+//         editable: false,
+//         scrollable: true,
+//         mobile: true,    })
+
+//     card_resultados.kWindow_conceptos.center().maximize().open()
+
+//     var lista = conceptos.split('},')
+
+//     json_lista = []
+
+//     $.each(lista ,function (indice, elemento) {
+//         elemento_formateado = elemento.replace("{","").replace("}","")
+//         elemento_formateado = "{" + elemento_formateado + "}"
+//         json_lista.push(JSON.parse(elemento_formateado))
+//     })
+//     kGrid_concepto.data('kendoGrid').dataSource.data(json_lista)
+// }
+// GridResultados.prototype.ver_Trasladados = function (e) {
+//     e.preventDefault()
+//     var fila = this.dataItem($(e.currentTarget).closest('tr'))
+
+//     trasladados = fila.impuestos_trasladados.replace('[','').replace(']','')
+
+//     kGrid_trasladados = $('#grid_trasladados').kendoGrid({
+//         dataSource : {
+//             schema: {
+//                 model:{
+//                     fields: kFields_impuestos
+//                 }
+//             },
+//             // pageSize: 10,
+//         },
+//         columns: [
+//             { 
+//                 field: "tasa", 
+//                 title: "Tasa", 
+//                 width: "80px",
+//                 attributes:{style:"text-align:right;"}
+//             },
+//             { field: "impuesto", title: "Impuesto", width: "110px" },
+//             { 
+//                 field: "importe", 
+//                 title: "Importe", 
+//                 width: "100px",
+//                 format: '{0:c}',
+//                 attributes:{style:"text-align:right;"}
+//             },
+//         ],
+//         groupable: false,
+//         sortable: true,
+//         resizable: true,
+//         selectable: true,
+//         editable: false,
+//         scrollable: true,
+//         mobile: true,
+//         // pageable: true,
+//     })
+
+//     card_resultados.kWindow_trasladados.center().maximize().open()
+
+//     var lista = trasladados.split('},')
+
+//     json_lista = []
+
+//     $.each(lista ,function (indice, elemento) {
+//         elemento_formateado = elemento.replace("{","").replace("}","")
+//         elemento_formateado = "{" + elemento_formateado + "}"
+//         json_lista.push(JSON.parse(elemento_formateado))
+//     })
+//     kGrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
+// }
+// GridResultados.prototype.ver_Retenidos = function (e) {
+//     e.preventDefault()
+//     var fila = this.dataItem($(e.currentTarget).closest('tr'))
+
+//     retenidos = fila.impuestos_retenidos.replace('[','').replace(']','')
+
+//     kGrid_retenidos = $('#grid_retenidos').kendoGrid({
+//         dataSource : {
+//             schema: {
+//                 model:{
+//                     fields: kFields_impuestos
+//                 }
+//             },
+//             // pageSize: 10,
+//         },
+//         columns: [
+//             { 
+//                 field: "tasa", 
+//                 title: "Tasa", 
+//                 width: "80px",
+//                 attributes:{style:"text-align:right;"}
+//             },
+//             { field: "impuesto", title: "Impuesto", width: "110px" },
+//             { 
+//                 field: "importe", 
+//                 title: "Importe", 
+//                 width: "100px",
+//                 format: '{0:c}',
+//                 attributes:{style:"text-align:right;"}
+//             },
+//         ],
+//         groupable: false,
+//         sortable: true,
+//         resizable: true,
+//         selectable: true,
+//         editable: false,
+//         scrollable: true,
+//         mobile: true,
+//         // pageable: true,
+//     })
+
+//     card_resultados.kWindow_retenidos.center().maximize().open()
+
+//     var lista = retenidos.split('},')
+
+//     json_lista = []
+
+//     $.each(lista ,function (indice, elemento) {
+//         elemento_formateado = elemento.replace("{","").replace("}","")
+//         elemento_formateado = "{" + elemento_formateado + "}"
+//         json_lista.push(JSON.parse(elemento_formateado))
+//     })
+//     kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
+// }
+

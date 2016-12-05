@@ -22,7 +22,6 @@ var kWindow_init = {
     resizable: true,
 }
 
-
 var kFields_comprobantes = {
     serie: { editable: false, type: "string" },
     folio: { editable: false, type: "string" },
@@ -76,11 +75,12 @@ var kFields_comprobantes = {
     impuestos_retenidos: { editable: false, type: "string" },
     uuid: { editable: false, type: "string" },
     fechaTimbrado: { editable: false, type: "string" },
+    pago: { editable: true, type: "string" },
     noCertificadoSAT: { editable: false, type: "string" },
     selloSAT: { editable: false, type: "string" },
     empresa: { editable: false, type: "string" },
     comentarios: { editable: false, type: "string" },
-    comprobacion: { editable: false, type: "string" },
+    comprobacion: { editable: true, type: "string" },
     url: { editable: false, type: "string" },
     tiene_pdf: { editable: false, type: "string" },
     estadoSat: { editable: false, type: "string" },

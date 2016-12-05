@@ -154,13 +154,16 @@ class ModeloFacturaProveedor(object):
                 conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
-                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
+                impuestos_trasladados=json.dumps(
+                    _comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(
+                    _comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
                 selloSAT=_comprobante.selloSAT,
                 url=_comprobante.url,
+                pago="PENDIENTE",
             )
 
             empresa = Empresa.objects.get(clave=_comprobante.empresa_clave)
@@ -252,13 +255,16 @@ class ModeloFacturaCliente(object):
                 conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
-                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
+                impuestos_trasladados=json.dumps(
+                    _comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(
+                    _comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
                 selloSAT=_comprobante.selloSAT,
                 url=_comprobante.url,
+                pago="PENDIENTE",
             )
             empresa = Empresa.objects.get(clave=_comprobante.empresa_clave)
             comprobante.empresa = empresa
@@ -349,8 +355,10 @@ class ModeloComprobanteEmpleado(object):
                 conceptos=json.dumps(_comprobante.conceptos),
                 totalImpuestosTrasladados=_comprobante.totalImpuestosTrasladados,
                 totalImpuestosRetenidos=_comprobante.totalImpuestosRetenidos,
-                impuestos_trasladados=json.dumps(_comprobante.impuestos_trasladados),
-                impuestos_retenidos=json.dumps(_comprobante.impuestos_retenidos),
+                impuestos_trasladados=json.dumps(
+                    _comprobante.impuestos_trasladados),
+                impuestos_retenidos=json.dumps(
+                    _comprobante.impuestos_retenidos),
                 uuid=_comprobante.uuid,
                 fechaTimbrado=_comprobante.fechaTimbrado,
                 noCertificadoSAT=_comprobante.noCertificadoSAT,

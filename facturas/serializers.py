@@ -14,7 +14,6 @@ from .models import Resumen
 class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()
-    comprobacion = serializers.SerializerMethodField()
 
     class Meta:
         model = FacturaProveedor
@@ -79,6 +78,7 @@ class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'tiene_pdf',
             'estadoSat',
+            'pago',
         )
 
     def get_empresa(self, obj):
@@ -88,17 +88,10 @@ class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
         except:
             return ""
 
-    def get_comprobacion(self, obj):
-        try:
-            return obj.get_comprobacion_display()
-        except:
-            return ""
-
 
 class FacturaClienteSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()
-    comprobacion = serializers.SerializerMethodField()
 
     class Meta:
         model = FacturaCliente
@@ -163,6 +156,7 @@ class FacturaClienteSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'tiene_pdf',
             'estadoSat',
+            'pago',
         )
 
     def get_empresa(self, obj):
@@ -172,17 +166,9 @@ class FacturaClienteSerializer(serializers.HyperlinkedModelSerializer):
         except:
             return ""
 
-    def get_comprobacion(self, obj):
-        try:
-            return obj.get_comprobacion_display()
-        except:
-            return ""
-
-
 class ComprobanteEmpleadoSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()
-    comprobacion = serializers.SerializerMethodField()
 
     class Meta:
         model = ComprobanteEmpleado
@@ -278,12 +264,6 @@ class ComprobanteEmpleadoSerializer(serializers.HyperlinkedModelSerializer):
 
         try:
             return obj.empresa.clave
-        except:
-            return ""
-
-    def get_comprobacion(self, obj):
-        try:
-            return obj.get_comprobacion_display()
         except:
             return ""
 
