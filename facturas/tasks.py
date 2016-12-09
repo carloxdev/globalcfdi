@@ -23,13 +23,8 @@ def obtener_facturas(_empresa_clave, _fecha_inicio, _fecha_final):
         os.path.join(os.getcwd(), os.pardir, 'Sitio')
     )
     app = Cfdineitor("PRODUCCION", run_path)
-    app.get_Invoices_Company_ByRange("LSV", fecha_inicio, fecha_final)
-
-#
-
-# print fecha_inicio
-# print fecha_final
-
-# 
-
-# print "HOla"
+    app.get_Invoices_Company_ByRange(
+        _empresa_clave,
+        fecha_inicio,
+        fecha_final
+    )

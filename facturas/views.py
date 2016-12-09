@@ -194,6 +194,7 @@ class ReconocerFactura(View):
 
         return HttpResponse(data, content_type='application/json')
 
+
 # ----------------- FACTURA PROVEEDOR ----------------- #
 
 
