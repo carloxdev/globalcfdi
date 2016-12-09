@@ -131,6 +131,25 @@ TargetaFiltros.prototype.validar_Filtros = function () {
 
     return bandera;
 }
+TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
+
+    return {
+        page: _page,
+        pageSize: _pageSize,
+        empresa__clave: this.$empresa.val(),
+        fecha_min: this.$fecha_inicio.val(),
+        fecha_max: this.$fecha_fin.val(),
+        emisor_rfc: this.$emisor_rfc.val(),
+        emisor_nombre: this.$emisor_nombre.val(),
+        uuid: this.$uuid.val(),
+        estadoSat: this.$estado_sat.val(),
+        folio: this.$folio.val(),
+        serie: this.$serie.val(),
+        fechaTimbrado_min: this.$fecha_timbrado_inicio.val(),
+        fechaTimbrado_max: this.$fecha_timbrado_fin.val(),
+        comprobacion: this.$comprobacion.val(),
+    }
+}
 
 
 /*-----------------------------------------------*\
@@ -150,7 +169,7 @@ function TargetaResultados() {
     // this.$popup_retenidos = $('#id_retenidos')
     // this.kWindow_retenidos = null
 
-    this.init()
+    // this.init()
 }
 TargetaResultados.prototype.init = function () {
 
@@ -172,6 +191,9 @@ TargetaResultados.prototype.init = function () {
 function GridResultados() {
 
     this.$id = $("#resultados")
+
+    this.toolbar = new ToolBar()
+
     this.kFuenteDatos = null
     this.kGrid = null
     this.init()
@@ -194,6 +216,10 @@ GridResultados.prototype.init = function (e) {
         columns: this.get_Columnas(),
         dataBound: this.llenar,
         pageable: true,
+        toolbar: [
+            "excel"
+        ],
+        excelExport: this.toolbar.
     })
 }
 GridResultados.prototype.get_Columnas = function (e) {
@@ -370,22 +396,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             parameterMap: function (data, action) {
                 if (action === "read") {
 
-                    return {
-                        page: data.page,
-                        pageSize: data.pageSize,
-                        empresa__clave: card_filtros.$empresa.val(),
-                        fecha_min: card_filtros.$fecha_inicio.val(),
-                        fecha_max: card_filtros.$fecha_fin.val(),
-                        emisor_rfc: card_filtros.$emisor_rfc.val(),
-                        emisor_nombre: card_filtros.$emisor_nombre.val(),
-                        uuid: card_filtros.$uuid.val(),
-                        estadoSat: card_filtros.$estado_sat.val(),
-                        folio: card_filtros.$folio.val(),
-                        serie: card_filtros.$serie.val(),
-                        fechaTimbrado_min: card_filtros.$fecha_timbrado_inicio.val(),
-                        fechaTimbrado_max: card_filtros.$fecha_timbrado_fin.val(),
-                        comprobacion: card_filtros.$comprobacion.val(),
-                    }
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
                 }
             }
         },
@@ -601,8 +612,278 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
     })    
 }
 
+
 /*-----------------------------------------------*\
-            OBJETO: Grid Resultados
+            OBJETO: Toolbar
+\*-----------------------------------------------*/
+
+function ToolBar() {
+    this.botonExportar = $('#botonExportar')
+    this.kFuenteDatos = null
+    this.kRows = null
+    this.init()
+}
+ToolBar.prototype.init = function (e) {
+
+    kendo.culture("es-MX")
+
+    this.kFuenteDatos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+
+    this.botonExportar.on('click', this, this.click_BotonExportar)
+}
+ToolBar.prototype.get_Campos = function (e) {
+
+    return {
+        doc_compania: { editable: false, type: "string" },
+        doc_compania_desc: { editable: false, type: "string" },
+        anio: { editable: false, type: "string" },
+        periodo: { editable: false, type: "string" },
+        doc_tipo: { editable: false, type: "string" },
+        doc_tipo_desc: { editable: false, type: "string" },
+        doc_numero: { editable: false, type: "number" },
+        doc_fecha_lm: { editable: false, type: "date" },
+        un_proyecto: { editable: false, type: "string" },
+        un_proyecto_desc: { editable: false, type: "string" },
+        un_proyecto_zona: { editable: false, type: "string" },
+        un_proyecto_tipo: { editable: false, type: "string" },
+        un_proyecto_tipo_desc: { editable: false, type: "string" },
+        un: { editable: false, type: "string" },
+        un_desc: { editable: false, type: "string" },
+        cuenta_objeto: { editable: false, type: "string" },
+        cuenta_auxiliar: { editable: false, type: "string" },
+        cuenta_desc: { editable: false, type: "string" },
+        cuenta_tipo: { editable: false, type: "string" },
+        cuenta_tipo_desc: { editable: false, type: "string" },
+        cuenta_clase: { editable: false, type: "string" },
+        cuenta_clase_desc: { editable: false, type: "string" },
+        cuenta_flujo: { editable: false, type: "string" },
+        cuenta_flujo_desc: { editable: false, type: "string" },
+        monto_mx: { editable: false, type: "number" },
+        enero_mx: { editable: false, type: "number" },
+        febrero_mx: { editable: false, type: "number" },
+        marzo_mx: { editable: false, type: "number" },
+        abril_mx: { editable: false, type: "number" },
+        mayo_mx: { editable: false, type: "number" },
+        junio_mx: { editable: false, type: "number" },
+        julio_mx: { editable: false, type: "number" },
+        agosto_mx: { editable: false, type: "number" },
+        septiembre_mx: { editable: false, type: "number" },
+        octubre_mx: { editable: false, type: "number" },
+        noviembre_mx: { editable: false, type: "number" },
+        diciembre_mx: { editable: false, type: "number" },
+    }
+}
+ToolBar.prototype.get_FuenteDatosConfig = function (e) {
+
+    return {
+        serverFiltering: true,
+        transport: {
+            read: {
+                url: url_export,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
+
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
+                }
+            }
+        },
+        schema: {
+            model: {
+                id: "pk",
+                fields: this.get_Campos()
+            }
+        },
+        error: function (e) {
+            alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+        },
+        serverFiltering: true
+    }
+}
+ToolBar.prototype.init_Celdas = function (e) {
+
+    if (this.kRows != null) {
+        if (this.kRows.length != 1) {
+            this.kRows.length = 0;
+        }
+    }
+
+    this.kRows = [{
+        cells: [
+            { value: "Compania" },
+            { value: "Compania Desc" },
+            { value: "Anio" },
+            { value: "Periodo" },
+            { value: "Doc Tipo" },
+            { value: "Doc Tipo Dec" },
+            { value: "Doc No" },
+            { value: "Fecha LM" },
+            { value: "Proyecto" },
+            { value: "Proyecto Desc" },
+            { value: "Zona" },
+            { value: "Un Tipo" },
+            { value: "Un Tipo Desc" },
+            { value: "UN" },
+            { value: "UN Desc" },
+            { value: "Cuenta Obj" },
+            { value: "Cuenta Aux" },
+            { value: "Cuenta Desc" },
+            { value: "Cuenta Tipo" },
+            { value: "Cuenta Tipo Desc" },
+            { value: "Cuenta Clase Desc" },
+            { value: "Cuenta Clase" },
+            { value: "Cuenta Flujo" },
+            { value: "cuenta Flujo Desc" },
+            { value: "Total" },
+            { value: "Enero" },
+            { value: "Febero" },
+            { value: "Marzo" },
+            { value: "Abril" },
+            { value: "Mayo" },
+            { value: "Junio" },
+            { value: "Julio" },
+            { value: "Agosto" },
+            { value: "Septiembre" },
+            { value: "Octubre" },
+            { value: "Noviembre" },
+            { value: "Diciembre" },
+        ]
+    }];
+}
+ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
+
+    for (var i = 0; i < data.length; i++) {
+
+        this.kRows.push({
+            cells: [
+                { value: data[i].doc_compania },
+                { value: data[i].doc_compania_desc },
+                { value: data[i].anio },
+                { value: data[i].periodo },
+                { value: data[i].doc_tipo },
+                { value: data[i].doc_tipo_desc },
+                { value: data[i].doc_numero },
+                { value: data[i].doc_fecha_lm },
+                { value: data[i].un_proyecto },
+                { value: data[i].un_proyecto_desc },
+                { value: data[i].un_proyecto_zona },
+                { value: data[i].un_proyecto_tipo },
+                { value: data[i].un_proyecto_tipo_desc },
+                { value: data[i].un },
+                { value: data[i].un_desc },
+                { value: data[i].cuenta_objeto },
+                { value: data[i].cuenta_auxiliar },
+                { value: data[i].cuenta_desc },
+                { value: data[i].cuenta_tipo },
+                { value: data[i].cuenta_tipo_desc },
+                { value: data[i].cuenta_clase },
+                { value: data[i].cuenta_clase_desc },
+                { value: data[i].cuenta_flujo },
+                { value: data[i].cuenta_flujo_desc },
+                { value: data[i].monto_mx },
+                { value: data[i].enero_mx },
+                { value: data[i].febrero_mx },
+                { value: data[i].marzo_mx },
+                { value: data[i].abril_mx },
+                { value: data[i].mayo_mx },
+                { value: data[i].junio_mx },
+                { value: data[i].julio_mx },
+                { value: data[i].agosto_mx },
+                { value: data[i].septiembre_mx },
+                { value: data[i].octubre_mx },
+                { value: data[i].noviembre_mx },
+                { value: data[i].diciembre_mx },
+            ]
+        })
+    }
+}
+ToolBar.prototype.get_Hojas = function () {
+    return {
+        sheets: [{
+            columnas: [
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+            ],
+            title: "registros",
+            rows: this.kRows
+        }]
+    }
+}
+ToolBar.prototype.click_BotonExportar = function (e) {
+
+    e.preventDefault()
+
+    if (targeta_filtros.validar() == true) {
+
+        // Se inicializan los titulos:
+        e.data.init_Celdas();
+
+        show_Spinner()
+
+        // se carga y los datos se agregarn a las filas:
+        e.data.kFuenteDatos.fetch(function () {
+
+            var datos = this.data();
+
+            e.data.agregar_Info_A_Celdas(datos)
+
+            // Se crea Libro:
+            var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
+
+            // Se genera archivo de Excel:
+            kendo.saveAs({
+                dataURI: workbook.toDataURL(),
+                fileName: "registros.xlsx",
+                proxyURL: 'frmSaveFile.aspx'
+            })
+        })
+    }
+    else {
+        alert("Favor de seleccionar al menos un filtro")
+    }
+}
+
+
+
+/*-----------------------------------------------*\
+            OBJETO: ??
 \*-----------------------------------------------*/
 
 // GridResultados.prototype.ver_Conceptos = function (e) {

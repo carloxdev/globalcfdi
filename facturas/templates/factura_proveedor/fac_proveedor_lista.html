@@ -196,6 +196,10 @@
 <!-- Configuracion de componentes -->
 <script src="{% static 'common_scripts/data_config.js' %}"></script>
 
+<script type="text/x-kendo-template" id="toolbar">
+	<a class="k-button" href="\#" onclick="return card_resultados.grid.exportar()">Exportar</a>
+</script>
+
 <!-- Js del Sitio -->
 <script src="{% static 'factura_proveedor/fac_proveedor_lista.js' %}"></script>
 

@@ -180,9 +180,12 @@ class ObtenerForm(forms.Form):
 
     def obtener_Empresas(self, _usuario):
 
-        empresa = [('', 'Todas'), ]
+        empresa = []
 
-        registros = Empresa.objects.filter(usuario=_usuario)
+        if _usuario.is_staff:
+            registros = Empresa.objects.all()
+        else:
+            registros = Empresa.objects.filter(usuario=_usuario)
 
         for registro in registros:
             empresa.append(

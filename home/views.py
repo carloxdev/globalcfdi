@@ -109,6 +109,19 @@ class Dashboard(View):
         return render(request, self.template_name, contexto)
 
 
+@method_decorator(login_required, name='dispatch')
+class DashboardDetalle(View):
+
+    def __init__(self):
+        self.template_name = 'home/dashboard_detalle.html'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
+
+    def post(self, request):
+        return render(request, self.template_name, {})
+
+
 class Servicios(View):
 
     def __init__(self):
