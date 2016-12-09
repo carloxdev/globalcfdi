@@ -313,7 +313,7 @@ class LogsList(View):
 
 
 class LogAPI(viewsets.ModelViewSet):
-    queryset = Log.objects.all().order_by('-fecha_operacion',)
+    queryset = Log.objects.all().order_by('-created_date',)
     serializer_class = LogSerializer
     pagination_class = GenericPagination
 
