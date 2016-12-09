@@ -208,7 +208,6 @@ GridResultados.prototype.init = function (e) {
         dataSource: this.kFuenteDatos,
         columnMenu: true,
         groupable: false,
-        sortable: true,
         resizable: true,
         selectable: true,
         editable: true,

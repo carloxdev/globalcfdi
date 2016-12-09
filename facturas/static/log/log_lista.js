@@ -148,6 +148,9 @@ TargetaResultados.prototype.init = function () {
             total: "count",
             model: {
                 fields: this.kFields
+            },
+            sort: {
+                field: "created_date", dir: "desc"
             }
         },
         error: function (e) {
