@@ -276,8 +276,13 @@ class FacturaClienteAPI(viewsets.ModelViewSet):
     filter_class = FacturaClienteFilter
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
-        return FacturaCliente.objects.filter(empresa__in=empresas)
+        if self.request.user.is_staff:
+            facturas = FacturaCliente.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
+
+        return facturas
 
 
 class FacturaClienteTodosAPI(viewsets.ModelViewSet):
@@ -287,8 +292,13 @@ class FacturaClienteTodosAPI(viewsets.ModelViewSet):
     filter_class = FacturaClienteFilter
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
-        return FacturaCliente.objects.filter(empresa__in=empresas)
+        if self.request.user.is_staff:
+            facturas = FacturaCliente.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
+
+        return facturas
 
 # ----------------- COMPROBANTE EMPLEADO ----------------- #
 
@@ -317,8 +327,13 @@ class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
     filter_class = ComprobanteEmpleadoFilter
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
-        return ComprobanteEmpleado.objects.filter(empresa__in=empresas)
+        if self.request.user.is_staff:
+            facturas = ComprobanteEmpleado.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = ComprobanteEmpleado.objects.filter(empresa__in=empresas)
+
+        return facturas
 
 
 class ComprobanteEmpleadoTodosAPI(viewsets.ModelViewSet):
@@ -328,8 +343,13 @@ class ComprobanteEmpleadoTodosAPI(viewsets.ModelViewSet):
     filter_class = ComprobanteEmpleadoFilter
 
     def get_queryset(self):
-        empresas = self.request.user.empresa_set.all()
-        return ComprobanteEmpleado.objects.filter(empresa__in=empresas)
+        if self.request.user.is_staff:
+            facturas = ComprobanteEmpleado.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = ComprobanteEmpleado.objects.filter(empresa__in=empresas)
+
+        return facturas
 
 # ----------------- LOG ----------------- #
 

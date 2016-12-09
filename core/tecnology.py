@@ -62,8 +62,9 @@ class Cfdineitor(object):
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
 
         for fecha in fechas:
-            log = esclavo.get_Invoices_ByDay("RECIBIDAS", fecha)
-            self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
+            esclavo.get_Invoices_ByDay("RECIBIDAS", fecha)
+            esclavo.get_Invoices_ByDay("EMITIDAS", fecha)
+            # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
 
     def get_Invoices_AllCompanies_Last3Days(self):
 
