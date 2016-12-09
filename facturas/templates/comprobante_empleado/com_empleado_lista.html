@@ -153,6 +153,13 @@
 </div>
 
 <div class="container-fluid contenedor">
+
+	<div class="btn-group toolbar">
+		<button type="button" class="btn btn-default" id="botonExportar">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Exportar
+		</button>
+	</div>
+
 	<div id="resultados" class="grid" >
 	</div>			
 </div>
@@ -179,6 +186,9 @@
 
 <!-- Alertifyjs -->
 <script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Export -->
+<script src="{% static 'libs/kendo_2015_2_624/js/jszip.min.js' %}"></script>
 
 <!-- Kendo Js-->
 <script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>

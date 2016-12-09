@@ -9,6 +9,7 @@ var url_archivos = ""
 var url_validar_factura = ""
 var url_marcar_pago = ""
 var url_reconocer_factura = ""
+var url_export = ""
 
 if (url.pathname.search("smart") > 0) {
     url_consulta = url.origin + "/smart/api/facturas_proveedor/"
@@ -16,6 +17,7 @@ if (url.pathname.search("smart") > 0) {
     url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/proveedor/"
     url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/proveedor/"
     url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/proveedor/"
+    url_export = url.origin + "/smart/api/facturas_proveedor_todos/"
 }
 else {
     url_consulta = url.origin + "/api/facturas_proveedor/"
@@ -23,6 +25,7 @@ else {
     url_validar_factura  = url.origin + "/comprobantes/validar_factura/proveedor/"
     url_marcar_pago = url.origin + "/comprobantes/marcar_pago/proveedor/"
     url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/proveedor/"
+    url_export = url.origin + "/api/facturas_proveedor_todos/"
 }
 
 // OBJS:
@@ -47,7 +50,7 @@ $(document).ready(function () {
 
 $(window).resize(function() {
 
-    card_resultados.grid.kGrid.data("kendoGrid").resize()
+    card_resultados.grid.kgrid.data("kendoGrid").resize()
 })
 
 
@@ -158,6 +161,8 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
 
 function TargetaResultados() {
 
+    this.toolbar = new ToolBar()
+
     this.grid = new GridResultados()
 
     // this.$popup_conceptos = $('#id_conceptos')
@@ -192,20 +197,18 @@ function GridResultados() {
 
     this.$id = $("#resultados")
 
-    // this.toolbar = new ToolBar()
-
-    this.kFuenteDatos = null
-    this.kGrid = null
+    this.kfuente_datos = null
+    this.kgrid = null
     this.init()
 }
 GridResultados.prototype.init = function (e) {
 
     kendo.culture("es-MX")
 
-    this.kFuenteDatos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-    this.kGrid = this.$id.kendoGrid({
-        dataSource: this.kFuenteDatos,
+    this.kgrid = this.$id.kendoGrid({
+        dataSource: this.kfuente_datos,
         columnMenu: true,
         groupable: false,
         resizable: true,
@@ -215,10 +218,6 @@ GridResultados.prototype.init = function (e) {
         columns: this.get_Columnas(),
         dataBound: this.llenar,
         pageable: true,
-        toolbar: [
-            "excel"
-        ],
-        // excelExport: this.toolbar.
     })
 }
 GridResultados.prototype.get_Columnas = function (e) {
@@ -437,18 +436,18 @@ GridResultados.prototype.llenar = function (e) {
     $.each(data, function (indice, elemento) {
         
         if (elemento.tiene_pdf == "false") {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
         }
         if (elemento.totalImpuestosTrasladados == 0) {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
         }
         if (elemento.totalImpuestosRetenidos == 0) {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
         }
     })
 }
 GridResultados.prototype.buscar = function () {
-    this.kFuenteDatos.page(1)
+    this.kfuente_datos.page(1)
 }
 GridResultados.prototype.validar_XML = function (e) {
     e.preventDefault()
@@ -467,7 +466,7 @@ GridResultados.prototype.validar_XML = function (e) {
 
         success: function (e) {
             alertify.warning(e.mensaje + " " + e.estado)
-            card_resultados.grid.kGrid.find("tr[data-uid='" + fila.uid + "'] td:eq(52)").text(e.estado); 
+            card_resultados.grid.kgrid.find("tr[data-uid='" + fila.uid + "'] td:eq(52)").text(e.estado); 
         },
         error: function (e) {
 
@@ -616,268 +615,296 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
             OBJETO: Toolbar
 \*-----------------------------------------------*/
 
-// function ToolBar() {
-//     this.botonExportar = $('#botonExportar')
-//     this.kFuenteDatos = null
-//     this.kRows = null
-//     this.init()
-// }
-// ToolBar.prototype.init = function (e) {
+function ToolBar() {
+    this.boton_exportar = $('#botonExportar')
+    this.kfuente_datos = null
+    this.krows = null
+    this.init()
+}
+ToolBar.prototype.init = function (e) {
 
-//     kendo.culture("es-MX")
+    kendo.culture("es-MX")
 
-//     this.kFuenteDatos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-//     this.botonExportar.on('click', this, this.click_BotonExportar)
-// }
-// ToolBar.prototype.get_Campos = function (e) {
+    this.boton_exportar.on('click', this, this.click_BotonExportar)
+}
+ToolBar.prototype.get_FuenteDatosConfig = function (e) {
 
-//     return {
-//         doc_compania: { editable: false, type: "string" },
-//         doc_compania_desc: { editable: false, type: "string" },
-//         anio: { editable: false, type: "string" },
-//         periodo: { editable: false, type: "string" },
-//         doc_tipo: { editable: false, type: "string" },
-//         doc_tipo_desc: { editable: false, type: "string" },
-//         doc_numero: { editable: false, type: "number" },
-//         doc_fecha_lm: { editable: false, type: "date" },
-//         un_proyecto: { editable: false, type: "string" },
-//         un_proyecto_desc: { editable: false, type: "string" },
-//         un_proyecto_zona: { editable: false, type: "string" },
-//         un_proyecto_tipo: { editable: false, type: "string" },
-//         un_proyecto_tipo_desc: { editable: false, type: "string" },
-//         un: { editable: false, type: "string" },
-//         un_desc: { editable: false, type: "string" },
-//         cuenta_objeto: { editable: false, type: "string" },
-//         cuenta_auxiliar: { editable: false, type: "string" },
-//         cuenta_desc: { editable: false, type: "string" },
-//         cuenta_tipo: { editable: false, type: "string" },
-//         cuenta_tipo_desc: { editable: false, type: "string" },
-//         cuenta_clase: { editable: false, type: "string" },
-//         cuenta_clase_desc: { editable: false, type: "string" },
-//         cuenta_flujo: { editable: false, type: "string" },
-//         cuenta_flujo_desc: { editable: false, type: "string" },
-//         monto_mx: { editable: false, type: "number" },
-//         enero_mx: { editable: false, type: "number" },
-//         febrero_mx: { editable: false, type: "number" },
-//         marzo_mx: { editable: false, type: "number" },
-//         abril_mx: { editable: false, type: "number" },
-//         mayo_mx: { editable: false, type: "number" },
-//         junio_mx: { editable: false, type: "number" },
-//         julio_mx: { editable: false, type: "number" },
-//         agosto_mx: { editable: false, type: "number" },
-//         septiembre_mx: { editable: false, type: "number" },
-//         octubre_mx: { editable: false, type: "number" },
-//         noviembre_mx: { editable: false, type: "number" },
-//         diciembre_mx: { editable: false, type: "number" },
-//     }
-// }
-// ToolBar.prototype.get_FuenteDatosConfig = function (e) {
+    return {
+        serverFiltering: true,
+        transport: {
+            read: {
+                url: url_export,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
 
-//     return {
-//         serverFiltering: true,
-//         transport: {
-//             read: {
-//                 url: url_export,
-//                 type: "GET",
-//                 dataType: "json",
-//             },
-//             parameterMap: function (data, action) {
-//                 if (action === "read") {
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
+                }
+            }
+        },
+        schema: {
+            model: {
+                id: "pk",
+                fields: kFields_comprobantes
+            }
+        },
+        error: function (e) {
+            alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+        },
+        serverFiltering: true
+    }
+}
+ToolBar.prototype.init_Celdas = function (e) {
 
-//                     return card_filtros.get_Filtros(data.page, data.pageSize)
-//                 }
-//             }
-//         },
-//         schema: {
-//             model: {
-//                 id: "pk",
-//                 fields: this.get_Campos()
-//             }
-//         },
-//         error: function (e) {
-//             alert("Status: " + e.status + "; Error message: " + e.errorThrown);
-//         },
-//         serverFiltering: true
-//     }
-// }
-// ToolBar.prototype.init_Celdas = function (e) {
+    if (this.krows != null) {
+        if (this.krows.length != 1) {
+            this.krows.length = 0;
+        }
+    }
 
-//     if (this.kRows != null) {
-//         if (this.kRows.length != 1) {
-//             this.kRows.length = 0;
-//         }
-//     }
+    this.krows = [{
+        cells: [
+            { value: "UUID" },        
+            { value: "ESTADO SAT" },
+            { value: "SERIE" },
+            { value: "FOLIO" },
+            { value: "FECHA" },
+            { value: "FORMA DE PAGO" },
+            { value: "NO CERTIFICADO" },
+            { value: "SUBTOTAL" },
+            { value: "TIPO CAMBIO" },
+            { value: "MONEDA" },
+            { value: "TOTAL" },
+            { value: "TIPO DE COMPROBANTE" },
+            { value: "METODO DE PAGO" },
+            { value: "LUGAR EXPEDICION" },
+            { value: "NUM CTA PAGO" },
+            { value: "CONDICIONES DE PAGO" },
+            { value: "EMISOR RFC" },
+            { value: "EMISOR NOMBRE" },
+            { value: "EMISOR CALLE" },
+            { value: "EMISOR NO EXTERIOR" },
+            { value: "EMISOR NO INTERIOR" },
+            { value: "EMISOR COLONIA" },
+            { value: "EMISOR LOCALIDAD" },
+            { value: "EMISOR MUNICIPIO" },
+            { value: "EMISOR ESTADO" },
+            { value: "EMISOR PAIS" },
+            { value: "EMISOR CODIGO POSTAL" },
+            { value: "EMISOR EXPEDIDO EN CALLE" },
+            { value: "EMISOR EXPEDIDO EN NOEXTERIOR" },
+            { value: "EMISOR EXPEDIDO EN NOINTERIOR" },
+            { value: "EMISOR EXPEDIDO EN COLONIA" },
+            { value: "EMISOR EXPEDIDO EN MUNICIPIO" },
+            { value: "EMISOR EXPEDIDO EN ESTADO" },
+            { value: "EMISOR EXPEDIDO EN PAIS" },
+            { value: "EMISOR REGIMEN" },
+            { value: "RECEPTOR RFC" },
+            { value: "RECEPTOR NOMBRE" },
+            { value: "RECEPTOR CALLE" },
+            { value: "RECEPTOR NO EXTERIOR" },
+            { value: "RECEPTOR NO INTERIOR" },
+            { value: "RECEPTOR COLONIA" },
+            { value: "RECEPTOR LOCALIDAD" },
+            { value: "RECEPTOR MUNICIPIO" },
+            { value: "RECEPTOR ESTADO" },
+            { value: "RECEPTOR PAIS" },
+            { value: "RECEPTOR CODIGO POSTAL" },
+            { value: "CONCEPTOS" },
+            { value: "TOTAL IMPUESTOS TRASLADADOS" },
+            { value: "TOTAL IMPUESTOS RETENIDOS" },
+            { value: "IMPUESTOS TRASLADADOS" },
+            { value: "IMPUESTOS RETENIDOS" },
+            { value: "FECHA TIMBRADO" },
+            { value: "PAGO" },
+            { value: "COMPROBACION" },
+            { value: "NO CERTIFICADO SAT" },
+            { value: "SELLO" },
+            { value: "SELLO SAT" },
+            { value: "EMPRESA" },
+            { value: "COMENTARIOS" },
+            { value: "URL" },
+        ]
+    }];
+}
+ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
 
-//     this.kRows = [{
-//         cells: [
-//             { value: "Compania" },
-//             { value: "Compania Desc" },
-//             { value: "Anio" },
-//             { value: "Periodo" },
-//             { value: "Doc Tipo" },
-//             { value: "Doc Tipo Dec" },
-//             { value: "Doc No" },
-//             { value: "Fecha LM" },
-//             { value: "Proyecto" },
-//             { value: "Proyecto Desc" },
-//             { value: "Zona" },
-//             { value: "Un Tipo" },
-//             { value: "Un Tipo Desc" },
-//             { value: "UN" },
-//             { value: "UN Desc" },
-//             { value: "Cuenta Obj" },
-//             { value: "Cuenta Aux" },
-//             { value: "Cuenta Desc" },
-//             { value: "Cuenta Tipo" },
-//             { value: "Cuenta Tipo Desc" },
-//             { value: "Cuenta Clase Desc" },
-//             { value: "Cuenta Clase" },
-//             { value: "Cuenta Flujo" },
-//             { value: "cuenta Flujo Desc" },
-//             { value: "Total" },
-//             { value: "Enero" },
-//             { value: "Febero" },
-//             { value: "Marzo" },
-//             { value: "Abril" },
-//             { value: "Mayo" },
-//             { value: "Junio" },
-//             { value: "Julio" },
-//             { value: "Agosto" },
-//             { value: "Septiembre" },
-//             { value: "Octubre" },
-//             { value: "Noviembre" },
-//             { value: "Diciembre" },
-//         ]
-//     }];
-// }
-// ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
+    for (var i = 0; i < data.length; i++) {
 
-//     for (var i = 0; i < data.length; i++) {
+        this.krows.push({
+            cells: [
+                { value: data[i].uuid },
+                { value: data[i].estadoSat },
+                { value: data[i].serie },
+                { value: data[i].folio },
+                { value: data[i].fecha },
+                { value: data[i].formaDePago },
+                { value: data[i].noCertificado },
+                { value: data[i].subTotal },
+                { value: data[i].tipoCambio },
+                { value: data[i].moneda },
+                { value: data[i].total },
+                { value: data[i].tipoDeComprobante },
+                { value: data[i].metodoDePago },
+                { value: data[i].lugarExpedicion },
+                { value: data[i].numCtaPago },
+                { value: data[i].condicionesDePago },
+                { value: data[i].emisor_rfc },
+                { value: data[i].emisor_nombre },
+                { value: data[i].emisor_calle },
+                { value: data[i].emisor_noExterior },
+                { value: data[i].emisor_noInterior },
+                { value: data[i].emisor_colonia },
+                { value: data[i].emisor_localidad },
+                { value: data[i].emisor_municipio },
+                { value: data[i].emisor_estado },
+                { value: data[i].emisor_pais },
+                { value: data[i].emisor_codigoPostal },
+                { value: data[i].emisor_expedidoEn_calle },
+                { value: data[i].emisor_expedidoEn_noExterior },
+                { value: data[i].emisor_expedidoEn_noInterior },
+                { value: data[i].emisor_expedidoEn_colonia },
+                { value: data[i].emisor_expedidoEn_municipio },
+                { value: data[i].emisor_expedidoEn_estado },
+                { value: data[i].emisor_expedidoEn_pais },
+                { value: data[i].emisor_regimen },
+                { value: data[i].receptor_rfc },
+                { value: data[i].receptor_nombre },
+                { value: data[i].receptor_calle },
+                { value: data[i].receptor_noExterior },
+                { value: data[i].receptor_noInterior },
+                { value: data[i].receptor_colonia },
+                { value: data[i].receptor_localidad },
+                { value: data[i].receptor_municipio },
+                { value: data[i].receptor_estado },
+                { value: data[i].receptor_pais },
+                { value: data[i].receptor_codigoPostal },
+                { value: data[i].conceptos },
+                { value: data[i].totalImpuestosTrasladados },
+                { value: data[i].totalImpuestosRetenidos },
+                { value: data[i].impuestos_trasladados },
+                { value: data[i].impuestos_retenidos },
+                { value: data[i].fechaTimbrado },
+                { value: data[i].pago },
+                { value: data[i].comprobacion },
+                { value: data[i].noCertificadoSAT },
+                { value: data[i].sello },
+                { value: data[i].selloSAT },
+                { value: data[i].empresa },
+                { value: data[i].comentarios },
+                { value: url_archivos + data[i].url },
+            ]
+        })
+    }
+}
+ToolBar.prototype.get_Hojas = function () {
+    return {
+        sheets: [{
+            columnas: [
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+            ],
+            title: "registros",
+            rows: this.krows
+        }]
+    }
+}
+ToolBar.prototype.click_BotonExportar = function (e) {
 
-//         this.kRows.push({
-//             cells: [
-//                 { value: data[i].doc_compania },
-//                 { value: data[i].doc_compania_desc },
-//                 { value: data[i].anio },
-//                 { value: data[i].periodo },
-//                 { value: data[i].doc_tipo },
-//                 { value: data[i].doc_tipo_desc },
-//                 { value: data[i].doc_numero },
-//                 { value: data[i].doc_fecha_lm },
-//                 { value: data[i].un_proyecto },
-//                 { value: data[i].un_proyecto_desc },
-//                 { value: data[i].un_proyecto_zona },
-//                 { value: data[i].un_proyecto_tipo },
-//                 { value: data[i].un_proyecto_tipo_desc },
-//                 { value: data[i].un },
-//                 { value: data[i].un_desc },
-//                 { value: data[i].cuenta_objeto },
-//                 { value: data[i].cuenta_auxiliar },
-//                 { value: data[i].cuenta_desc },
-//                 { value: data[i].cuenta_tipo },
-//                 { value: data[i].cuenta_tipo_desc },
-//                 { value: data[i].cuenta_clase },
-//                 { value: data[i].cuenta_clase_desc },
-//                 { value: data[i].cuenta_flujo },
-//                 { value: data[i].cuenta_flujo_desc },
-//                 { value: data[i].monto_mx },
-//                 { value: data[i].enero_mx },
-//                 { value: data[i].febrero_mx },
-//                 { value: data[i].marzo_mx },
-//                 { value: data[i].abril_mx },
-//                 { value: data[i].mayo_mx },
-//                 { value: data[i].junio_mx },
-//                 { value: data[i].julio_mx },
-//                 { value: data[i].agosto_mx },
-//                 { value: data[i].septiembre_mx },
-//                 { value: data[i].octubre_mx },
-//                 { value: data[i].noviembre_mx },
-//                 { value: data[i].diciembre_mx },
-//             ]
-//         })
-//     }
-// }
-// ToolBar.prototype.get_Hojas = function () {
-//     return {
-//         sheets: [{
-//             columnas: [
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//                 { autoWidth: true },
-//             ],
-//             title: "registros",
-//             rows: this.kRows
-//         }]
-//     }
-// }
-// ToolBar.prototype.click_BotonExportar = function (e) {
+    e.preventDefault()
 
-//     e.preventDefault()
+    if (card_filtros.validar_Filtros() == true) {
 
-//     if (targeta_filtros.validar() == true) {
+        // Se inicializan los titulos:
+        e.data.init_Celdas();
 
-//         // Se inicializan los titulos:
-//         e.data.init_Celdas();
+        // show_Spinner()
 
-//         show_Spinner()
+        // se carga y los datos se agregarn a las filas:
+        e.data.kfuente_datos.fetch(function () {
 
-//         // se carga y los datos se agregarn a las filas:
-//         e.data.kFuenteDatos.fetch(function () {
+            var datos = this.data();
 
-//             var datos = this.data();
+            e.data.agregar_Info_A_Celdas(datos)
 
-//             e.data.agregar_Info_A_Celdas(datos)
+            // Se crea Libro:
+            var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
 
-//             // Se crea Libro:
-//             var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
-
-//             // Se genera archivo de Excel:
-//             kendo.saveAs({
-//                 dataURI: workbook.toDataURL(),
-//                 fileName: "registros.xlsx",
-//                 proxyURL: 'frmSaveFile.aspx'
-//             })
-//         })
-//     }
-//     else {
-//         alert("Favor de seleccionar al menos un filtro")
-//     }
-// }
+            // Se genera archivo de Excel:
+            kendo.saveAs({
+                dataURI: workbook.toDataURL(),
+                fileName: "registros.xlsx",
+                // proxyURL: 'frmSaveFile.aspx'
+            })
+        })
+    }
+    else {
+        alert("Favor de seleccionar al menos un filtro")
+    }
+}
 
 
 
@@ -891,7 +918,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
     
 //     conceptos = fila.conceptos.replace('[','').replace(']','')
 
-//     kGrid_concepto = $('#grid_conceptos').kendoGrid({
+//     kgrid_concepto = $('#grid_conceptos').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -944,7 +971,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_concepto.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_concepto.data('kendoGrid').dataSource.data(json_lista)
 // }
 // GridResultados.prototype.ver_Trasladados = function (e) {
 //     e.preventDefault()
@@ -952,7 +979,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 
 //     trasladados = fila.impuestos_trasladados.replace('[','').replace(']','')
 
-//     kGrid_trasladados = $('#grid_trasladados').kendoGrid({
+//     kgrid_trasladados = $('#grid_trasladados').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -998,7 +1025,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
 // }
 // GridResultados.prototype.ver_Retenidos = function (e) {
 //     e.preventDefault()
@@ -1006,7 +1033,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 
 //     retenidos = fila.impuestos_retenidos.replace('[','').replace(']','')
 
-//     kGrid_retenidos = $('#grid_retenidos').kendoGrid({
+//     kgrid_retenidos = $('#grid_retenidos').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -1052,6 +1079,6 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
 // }
 

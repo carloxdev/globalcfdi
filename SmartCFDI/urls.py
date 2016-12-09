@@ -12,8 +12,11 @@ from rest_framework import routers
 
 # Mis API Views:
 from facturas.views import FacturaProveedorAPI
+from facturas.views import FacturaProveedorTodosAPI
 from facturas.views import FacturaClienteAPI
+from facturas.views import FacturaClienteTodosAPI
 from facturas.views import ComprobanteEmpleadoAPI
+from facturas.views import ComprobanteEmpleadoTodosAPI
 from facturas.views import LogAPI
 from facturas.views import ResumenAPI
 
@@ -26,14 +29,29 @@ router.register(
     'facturas_proveedor'
 )
 router.register(
+    r'facturas_proveedor_todos',
+    FacturaProveedorTodosAPI,
+    'facturas_proveedor_todos'
+)
+router.register(
     r'facturas_cliente',
     FacturaClienteAPI,
     'facturas_cliente'
 )
 router.register(
+    r'facturas_cliente_todos',
+    FacturaClienteTodosAPI,
+    'facturas_cliente_todos'
+)
+router.register(
     r'comprobantes_empleado',
     ComprobanteEmpleadoAPI,
     'comprobantes_empleado'
+)
+router.register(
+    r'comprobantes_empleado_todos',
+    ComprobanteEmpleadoTodosAPI,
+    'comprobantes_empleado_todos'
 )
 router.register(
     r'logs',

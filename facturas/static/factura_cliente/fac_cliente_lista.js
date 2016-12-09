@@ -9,6 +9,7 @@ var url_archivos = ""
 var url_validar_factura = ""
 var url_marcar_pago = ""
 var url_reconocer_factura = ""
+var url_export = ""
 
 if (url.pathname.search("smart") > 0) {
     url_consulta = url.origin + "/smart/api/facturas_cliente/"
@@ -16,6 +17,7 @@ if (url.pathname.search("smart") > 0) {
     url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/cliente/"
     url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/cliente/"
     url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/cliente/"
+    url_export = url.origin + "/smart/api/facturas_cliente_todos/"
 }
 else {
     url_consulta = url.origin + "/api/facturas_cliente/"
@@ -23,6 +25,7 @@ else {
     url_validar_factura  = url.origin + "/comprobantes/validar_factura/cliente/"
     url_marcar_pago = url.origin + "/comprobantes/marcar_pago/cliente/"
     url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/cliente/"
+    url_export = url.origin + "/api/facturas_cliente_todos/"
 }
 
 // OBJS:
@@ -47,7 +50,7 @@ $(document).ready(function () {
 
 $(window).resize(function() {
 
-    card_resultados.grid.kGrid.data("kendoGrid").resize()
+    card_resultados.grid.kgrid.data("kendoGrid").resize()
 })
 
 
@@ -131,6 +134,25 @@ TargetaFiltros.prototype.validar_Filtros = function () {
 
     return bandera;
 }
+TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
+
+    return {
+        page: _page,
+        pageSize: _pageSize,
+        empresa__clave: this.$empresa.val(),
+        fecha_min: this.$fecha_inicio.val(),
+        fecha_max: this.$fecha_fin.val(),
+        emisor_rfc: this.$emisor_rfc.val(),
+        emisor_nombre: this.$emisor_nombre.val(),
+        uuid: this.$uuid.val(),
+        estadoSat: this.$estado_sat.val(),
+        folio: this.$folio.val(),
+        serie: this.$serie.val(),
+        fechaTimbrado_min: this.$fecha_timbrado_inicio.val(),
+        fechaTimbrado_max: this.$fecha_timbrado_fin.val(),
+        comprobacion: this.$comprobacion.val(),
+    }
+}
 
 
 /*-----------------------------------------------*\
@@ -138,6 +160,8 @@ TargetaFiltros.prototype.validar_Filtros = function () {
 \*-----------------------------------------------*/
 
 function TargetaResultados() {
+
+    this.toolbar = new ToolBar()
 
     this.grid = new GridResultados()
 
@@ -150,7 +174,7 @@ function TargetaResultados() {
     // this.$popup_retenidos = $('#id_retenidos')
     // this.kWindow_retenidos = null
 
-    this.init()
+    // this.init()
 }
 TargetaResultados.prototype.init = function () {
 
@@ -172,21 +196,21 @@ TargetaResultados.prototype.init = function () {
 function GridResultados() {
 
     this.$id = $("#resultados")
-    this.kFuenteDatos = null
-    this.kGrid = null
+
+    this.kfuente_datos = null
+    this.kgrid = null
     this.init()
 }
 GridResultados.prototype.init = function (e) {
 
     kendo.culture("es-MX")
 
-    this.kFuenteDatos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-    this.kGrid = this.$id.kendoGrid({
-        dataSource: this.kFuenteDatos,
+    this.kgrid = this.$id.kendoGrid({
+        dataSource: this.kfuente_datos,
         columnMenu: true,
         groupable: false,
-        sortable: true,
         resizable: true,
         selectable: true,
         editable: true,
@@ -198,9 +222,8 @@ GridResultados.prototype.init = function (e) {
 }
 GridResultados.prototype.get_Columnas = function (e) {
     return [
-        { field: "receptor_rfc", title: "Receptor RFC", width: "140px" },
-        { field: "receptor_nombre", title: "Receptor Nombre", width: "350px"},                    
-
+        { field: "receptor_rfc", title: "Receptor RFC", width: "200px", hidden: true },
+        { field: "receptor_nombre", title: "Receptor Nombre", width: "200px", hidden: true },
         { field: "uuid", title: "UUID", width: "290px" },       
         {   
             field: "fecha", 
@@ -297,6 +320,8 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "lugarExpedicion", title: "Lugar Expedicion", width: "200px", hidden: true },
         { field: "numCtaPago", title: "Num Cta Pago", width: "200px", hidden: true },
         { field: "condicionesDePago", title: "Condiciones Pago", width: "200px", hidden: true },
+        { field: "emisor_rfc", title: "Emisor RFC", width: "140px" },
+        { field: "emisor_nombre", title: "Emisor Nombre", width: "350px" },            
         { field: "emisor_calle", title: "Emisor Calle", width: "200px", hidden: true },
         { field: "emisor_noExterior", title: "Emisor no Exterior", width: "200px", hidden: true },
         { field: "emisor_noInterior", title: "Emisor no Interior", width: "200px", hidden: true },
@@ -314,8 +339,6 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "emisor_expedidoEn_estado", title: "Emisor Expedido En_estado", width: "200px", hidden: true },
         { field: "emisor_expedidoEn_pais", title: "Emisor Expedido En_pais", width: "200px", hidden: true },
         { field: "emisor_regimen", title: "Emisor Regimen", width: "200px", hidden: true },
-        { field: "emisor_rfc", title: "Emisor RFC", width: "140px", hidden: true },
-        { field: "emisor_nombre", title: "Emisor Nombre", width: "350px", hidden: true  },    
         { field: "receptor_calle", title: "Receptor Calle", width: "200px", hidden: true },
         { field: "receptor_noExterior", title: "Receptor noExterior", width: "200px", hidden: true },
         { field: "receptor_noInterior", title: "Receptor noInterior", width: "200px", hidden: true },
@@ -371,22 +394,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             parameterMap: function (data, action) {
                 if (action === "read") {
 
-                    return {
-                        page: data.page,
-                        pageSize: data.pageSize,
-                        empresa__clave: card_filtros.$empresa.val(),
-                        fecha_min: card_filtros.$fecha_inicio.val(),
-                        fecha_max: card_filtros.$fecha_fin.val(),
-                        emisor_rfc: card_filtros.$emisor_rfc.val(),
-                        emisor_nombre: card_filtros.$emisor_nombre.val(),
-                        uuid: card_filtros.$uuid.val(),
-                        estadoSat: card_filtros.$estado_sat.val(),
-                        folio: card_filtros.$folio.val(),
-                        serie: card_filtros.$serie.val(),
-                        fechaTimbrado_min: card_filtros.$fecha_timbrado_inicio.val(),
-                        fechaTimbrado_max: card_filtros.$fecha_timbrado_fin.val(),
-                        comprobacion: card_filtros.$comprobacion.val(),
-                    }
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
                 }
             }
         },
@@ -428,18 +436,18 @@ GridResultados.prototype.llenar = function (e) {
     $.each(data, function (indice, elemento) {
         
         if (elemento.tiene_pdf == "false") {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
         }
         if (elemento.totalImpuestosTrasladados == 0) {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
         }
         if (elemento.totalImpuestosRetenidos == 0) {
-            card_resultados.grid.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
         }
     })
 }
 GridResultados.prototype.buscar = function () {
-    this.kFuenteDatos.page(1)
+    this.kfuente_datos.page(1)
 }
 GridResultados.prototype.validar_XML = function (e) {
     e.preventDefault()
@@ -458,7 +466,7 @@ GridResultados.prototype.validar_XML = function (e) {
 
         success: function (e) {
             alertify.warning(e.mensaje + " " + e.estado)
-            card_resultados.grid.kGrid.find("tr[data-uid='" + fila.uid + "'] td:eq(52)").text(e.estado); 
+            card_resultados.grid.kgrid.find("tr[data-uid='" + fila.uid + "'] td:eq(52)").text(e.estado); 
         },
         error: function (e) {
 
@@ -602,8 +610,306 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
     })    
 }
 
+
 /*-----------------------------------------------*\
-            OBJETO: Grid Resultados
+            OBJETO: Toolbar
+\*-----------------------------------------------*/
+
+function ToolBar() {
+    this.boton_exportar = $('#botonExportar')
+    this.kfuente_datos = null
+    this.krows = null
+    this.init()
+}
+ToolBar.prototype.init = function (e) {
+
+    kendo.culture("es-MX")
+
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+
+    this.boton_exportar.on('click', this, this.click_BotonExportar)
+}
+ToolBar.prototype.get_FuenteDatosConfig = function (e) {
+
+    return {
+        serverFiltering: true,
+        transport: {
+            read: {
+                url: url_export,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
+
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
+                }
+            }
+        },
+        schema: {
+            model: {
+                id: "pk",
+                fields: kFields_comprobantes
+            }
+        },
+        error: function (e) {
+            alert("Status: " + e.status + "; Error message: " + e.errorThrown);
+        },
+        serverFiltering: true
+    }
+}
+ToolBar.prototype.init_Celdas = function (e) {
+
+    if (this.krows != null) {
+        if (this.krows.length != 1) {
+            this.krows.length = 0;
+        }
+    }
+
+    this.krows = [{
+        cells: [
+            { value: "UUID" },        
+            { value: "ESTADO SAT" },
+            { value: "SERIE" },
+            { value: "FOLIO" },
+            { value: "FECHA" },
+            { value: "FORMA DE PAGO" },
+            { value: "NO CERTIFICADO" },
+            { value: "SUBTOTAL" },
+            { value: "TIPO CAMBIO" },
+            { value: "MONEDA" },
+            { value: "TOTAL" },
+            { value: "TIPO DE COMPROBANTE" },
+            { value: "METODO DE PAGO" },
+            { value: "LUGAR EXPEDICION" },
+            { value: "NUM CTA PAGO" },
+            { value: "CONDICIONES DE PAGO" },
+            { value: "EMISOR RFC" },
+            { value: "EMISOR NOMBRE" },
+            { value: "EMISOR CALLE" },
+            { value: "EMISOR NO EXTERIOR" },
+            { value: "EMISOR NO INTERIOR" },
+            { value: "EMISOR COLONIA" },
+            { value: "EMISOR LOCALIDAD" },
+            { value: "EMISOR MUNICIPIO" },
+            { value: "EMISOR ESTADO" },
+            { value: "EMISOR PAIS" },
+            { value: "EMISOR CODIGO POSTAL" },
+            { value: "EMISOR EXPEDIDO EN CALLE" },
+            { value: "EMISOR EXPEDIDO EN NOEXTERIOR" },
+            { value: "EMISOR EXPEDIDO EN NOINTERIOR" },
+            { value: "EMISOR EXPEDIDO EN COLONIA" },
+            { value: "EMISOR EXPEDIDO EN MUNICIPIO" },
+            { value: "EMISOR EXPEDIDO EN ESTADO" },
+            { value: "EMISOR EXPEDIDO EN PAIS" },
+            { value: "EMISOR REGIMEN" },
+            { value: "RECEPTOR RFC" },
+            { value: "RECEPTOR NOMBRE" },
+            { value: "RECEPTOR CALLE" },
+            { value: "RECEPTOR NO EXTERIOR" },
+            { value: "RECEPTOR NO INTERIOR" },
+            { value: "RECEPTOR COLONIA" },
+            { value: "RECEPTOR LOCALIDAD" },
+            { value: "RECEPTOR MUNICIPIO" },
+            { value: "RECEPTOR ESTADO" },
+            { value: "RECEPTOR PAIS" },
+            { value: "RECEPTOR CODIGO POSTAL" },
+            { value: "CONCEPTOS" },
+            { value: "TOTAL IMPUESTOS TRASLADADOS" },
+            { value: "TOTAL IMPUESTOS RETENIDOS" },
+            { value: "IMPUESTOS TRASLADADOS" },
+            { value: "IMPUESTOS RETENIDOS" },
+            { value: "FECHA TIMBRADO" },
+            { value: "PAGO" },
+            { value: "COMPROBACION" },
+            { value: "NO CERTIFICADO SAT" },
+            { value: "SELLO" },
+            { value: "SELLO SAT" },
+            { value: "EMPRESA" },
+            { value: "COMENTARIOS" },
+            { value: "URL" },
+        ]
+    }];
+}
+ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
+
+    for (var i = 0; i < data.length; i++) {
+
+        this.krows.push({
+            cells: [
+                { value: data[i].uuid },
+                { value: data[i].estadoSat },
+                { value: data[i].serie },
+                { value: data[i].folio },
+                { value: data[i].fecha },
+                { value: data[i].formaDePago },
+                { value: data[i].noCertificado },
+                { value: data[i].subTotal },
+                { value: data[i].tipoCambio },
+                { value: data[i].moneda },
+                { value: data[i].total },
+                { value: data[i].tipoDeComprobante },
+                { value: data[i].metodoDePago },
+                { value: data[i].lugarExpedicion },
+                { value: data[i].numCtaPago },
+                { value: data[i].condicionesDePago },
+                { value: data[i].emisor_rfc },
+                { value: data[i].emisor_nombre },
+                { value: data[i].emisor_calle },
+                { value: data[i].emisor_noExterior },
+                { value: data[i].emisor_noInterior },
+                { value: data[i].emisor_colonia },
+                { value: data[i].emisor_localidad },
+                { value: data[i].emisor_municipio },
+                { value: data[i].emisor_estado },
+                { value: data[i].emisor_pais },
+                { value: data[i].emisor_codigoPostal },
+                { value: data[i].emisor_expedidoEn_calle },
+                { value: data[i].emisor_expedidoEn_noExterior },
+                { value: data[i].emisor_expedidoEn_noInterior },
+                { value: data[i].emisor_expedidoEn_colonia },
+                { value: data[i].emisor_expedidoEn_municipio },
+                { value: data[i].emisor_expedidoEn_estado },
+                { value: data[i].emisor_expedidoEn_pais },
+                { value: data[i].emisor_regimen },
+                { value: data[i].receptor_rfc },
+                { value: data[i].receptor_nombre },
+                { value: data[i].receptor_calle },
+                { value: data[i].receptor_noExterior },
+                { value: data[i].receptor_noInterior },
+                { value: data[i].receptor_colonia },
+                { value: data[i].receptor_localidad },
+                { value: data[i].receptor_municipio },
+                { value: data[i].receptor_estado },
+                { value: data[i].receptor_pais },
+                { value: data[i].receptor_codigoPostal },
+                { value: data[i].conceptos },
+                { value: data[i].totalImpuestosTrasladados },
+                { value: data[i].totalImpuestosRetenidos },
+                { value: data[i].impuestos_trasladados },
+                { value: data[i].impuestos_retenidos },
+                { value: data[i].fechaTimbrado },
+                { value: data[i].pago },
+                { value: data[i].comprobacion },
+                { value: data[i].noCertificadoSAT },
+                { value: data[i].sello },
+                { value: data[i].selloSAT },
+                { value: data[i].empresa },
+                { value: data[i].comentarios },
+                { value: url_archivos + data[i].url },
+            ]
+        })
+    }
+}
+ToolBar.prototype.get_Hojas = function () {
+    return {
+        sheets: [{
+            columnas: [
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+                { autoWidth: true },
+            ],
+            title: "registros",
+            rows: this.krows
+        }]
+    }
+}
+ToolBar.prototype.click_BotonExportar = function (e) {
+
+    e.preventDefault()
+
+    if (card_filtros.validar_Filtros() == true) {
+
+        // Se inicializan los titulos:
+        e.data.init_Celdas();
+
+        // show_Spinner()
+
+        // se carga y los datos se agregarn a las filas:
+        e.data.kfuente_datos.fetch(function () {
+
+            var datos = this.data();
+
+            e.data.agregar_Info_A_Celdas(datos)
+
+            // Se crea Libro:
+            var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
+
+            // Se genera archivo de Excel:
+            kendo.saveAs({
+                dataURI: workbook.toDataURL(),
+                fileName: "registros.xlsx",
+                // proxyURL: 'frmSaveFile.aspx'
+            })
+        })
+    }
+    else {
+        alert("Favor de seleccionar al menos un filtro")
+    }
+}
+
+
+
+/*-----------------------------------------------*\
+            OBJETO: ??
 \*-----------------------------------------------*/
 
 // GridResultados.prototype.ver_Conceptos = function (e) {
@@ -612,7 +918,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
     
 //     conceptos = fila.conceptos.replace('[','').replace(']','')
 
-//     kGrid_concepto = $('#grid_conceptos').kendoGrid({
+//     kgrid_concepto = $('#grid_conceptos').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -665,7 +971,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_concepto.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_concepto.data('kendoGrid').dataSource.data(json_lista)
 // }
 // GridResultados.prototype.ver_Trasladados = function (e) {
 //     e.preventDefault()
@@ -673,7 +979,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 
 //     trasladados = fila.impuestos_trasladados.replace('[','').replace(']','')
 
-//     kGrid_trasladados = $('#grid_trasladados').kendoGrid({
+//     kgrid_trasladados = $('#grid_trasladados').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -719,7 +1025,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_trasladados.data('kendoGrid').dataSource.data(json_lista)
 // }
 // GridResultados.prototype.ver_Retenidos = function (e) {
 //     e.preventDefault()
@@ -727,7 +1033,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 
 //     retenidos = fila.impuestos_retenidos.replace('[','').replace(']','')
 
-//     kGrid_retenidos = $('#grid_retenidos').kendoGrid({
+//     kgrid_retenidos = $('#grid_retenidos').kendoGrid({
 //         dataSource : {
 //             schema: {
 //                 model:{
@@ -773,7 +1079,7 @@ GridResultados.prototype.reconocer_Factura = function (_uuid, _valor) {
 //         elemento_formateado = "{" + elemento_formateado + "}"
 //         json_lista.push(JSON.parse(elemento_formateado))
 //     })
-//     kGrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
+//     kgrid_retenidos.data('kendoGrid').dataSource.data(json_lista)
 // }
 
 

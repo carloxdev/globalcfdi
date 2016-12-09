@@ -166,6 +166,7 @@ class FacturaClienteSerializer(serializers.HyperlinkedModelSerializer):
         except:
             return ""
 
+
 class ComprobanteEmpleadoSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()

@@ -233,7 +233,24 @@ class FacturaProveedorAPI(viewsets.ModelViewSet):
         return facturas
 
 
+class FacturaProveedorTodosAPI(viewsets.ModelViewSet):
+    serializer_class = FacturaProveedorSerializer
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = FacturaProveedorFilter
+
+    def get_queryset(self):
+
+        if self.request.user.is_staff:
+            facturas = FacturaProveedor.objects.all()
+        else:
+            empresas = self.request.user.empresa_set.all()
+            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
+
+        return facturas
+
 # ----------------- FACTURA CLIENTE ----------------- #
+
 
 @method_decorator(login_required, name='dispatch')
 class FacturaClienteList(View):
@@ -263,7 +280,18 @@ class FacturaClienteAPI(viewsets.ModelViewSet):
         return FacturaCliente.objects.filter(empresa__in=empresas)
 
 
+class FacturaClienteTodosAPI(viewsets.ModelViewSet):
+    serializer_class = FacturaClienteSerializer
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = FacturaClienteFilter
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+        return FacturaCliente.objects.filter(empresa__in=empresas)
+
 # ----------------- COMPROBANTE EMPLEADO ----------------- #
+
 
 @method_decorator(login_required, name='dispatch')
 class ComprobanteEmpleadoList(View):
@@ -293,7 +321,18 @@ class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
         return ComprobanteEmpleado.objects.filter(empresa__in=empresas)
 
 
+class ComprobanteEmpleadoTodosAPI(viewsets.ModelViewSet):
+    serializer_class = ComprobanteEmpleadoSerializer
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ComprobanteEmpleadoFilter
+
+    def get_queryset(self):
+        empresas = self.request.user.empresa_set.all()
+        return ComprobanteEmpleado.objects.filter(empresa__in=empresas)
+
 # ----------------- LOG ----------------- #
+
 
 @method_decorator(login_required, name='dispatch')
 class LogsList(View):

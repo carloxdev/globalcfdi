@@ -33,7 +33,11 @@ h3 {
 }
 
 .contenedor {
-	height: 80%;
+	height: 70%;
+}
+
+.contenedor .toolbar {
+    margin-bottom: 1em;
 }
 
 .grid {
