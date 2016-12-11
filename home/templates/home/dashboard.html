@@ -30,9 +30,9 @@
 
 	<div class="row fila ">
 
-		{% if lista_empresas_resumen %}
+		{% if empresas_resumen %}
 
-			{% for resumen in lista_empresas_resumen %}
+			{% for resumen in empresas_resumen %}
 
 				<div class="col-md-4 targeta">
 				
@@ -51,27 +51,27 @@
 							Reporte Mensual Octubre 2016
 					    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							{{ resumen.cantidad_proveedores }} <br>
+							{{ resumen.proveedores_cantidad }} <br>
 							Folios Proveedores
 					    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.total_proveedores | floatformat:2 | intcomma }} <br>
+							$ {{ resumen.proveedores_total | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>
 						<div class="col-md-6 col-xs-6 tab">
-							{{ resumen.cantidad_clientes }} <br>
+							{{ resumen.clientes_cantidad }} <br>
 							Folios Clientes
 						    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.total_clientes | floatformat:2 | intcomma }} <br>
+							$ {{ resumen.clientes_total | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>
 						<div class="col-md-6 col-xs-6 tab">
-							{{ resumen.cantidad_nomina }} <br>
+							{{ resumen.nomina_cantidad }} <br>
 							Folios Nomina
 						    </div>
 					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.total_nomina | floatformat:2 | intcomma }} <br>
+							$ {{ resumen.nomina_total | floatformat:2 | intcomma }} <br>
 							Importe
 					    </div>					    
 					</div>

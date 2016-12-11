@@ -14,7 +14,6 @@ from django.views.generic.base import View
 
 # Otros Models:
 from configuracion.models import Empresa
-from facturas.models import Resumen
 
 # negocio.py
 from .negocio import EmpresaResumen
@@ -41,69 +40,29 @@ class Dashboard(View):
     def get(self, request):
 
         if request.user.is_staff:
-            empresas = Empresa.objects.filter(
-                activa=True
-            )
-
+            # Si es administrador se mostraran todas
+            empresas = Empresa.objects.all()
         else:
+            # Si no solo se mostraran las empresas activas
             empresas = Empresa.objects.filter(
                 usuario=request.user,
                 activa=True
             )
 
         lista = []
-        cantidad_nomina = 0
-        total_nomina = 0
-
-        cantidad_clientes = 0
-        total_clientes = 0
-
-        cantidad_proveedores = 0
-        total_proveedores = 0
 
         for empresa in empresas:
 
-            # Comprobante Empleados
-            resumen_nomina = Resumen.objects.filter(
-                empresa=empresa,
-                tipo="EMPLEADOS"
-            )
-            for resumen in resumen_nomina:
-                cantidad_nomina += resumen.cantidad_guardadas
-                total_nomina += resumen.total
+            resumen_empresa = EmpresaResumen(empresa)
 
-            # Factura de Clientes
-            resumen_cliente = Resumen.objects.filter(
-                empresa=empresa,
-                tipo="CLIENTES"
-            )
-            for resumen in resumen_cliente:
-                cantidad_clientes += resumen.cantidad_guardadas
-                total_clientes += resumen.total
-
-            # Factura de Proveedores
-            resumen_proveedor = Resumen.objects.filter(
-                empresa=empresa,
-                tipo="PROVEEDORES"
-            )
-            for resumen in resumen_proveedor:
-                cantidad_proveedores += resumen.cantidad_guardadas
-                total_proveedores += resumen.total
-
-            resumen_empresa = EmpresaResumen(
-                empresa,
-                cantidad_nomina,
-                total_nomina,
-                cantidad_clientes,
-                total_clientes,
-                cantidad_proveedores,
-                total_proveedores,
-            )
+            resumen_empresa.get_Nomina_Resumen()
+            resumen_empresa.get_Clientes_Resumen()
+            resumen_empresa.get_Proveedores_Resumen()
 
             lista.append(resumen_empresa)
 
         contexto = {
-            'lista_empresas_resumen': lista
+            'empresas_resumen': lista
         }
 
         return render(request, self.template_name, contexto)
