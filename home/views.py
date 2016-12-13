@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# Librerias django
+# Librerias Django
+from django.core.urlresolvers import reverse
 
 # Django Atajos
 from django.shortcuts import render
+from django.shortcuts import redirect
 
 # Django Login
 from django.contrib.auth.decorators import login_required
@@ -25,6 +27,13 @@ class Index(View):
         self.template_name = 'home/index.html'
 
     def get(self, request):
+
+        if request.user.is_authenticated():
+            return redirect(reverse('home.dashboard'))
+
+        else:
+            return render(request, self.template_name, {})
+
         return render(request, self.template_name, {})
 
     def post(self, request):

@@ -197,7 +197,6 @@ class ReconocerFactura(View):
 
 # ----------------- FACTURA PROVEEDOR ----------------- #
 
-
 @method_decorator(login_required, name='dispatch')
 class FacturaProveedorList(View):
 
@@ -249,8 +248,8 @@ class FacturaProveedorTodosAPI(viewsets.ModelViewSet):
 
         return facturas
 
-# ----------------- FACTURA CLIENTE ----------------- #
 
+# ----------------- FACTURA CLIENTE ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class FacturaClienteList(View):
@@ -300,8 +299,8 @@ class FacturaClienteTodosAPI(viewsets.ModelViewSet):
 
         return facturas
 
-# ----------------- COMPROBANTE EMPLEADO ----------------- #
 
+# ----------------- COMPROBANTE EMPLEADO ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class ComprobanteEmpleadoList(View):
@@ -351,8 +350,8 @@ class ComprobanteEmpleadoTodosAPI(viewsets.ModelViewSet):
 
         return facturas
 
-# ----------------- LOG ----------------- #
 
+# ----------------- LOG ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class LogsList(View):

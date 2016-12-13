@@ -70,7 +70,7 @@ class ModeloEmpresa(object):
 
         try:
             connection.close()
-            empresa = Empresa.objects.get(clave=_empresa_clave)
+            empresa = Empresa.objects.get(clave=_empresa_clave, activa=True)
             return empresa
 
         except Exception, error:
@@ -82,7 +82,7 @@ class ModeloEmpresa(object):
             )
 
     @classmethod
-    def get_Activas(self):
+    def get_All(self):
 
         try:
             connection.close()

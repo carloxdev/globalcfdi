@@ -17,6 +17,8 @@ from documentos import Log
 # Modelos del Sitio:
 from sitio import ModeloResumen
 
+TIPOS_FACTURA = ("RECIBIDAS", "EMITIDAS")
+
 
 class Contador(object):
 
@@ -68,14 +70,14 @@ class Contador(object):
 
             elFiltro = Filtro(_fecha)
 
-            if _tipo == "RECIBIDAS":
+            if _tipo == TIPOS_FACTURA[0]:
                 no_encontradas = self.search_ByDay(
                     elSat.search_InvoicesReceived,
                     elFiltro,
                     elSat
                 )
 
-            elif _tipo == "EMITIDAS":
+            elif _tipo == TIPOS_FACTURA[1]:
                 no_encontradas = self.search_ByDay(
                     elSat.search_InvoicesIssued,
                     elFiltro,
@@ -383,7 +385,7 @@ class Contador(object):
                             "No se establecio un tipo de resumen valido en un registro"
                         )
 
-            if _tipo == "RECIBIDAS":
+            if _tipo == TIPOS_FACTURA[0]:
                 self.save_Resumen(
                     _fecha,
                     "PROVEEDORES",
@@ -392,7 +394,7 @@ class Contador(object):
                     provee_total_monto
                 )
 
-            elif _tipo == "EMITIDAS":
+            elif _tipo == TIPOS_FACTURA[1]:
 
                 self.save_Resumen(
                     _fecha,

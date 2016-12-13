@@ -7,7 +7,7 @@ from datetime import timedelta
 
 
 # Librerias Propias:
-from slaves import Contador
+from slaves import Contador, TIPOS_FACTURA
 from tools.comunicacion import Postman
 from tools.datos import Chronos
 
@@ -35,73 +35,65 @@ class Cfdineitor(object):
             app_config.smtp_server
         )
 
-    def get_Invoices_ofValidCompanies(self):
+    def get_Invoices_ByRange(self, _empresa_clave, _f_inicio, _f_final):
 
-        empresas = ModeloEmpresa.get_Activas()
+        # Obtener fechas entre rango dado:
+        fechas = Chronos.getDays_FromRange(_f_inicio, _f_final)
 
-        for empresa in empresas:
-            print "Creando Contador......"
-            esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-            self.get_Invoices_Last3Days(esclavo, "RECIBIDAS")
-            self.get_Invoices_Last3Days(esclavo, "EMITIDAS")
-
-    def get_Invoices_Company(self, _empresa_clave):
-
+        # Obtener datos de empresa:
         empresa = ModeloEmpresa.get(_empresa_clave)
-        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-        lista_meses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
-        # lista_meses = [1, ]
-        self.get_Invoices_ByMonths(esclavo, "RECIBIDAS", lista_meses)
-        self.get_Invoices_ByMonths(esclavo, "EMITIDAS", lista_meses)
 
-    def get_Invoices_Company_ByRange(self, _empresa_clave, _fecha_inicio, _fecha_final):
-
-        fechas = Chronos.getDays_FromRange(_fecha_inicio, _fecha_final)
-
-        empresa = ModeloEmpresa.get(_empresa_clave)
+        # Crear esclavo Contador:
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
 
+        # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            esclavo.get_Invoices_ByDay("RECIBIDAS", fecha)
-            esclavo.get_Invoices_ByDay("EMITIDAS", fecha)
-            # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
+            esclavo.get_Invoices_ByDay(TIPOS_FACTURA[0], fecha)
+            esclavo.get_Invoices_ByDay(TIPOS_FACTURA[1], fecha)
+
+        # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
+
+    def get_Invoices_Today(self, _empresa_clave):
+
+        # Obtener fecha:
+        hoy = date.today()
+
+        # Obtener datos de empresa:
+        empresa = ModeloEmpresa.get(_empresa_clave)
+
+        # Crear esclavo Contador:
+        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+
+        # Descargar facturas:
+        esclavo.get_Invoices_ByDay(TIPOS_FACTURA[0], hoy)
+        esclavo.get_Invoices_ByDay(TIPOS_FACTURA[1], hoy)
+
+    def get_Invoices_AllCompanies_Today(self):
+
+        # Se obtienen todas las empresas activas:
+        lista_empresas = ModeloEmpresa.get_All()
+
+        # Por cada empresa se descagan las facturas de los ultimos 3 dias
+        for empresa in lista_empresas:
+            self.get_Invoices_Today(empresa.clave)
+
+    def get_Invoices_Last3Days(self, _empresa_clave):
+
+        # Obtenemos rango de fechas
+        hoy = date.today()
+        anteayer = hoy - timedelta(days=3)
+
+        # Se descargan las facturas en ese rango
+        self.get_Invoices_ByRange(_empresa_clave, anteayer, hoy)
 
     def get_Invoices_AllCompanies_Last3Days(self):
 
-        lista_empresas = ModeloEmpresa.get_Activas()
+        # Se obtienen todas las empresas activas:
+        lista_empresas = ModeloEmpresa.get_All()
 
+        # Por cada empresa se descagan las facturas de los ultimos 3 dias
         for empresa in lista_empresas:
-            esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
-            self.get_Invoices_LastThreeDays(esclavo, "RECIBIDAS")
-            self.get_Invoices_LastThreeDays(esclavo, "EMITIDAS")
-
-    def get_Invoices_Last3Days(self, _esclavo, _tipo):
-
-        ahora = date.today()
-
-        contador = 1
-        while contador <= 3:
-
-            try:
-                fecha = ahora - timedelta(days=contador)
-                log = _esclavo.get_Invoices_ByDay(_tipo, fecha)
-                self.informar_Resultados(log, _esclavo.empresa, _tipo)
-                contador += 1
-            except Exception, error:
-                print str(error)
-
-    def get_Invoices_ByMonths(self, _esclavo, _tipo, _lista_meses):
-
-        ahora = date.today()
-        anio = ahora.year
-
-        for mes in _lista_meses:
-
-            dias = Chronos.getDays_ByMonth(mes, anio)
-            for dia in dias:
-                fecha = date(anio, mes, dia)
-                log = _esclavo.get_Invoices_ByDay(_tipo, fecha)
-                self.informar_Resultados(log, _esclavo.empresa, _tipo)
+            self.get_Invoices_Last3Days(empresa.clave)
 
     def informar_Resultados(self, _log, _empresa, _tipo):
 
