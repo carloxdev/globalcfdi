@@ -37,6 +37,20 @@ PAGADO_ESTADO = {
     ('PAGADO', 'PAGADO'),
 }
 
+MONEDA_PESOS = [
+    "NACIONAL",
+    "PESOS MEXICANOS",
+    "MXP",
+    "Pesos",
+    "MXN",
+    "Peso Mexicano",
+    "MN",
+    "MONEDA NACIONAL",
+    "MEX",
+    "M.N.",
+    "PMX",
+]
+
 
 class Resumen(models.Model):
 
