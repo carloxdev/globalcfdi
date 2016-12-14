@@ -1,7 +1,8 @@
-from facturas.models import Resumen
+# from facturas.models import Resumen
 from facturas.models import FacturaProveedor
 from facturas.models import FacturaCliente
 from facturas.models import ComprobanteEmpleado
+from facturas.models import MONEDA_PESOS
 
 
 class EmpresaResumen(object):
@@ -35,7 +36,11 @@ class EmpresaResumen(object):
 
         for factura in facturas:
             self.nomina_cantidad += 1
-            self.nomina_total += factura.total
+
+            if MONEDA_PESOS.count(factura.moneda) > 0:
+                self.nomina_total += factura.total
+            else:
+                self.nomina_total += factura.total * factura.tipoCambio
 
     def get_Clientes_Resumen(self):
 
@@ -47,7 +52,11 @@ class EmpresaResumen(object):
 
         for factura in facturas:
             self.clientes_cantidad += 1
-            self.clientes_total += factura.total
+
+            if MONEDA_PESOS.count(factura.moneda) > 0:
+                self.clientes_total += factura.total
+            else:
+                self.clientes_total += factura.total * factura.tipoCambio
 
         # clientes_resumen = Resumen.objects.filter(
         #     empresa=self.empresa,
@@ -67,7 +76,11 @@ class EmpresaResumen(object):
 
         for factura in facturas:
             self.proveedores_cantidad += 1
-            self.proveedores_total += factura.total
+
+            if MONEDA_PESOS.count(factura.moneda) > 0:
+                self.proveedores_total += factura.total
+            else:
+                self.proveedores_total += factura.total * factura.tipoCambio
 
         # proveedores_resumen = Resumen.objects.filter(
         #     empresa=self.empresa,
