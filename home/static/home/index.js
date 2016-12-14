@@ -38,3 +38,7 @@ Sitio.prototype.Click_Dia = function(date, event, view) {
 
 	window.location.href = url
 }
+
+
+
+
