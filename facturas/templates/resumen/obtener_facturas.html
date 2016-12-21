@@ -18,6 +18,9 @@
 <!-- jQuery UI --> 
 <link rel="stylesheet" href="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.css' %}"/>
 
+<!-- Custom --> 
+<link rel="stylesheet" href="{% static 'log/log_lista.css' %}" />
+
 {% endblock css %}
 
 {% block contenido %}
@@ -28,8 +31,12 @@
 </ol>
 
 <div class="container-fluid">
+
 	<div class="row">
+
+		<!-- Filtros -->
 		<div class="col-md-12">
+
 			<form action="" method="POST">
 				{% csrf_token %}
 				<div class="panel-group">
@@ -88,16 +95,16 @@
 					</div>	
 				</div>
 			</form>
-
 		</div>
-	
-		<div class="hidden" id="id_bandera">{{bandera}}</div>
 
 		<div class="col-md-12">
 
+			<div class="hidden" id="id_bandera">{{bandera}}</div>
+
 			{% if bandera %}
 				{% if bandera == "INICIO_PROCESO" %}
-					<div class="alert alert-info mensaje--center">
+					<div class="alert alert-info alert-dismissible mensaje--center" role="alert" >
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						{{ mensaje }}
 					</div>
 				{% else %}
@@ -108,11 +115,13 @@
 			{% endif %}
 		</div>
 
-		<div class="container-fluid contenedor hidden">
-			<div id="resultados" class="grid" >
-			</div>
-		</div>
+	</div>
+</div>
 
+
+<div class="container-fluid contenedor {% if bandera != "INICIO_PROCESO" %} hidden {% endif %}">
+
+	<div id="resultados" class="grid" >
 	</div>
 </div>
 
@@ -122,6 +131,9 @@
 
 <!-- Alertifyjs -->
 <script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
+
+<!-- Moment -->
+<script src="{% static 'libs/moment/moment.js' %}"></script>
 
 <!-- Kendo Js-->
 <script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>

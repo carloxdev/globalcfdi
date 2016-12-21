@@ -6,14 +6,19 @@
 // URLS:
 var url = window.location
 var url_grid = ""
+var url_archivos = ""
 
 if (url.pathname.search("smart") > 0) {
     url_grid = url.origin +  "/smart/api/logs/"
+    url_archivos = url.origin + "/smart/media/"
 }
 else {
 
     url_grid = url.origin +  "/api/logs/"
+    url_archivos = url.origin + "/media/"
 }
+
+var fecha_busqueda = ""
 
 
 // OBJS:
@@ -31,13 +36,16 @@ $(document).ready(function () {
     pagina = new Pagina()
 
     pagina.init_Alertify()
-});
 
+    moment.locale('es')
+});
 
 $(window).resize(function() {
 
-    // card_resultados.grid.kgrid.data("kendoGrid").resize()
+    card_resultados.grid.kgrid.data("kendoGrid").resize()
 })
+
+
 
 
 /*-----------------------------------------------*\
@@ -78,16 +86,25 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
         page: _page,
         pageSize: _pageSize,
         empresa__clave: this.$empresa.val(),
-        fecha_operacion_min: this.$fecha_operacion_inicio.val(),
-        fecha_operacion_max: this.$fecha_operacion_fin.val(),
-        created_date_min: this.get_FechaCreacion()
-
+        fecha_operacion_min: this.$fecha_inicio.val(),
+        fecha_operacion_max: this.$fecha_fin.val(),
+        created_date_min: this.get_FechaCreacion_Min(),
+        // created_date_max: this.get_FechaCreacion_Max(),
     }    
 }
-TargetaFiltros.prototype.get_FechaCreacion = function () {
+TargetaFiltros.prototype.get_FechaCreacion_Min = function () {
 
-    return "2016-08-12:12:45:00"
+    if (fecha_busqueda == "") {
+        fecha_busqueda = String(moment().format('YYYY-MM-DDTHH:mm:') + "00")
+    }
 
+    return fecha_busqueda
+    // return "2016-08-12:12:45:00"
+}
+TargetaFiltros.prototype.get_FechaCreacion_Max = function () {
+
+    var fecha = String(moment().add(3,'m').format('YYYY-MM-DDTHH:mm:ss'))
+    return fecha
 }
 
 /*-----------------------------------------------*\
@@ -98,15 +115,21 @@ function TargetaResultados() {
 
     this.$bandera = $('#id_bandera')
 
+    this.grid = new GridPrincipal()
+
     this.Load()
 }
 TargetaResultados.prototype.Load = function () {
 
     if (this.$bandera.text() == "INICIO_PROCESO") {
-        alertify.notify("Esto ya comenzo")
-    }
-    else {
-        alertify.notify("aun no")   
+        this.grid.kgrid.data("kendoGrid").resize()
+        this.grid.buscar()
+
+        setInterval(function () {
+
+            card_resultados.grid.buscar()
+
+        }, 1000)
     }
 }
 
@@ -117,7 +140,7 @@ TargetaResultados.prototype.Load = function () {
 
 function GridPrincipal() {
 
-    this.$id = $("#grid_principal")
+    this.$id = $("#resultados")
     this.kfuente_datos = null
     this.kgrid = null
 
@@ -129,22 +152,29 @@ GridPrincipal.prototype.init = function () {
 
     this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-    this.kGrid = this.$id.kendoGrid({
+    this.kgrid = this.$id.kendoGrid(this.get_Config())
+}
+GridPrincipal.prototype.get_Config = function () {
+    return {
         dataSource: this.kfuente_datos,
         columnMenu: false,
         groupable: false,
         sortable: false,
         editable: false,
         resizable: true,
+        autoBind: false, 
         selectable: true,
         scrollable: false,
         columns: this.get_Columnas(),
+        dataBound: this.llenar_Grid,
         scrollable: true,
-        pageable: true,
+        pageable: {
+            refresh: true,            
+        },
         noRecords: {
             template: "<div class='grid-empy'> No se encontraron registros </div>"
         },        
-    })
+    }
 }
 GridPrincipal.prototype.get_Campos = function (e) {
 
@@ -205,14 +235,14 @@ GridPrincipal.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_grid,
                 type: "GET",
                 dataType: "json",
             },
             parameterMap: function (data, action) {
                 if (action === "read") {
 
-                    return targeta_filtros.get_Filtros(data.page, data.pageSize)
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
                 }
             }
         },
@@ -220,7 +250,7 @@ GridPrincipal.prototype.get_FuenteDatosConfig = function (e) {
             data: "results",
             total: "count",
             model: {
-                fields: this.kFields
+                fields: this.get_Campos()
             },
             sort: {
                 field: "created_date", dir: "desc"
@@ -231,4 +261,35 @@ GridPrincipal.prototype.get_FuenteDatosConfig = function (e) {
         },
     }
 }
+GridPrincipal.prototype.buscar = function (e) {
+    
+    this.kfuente_datos.page(1)   
+    this.kgrid.data('kendoGrid').refresh()
+}
+GridPrincipal.prototype.descargar_Log = function (e) {
+    e.preventDefault()
+    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    var url = url_archivos + fila.url
+    var win = window.open(url, '_blank')
+    win.focus()
+}
+GridPrincipal.prototype.llenar_Grid = function (e) {
 
+    e.preventDefault()
+
+    $('td').each( function () {
+        if($(this).text()=='EXITO'){ 
+
+            $(this).addClass('cell--exito')
+        }
+        else if($(this).text()=='DETALLES'){ 
+            $(this).addClass('cell--detalle')
+        }
+        else if($(this).text()=='ERROR'){ 
+            $(this).addClass('cell--error')
+        }
+        else if($(this).text()=='PROCESANDO'){
+            $(this).addClass('cell--procesando')
+        } 
+    })
+}

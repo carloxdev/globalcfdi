@@ -28,6 +28,12 @@ $(document).ready(function () {
 })
 
 
+$(window).resize(function() {
+
+    card_resultados.grid.kGrid.data("kendoGrid").resize()
+})
+
+
 /*-----------------------------------------------*\
             OBJETO: TargetaFiltros
 \*-----------------------------------------------*/
