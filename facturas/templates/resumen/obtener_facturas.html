@@ -8,11 +8,8 @@
 
 <!-- Kendo -->
 <link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common-material.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.material.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.dataviz.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.dataviz.material.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.mobile.material.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
 
 <!-- Alertifyjs --> 
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
@@ -94,13 +91,28 @@
 
 		</div>
 	
+		<div class="hidden" id="id_bandera">{{bandera}}</div>
+
 		<div class="col-md-12">
-			{% if mensaje %}
-				<div class="alert alert-danger mensaje--center">
-					{{ mensaje }}
-				</div>
+
+			{% if bandera %}
+				{% if bandera == "INICIO_PROCESO" %}
+					<div class="alert alert-info mensaje--center">
+						{{ mensaje }}
+					</div>
+				{% else %}
+					<div class="alert alert-danger mensaje--center">
+						{{ mensaje }}
+					</div>
+				{% endif %}
 			{% endif %}
-		</div>		
+		</div>
+
+		<div class="container-fluid contenedor hidden">
+			<div id="resultados" class="grid" >
+			</div>
+		</div>
+
 	</div>
 </div>
 

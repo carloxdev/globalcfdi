@@ -54,7 +54,7 @@ from .forms import ResumenFormFiltros
 # from django.core.paginator import PageNotAnInteger
 
 # Tasks
-from .tasks import obtener_facturas
+from .tasks import obtener_Facturas
 from core.sat import WebServiceSAT
 
 
@@ -425,13 +425,15 @@ class ObtenerFacturas(View):
 
     def __init__(self):
         self.template_name = 'resumen/obtener_facturas.html'
+        self.bandera = ''
         self.mensaje = ''
 
     def get(self, request):
         formulario = ObtenerForm(username=request.user)
 
         contexto = {
-            'form': formulario
+            'form': formulario,
+            'bandera': self.bandera,
         }
 
         return render(request, self.template_name, contexto)
@@ -447,21 +449,24 @@ class ObtenerFacturas(View):
             fecha_inicio = str(datos_formulario.get('fecha_inicio'))
             fecha_fin = str(datos_formulario.get('fecha_final'))
 
-            print fecha_inicio
-            print fecha_fin
-
             try:
-                obtener_facturas.delay(
+                obtener_Facturas.delay(
                     empresa,
                     fecha_inicio,
                     fecha_fin
                 )
+
+                self.bandera = "INICIO_PROCESO"
+                self.mensaje = "En la siguiente tabla se mostrara el resultado de la descargar por Dia:"
+
             except Exception as e:
+                self.bandera = "ERROR"
                 self.mensaje = str(e)
 
         contexto = {
             'form': formulario,
-            'mensaje': self.mensaje
+            'mensaje': self.mensaje,
+            'bandera': self.bandera,
         }
         return render(request, self.template_name, contexto)
 

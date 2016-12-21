@@ -28,7 +28,7 @@ class Contador(object):
         self.ruta_ejecucion = _ruta_ejecucion
         self.ambiente = _ambiente
 
-    def get_Invoices_ByDay(self, _tipo, _fecha):
+    def get_ByDay(self, _tipo, _fecha):
 
         lista_resumen = []
         no_encontradas = 0
@@ -86,7 +86,7 @@ class Contador(object):
 
             else:
                 raise ErrorValidacion(
-                    "Contador.get_Invoices_ByDay()",
+                    "Contador.get_ByDay()",
                     "No se establecio un tipo valido"
                 )
 
@@ -280,7 +280,7 @@ class Contador(object):
                 str(error)
             )
 
-    def save_Invoices_byDay(self, _tipo, _fecha):
+    def save_ByDay(self, _tipo, _fecha):
 
         try:
             ruta = Ruta(
@@ -315,7 +315,7 @@ class Contador(object):
             print str(error)
             return None, None
 
-    def validate_Invoices_byDay(self, _tipo, _fecha):
+    def validate_ByDay(self, _tipo, _fecha):
 
         try:
             ruta = Ruta(
@@ -338,7 +338,7 @@ class Contador(object):
                         archivo.nombre
                     )
                     print "\nLeyendo archivo: {}".format(archivo.nombre)
-                    comprobante.read()
+                    comprobante.read(_tipo)
                     comprobante.validate()
 
         except Exception, error:

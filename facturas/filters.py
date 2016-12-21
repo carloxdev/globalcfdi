@@ -30,12 +30,35 @@ def filtra_FechaOperacion_Max(queryset, value):
         return consulta
 
 
+def filtra_created_Min(queryset, value):
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(created_date__gte=value)
+        return consulta
+
+
+def filtra_created_Max(queryset, value):
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(created_date__lte=value)
+        return consulta
+
+
 class LogFilter(filters.FilterSet):
 
     fecha_operacion_min = django_filters.CharFilter(
         action=filtra_FechaOperacion_Min)
     fecha_operacion_max = django_filters.CharFilter(
         action=filtra_FechaOperacion_Max)
+
+    created_date_min = django_filters.CharFilter(
+        action=filtra_created_Min)
+    created_date_max = django_filters.CharFilter(
+        action=filtra_created_Max)
 
     class Meta:
         model = Log
@@ -45,6 +68,8 @@ class LogFilter(filters.FilterSet):
             'operacion',
             'fecha_operacion_min',
             'fecha_operacion_max',
+            'created_date_min',
+            'created_date_max',
         ]
 
 

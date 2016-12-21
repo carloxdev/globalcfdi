@@ -12,7 +12,7 @@ from core.tecnology import Cfdineitor
 
 
 @task
-def obtener_facturas(_empresa_clave, _fecha_inicio, _fecha_final):
+def obtener_Facturas(_empresa_clave, _fecha_inicio, _fecha_final):
 
     print _empresa_clave
     print _fecha_inicio
@@ -23,8 +23,28 @@ def obtener_facturas(_empresa_clave, _fecha_inicio, _fecha_final):
         os.path.join(os.getcwd(), os.pardir, 'Sitio')
     )
     app = Cfdineitor("PRODUCCION", run_path)
-    app.get_Invoices_ByRange(
+    app.get_ByRange(
         _empresa_clave,
         fecha_inicio,
         fecha_final
     )
+
+
+@task
+def obtener_Facturas_Daily():
+
+    run_path = os.path.abspath(
+        os.path.join(os.getcwd(), os.pardir, 'Sitio')
+    )
+    app = Cfdineitor("PRODUCCION", run_path)
+    app.get_AllCompanies_Last3Days()
+
+
+@task
+def validar_Facturas_Daily():
+
+    run_path = os.path.abspath(
+        os.path.join(os.getcwd(), os.pardir, 'Sitio')
+    )
+    app = Cfdineitor("PRODUCCION", run_path)
+    app.valid_AllCompanies_Last2Monts()

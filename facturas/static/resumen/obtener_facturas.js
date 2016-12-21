@@ -1,7 +1,24 @@
+/*-----------------------------------------------*\
+            GLOBAL VARIABLES
+\*-----------------------------------------------*/
 
+
+// URLS:
+var url = window.location
+var url_grid = ""
+
+if (url.pathname.search("smart") > 0) {
+    url_grid = url.origin +  "/smart/api/logs/"
+}
+else {
+
+    url_grid = url.origin +  "/api/logs/"
+}
+
+
+// OBJS:
 var card_filtros = null
 var card_resultados = null
-var url_dominio = window.location.protocol + '//' + window.location.host + '/'
 
 /*-----------------------------------------------*\
             LOAD
@@ -10,10 +27,17 @@ var url_dominio = window.location.protocol + '//' + window.location.host + '/'
 $(document).ready(function () {
 
     card_filtros = new TargetaFiltros()
+    card_resultados = new TargetaResultados()
+    pagina = new Pagina()
 
-    alertify.set('notifier', 'position', 'top-right')
-    alertify.set('notifier', 'delay', 10)
+    pagina.init_Alertify()
 });
+
+
+$(window).resize(function() {
+
+    // card_resultados.grid.kgrid.data("kendoGrid").resize()
+})
 
 
 /*-----------------------------------------------*\
@@ -26,14 +50,17 @@ function TargetaFiltros() {
     this.$fecha_inicio = $('#id_fecha_inicio')
     this.$fecha_fin = $('#id_fecha_final')
 
-
-
     // Iniciamos estilos y funcionalidad
     this.init()
 }
 TargetaFiltros.prototype.init = function () {
 
-    var datepicker_init = {
+    this.$fecha_inicio.datepicker(this.get_DateConfig())
+    this.$fecha_fin.datepicker(this.get_DateConfig())
+}
+TargetaFiltros.prototype.get_DateConfig = function () {
+
+    return {
         autoSize: true,
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
         dayNamesMin: ['Dom', 'Lu', 'Ma', 'Mi', 'Je', 'Vi', 'Sa'],
@@ -44,60 +71,164 @@ TargetaFiltros.prototype.init = function () {
         changeMonth: true,
         changeYear: true,
     }
-
-    this.$fecha_inicio.datepicker(datepicker_init)
-    this.$fecha_fin.datepicker(datepicker_init)
-
-    // this.$fecha_timbrado_inicio.datepicker(datepicker_init)
-    // this.$fecha_timbrado_fin.datepicker(datepicker_init)  
-
-    // // Botones
-    // this.$boton_buscar.on('click', this, this.click_BotonBuscar);
-    // this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
 }
-// TargetaFiltros.prototype.click_BotonBuscar = function (e) {
+TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
 
-//     e.preventDefault()
-//     card_resultados.buscar()
-// }
-// TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
+    return {
+        page: _page,
+        pageSize: _pageSize,
+        empresa__clave: this.$empresa.val(),
+        fecha_operacion_min: this.$fecha_operacion_inicio.val(),
+        fecha_operacion_max: this.$fecha_operacion_fin.val(),
+        created_date_min: this.get_FechaCreacion()
 
-//     e.preventDefault()
+    }    
+}
+TargetaFiltros.prototype.get_FechaCreacion = function () {
 
-//     e.data.$empresa.val("")
-//     e.data.$uuid.val("")
-//     e.data.$emisor_rfc.val("")
-//     e.data.$serie.val("")
-//     e.data.$emisor_nombre.val("")
-//     e.data.$folio.val("")
-//     e.data.$fecha_inicio.val("")
-//     e.data.$fecha_fin.val("")
-//     e.data.$fecha_timbrado_inicio.val("")
-//     e.data.$fecha_timbrado_fin.val("")
-//     e.data.$estado_sat.val("")
-//     e.data.$comprobacion.val("")
-// }
-// TargetaFiltros.prototype.validar_Filtros = function () {
-//     bandera = false;
+    return "2016-08-12:12:45:00"
 
-//     if ((this.$empresa.val() != "") ||
-//         (this.$uuid.val() != "") ||
-//         (this.$emisor_rfc.val() != "") ||
-//         (this.$serie.val() != "") ||
-//         (this.$emisor_nombre.val() != "") ||
-//         (this.$folio.val() != "") ||
-//         (this.$fecha_inicio.val() != "") ||
-//         (this.$fecha_fin.val() != "") ||
-//         (this.$fecha_timbrado_inicio.val() != "") ||
-//         (this.$fecha_timbrado_fin.val() != "") ||
-//         (this.$estado_sat.val() != "") ||
-//         (this.$comprobacion.val() != "")) {
-//         bandera = true
-//     }
+}
 
-//     return bandera;
-// }
+/*-----------------------------------------------*\
+            OBJETO: TargetaResultados
+\*-----------------------------------------------*/
+
+function TargetaResultados() {
+
+    this.$bandera = $('#id_bandera')
+
+    this.Load()
+}
+TargetaResultados.prototype.Load = function () {
+
+    if (this.$bandera.text() == "INICIO_PROCESO") {
+        alertify.notify("Esto ya comenzo")
+    }
+    else {
+        alertify.notify("aun no")   
+    }
+}
 
 
+/*-----------------------------------------------*\
+            OBJETO: GRID
+\*-----------------------------------------------*/
 
+function GridPrincipal() {
+
+    this.$id = $("#grid_principal")
+    this.kfuente_datos = null
+    this.kgrid = null
+
+    this.init()
+}
+GridPrincipal.prototype.init = function () {
+
+    kendo.culture("es-MX")
+
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+
+    this.kGrid = this.$id.kendoGrid({
+        dataSource: this.kfuente_datos,
+        columnMenu: false,
+        groupable: false,
+        sortable: false,
+        editable: false,
+        resizable: true,
+        selectable: true,
+        scrollable: false,
+        columns: this.get_Columnas(),
+        scrollable: true,
+        pageable: true,
+        noRecords: {
+            template: "<div class='grid-empy'> No se encontraron registros </div>"
+        },        
+    })
+}
+GridPrincipal.prototype.get_Campos = function (e) {
+
+    return {
+        empresa: { editable: false, type: "string" },
+        nombre: { editable: false, type: "string" },
+        estado: { editable: false, type: "string" },
+        operacion: { editable: false, type: "string" },
+        fecha_operacion: { editable: false, type: "string" },
+        descripcion: { editable: false, type: "string" },
+        url: { editable: false, type: "string" },
+        created_date: { editable: false, type: "string" },
+        updated_date: { editable: false, type: "string" },
+    }
+}
+GridPrincipal.prototype.get_Columnas = function (e) {
+
+    return [
+        { field: "empresa", title: "Empresa", width: "120px" },
+        { field: "nombre", title: "Nombre", width: "250px" },
+        { field: "estado", title: "Estado", width: "100px" },
+        { field: "operacion", title: "Operacion", width: "100px" },
+        { 
+            field: "fecha_operacion", 
+            title: "Fecha Operacion", 
+            width: "130px", 
+            template: "#= kendo.toString(kendo.parseDate(fecha_operacion, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        { field: "descripcion", title: "Descripcion", width: "150px" },
+        { 
+            field: "created_date", 
+            title: "Creado el", 
+            width: "120px",
+            template: "#= kendo.toString(kendo.parseDate(created_date, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        { 
+            field: "updated_date", 
+            title: "Actualizado el", 
+            width: "120px",
+            template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MMMM-yyyy') #"
+        },
+        {
+           command: {
+               text: "Log",
+               click: this.descargar_Log
+           },
+           title: " ",
+           width: "90px"
+        },
+    ]
+}
+GridPrincipal.prototype.get_FuenteDatosConfig = function (e) {
+
+    return {
+
+        serverPaging: true,
+        pageSize: 20,
+        transport: {
+            read: {
+
+                url: url_consulta,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
+
+                    return targeta_filtros.get_Filtros(data.page, data.pageSize)
+                }
+            }
+        },
+        schema: {
+            data: "results",
+            total: "count",
+            model: {
+                fields: this.kFields
+            },
+            sort: {
+                field: "created_date", dir: "desc"
+            }
+        },
+        error: function (e) {
+            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+        },
+    }
+}
 

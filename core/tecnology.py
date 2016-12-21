@@ -35,7 +35,7 @@ class Cfdineitor(object):
             app_config.smtp_server
         )
 
-    def get_Invoices_ByRange(self, _empresa_clave, _f_inicio, _f_final):
+    def get_ByRange(self, _empresa_clave, _f_inicio, _f_final):
 
         # Obtener fechas entre rango dado:
         fechas = Chronos.getDays_FromRange(_f_inicio, _f_final)
@@ -48,12 +48,12 @@ class Cfdineitor(object):
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            esclavo.get_Invoices_ByDay(TIPOS_FACTURA[0], fecha)
-            esclavo.get_Invoices_ByDay(TIPOS_FACTURA[1], fecha)
+            esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
+            esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
 
-    def get_Invoices_Today(self, _empresa_clave):
+    def get_Today(self, _empresa_clave):
 
         # Obtener fecha:
         hoy = date.today()
@@ -65,35 +65,35 @@ class Cfdineitor(object):
         esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
 
         # Descargar facturas:
-        esclavo.get_Invoices_ByDay(TIPOS_FACTURA[0], hoy)
-        esclavo.get_Invoices_ByDay(TIPOS_FACTURA[1], hoy)
+        esclavo.get_ByDay(TIPOS_FACTURA[0], hoy)
+        esclavo.get_ByDay(TIPOS_FACTURA[1], hoy)
 
-    def get_Invoices_AllCompanies_Today(self):
+    def get_AllCompanies_Today(self):
 
         # Se obtienen todas las empresas activas:
         lista_empresas = ModeloEmpresa.get_All()
 
         # Por cada empresa se descagan las facturas de los ultimos 3 dias
         for empresa in lista_empresas:
-            self.get_Invoices_Today(empresa.clave)
+            self.get_Today(empresa.clave)
 
-    def get_Invoices_Last3Days(self, _empresa_clave):
+    def get_Last3Days(self, _empresa_clave):
 
         # Obtenemos rango de fechas
         hoy = date.today()
         anteayer = hoy - timedelta(days=3)
 
         # Se descargan las facturas en ese rango
-        self.get_Invoices_ByRange(_empresa_clave, anteayer, hoy)
+        self.get_ByRange(_empresa_clave, anteayer, hoy)
 
-    def get_Invoices_AllCompanies_Last3Days(self):
+    def get_AllCompanies_Last3Days(self):
 
         # Se obtienen todas las empresas activas:
         lista_empresas = ModeloEmpresa.get_All()
 
         # Por cada empresa se descagan las facturas de los ultimos 3 dias
         for empresa in lista_empresas:
-            self.get_Invoices_Last3Days(empresa.clave)
+            self.get_Last3Days(empresa.clave)
 
     def informar_Resultados(self, _log, _empresa, _tipo):
 
@@ -117,3 +117,37 @@ class Cfdineitor(object):
                     _empresa.clave, _tipo),
                 "El proceso tuvo algun error en su inicio, que no logro generar LOG. Favor de comunicarse con el administrador",
             )
+
+    def valid_ByRange(self, _empresa_clave, _f_inicio, _f_final):
+
+        # Obtener fechas entre rango dado:
+        fechas = Chronos.getDays_FromRange(_f_inicio, _f_final)
+
+        # Obtener datos de empresa:
+        empresa = ModeloEmpresa.get(_empresa_clave)
+
+        # Crear esclavo Contador:
+        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+
+        # Descargar Emitidas y Recibidas por cada fecha
+        for fecha in fechas:
+            esclavo.validate_ByDay(TIPOS_FACTURA[0], fecha)
+            esclavo.validate_ByDay(TIPOS_FACTURA[1], fecha)
+
+    def valid_Last2Monts(self, _empresa_clave):
+
+        # Obtenemos rango de fechas
+        hoy = date.today()
+        mes_anterior = hoy.month - 2
+        fecha_inicio = hoy.replace(month=mes_anterior, day=1)
+
+        self.valid_ByRange(_empresa_clave, fecha_inicio, hoy)
+
+    def valid_AllCompanies_Last2Monts(self):
+
+        # Se obtienen todas las empresas activas:
+        lista_empresas = ModeloEmpresa.get_All()
+
+        # Por cada empresa se validan las facturas de los ultimos 2 meses
+        for empresa in lista_empresas:
+            self.valid_Last2Monts(empresa.clave)

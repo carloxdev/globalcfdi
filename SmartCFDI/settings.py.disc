@@ -1,6 +1,9 @@
+from __future__ import absolute_import
 
 import os
 import djcelery
+
+from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -101,6 +104,19 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Mexico_City'
 
+
+CELERYBEAT_SCHEDULE = {
+    'add-get_every-day': {
+        'task': 'facturas.tasks.obtener_Facturas_Daily',
+        'schedule': crontab(hour=4, minute=00),
+        # 'args': (15, 35)
+    },
+    'add-valid_every-day': {
+        'task': 'facturas.tasks.validar_Facturas_Daily',
+        'schedule': crontab(hour=5, minute=00),
+        # 'args': (15, 35)
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
