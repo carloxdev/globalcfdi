@@ -95,7 +95,7 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
 TargetaFiltros.prototype.get_FechaCreacion_Min = function () {
 
     if (fecha_busqueda == "") {
-        fecha_busqueda = String(moment().format('YYYY-MM-DDTHH:mm:') + "00")
+        fecha_busqueda = String(moment().subtract(1,'m').format('YYYY-MM-DDTHH:mm:') + "00")
     }
 
     return fecha_busqueda
