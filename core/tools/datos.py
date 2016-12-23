@@ -8,6 +8,7 @@ import re
 import shutil
 from datetime import datetime
 from datetime import timedelta
+from dateutil import parser
 
 # Librerias Propias
 from mistakes import ErrorEjecucion
@@ -451,16 +452,22 @@ class Validator(object):
 
     @classmethod
     def convertToDate(self, data, hora=True):
+
         if data is None:
             return None
         else:
+
+            data = data.replace("Z", "")
+
             if hora:
-                return datetime.strptime(
-                    data.replace("Z", ""),
-                    '%Y-%m-%dT%H:%M:%S'
-                )
+
+                fecha = parser.parse(data)
+                fecha = fecha.replace(microsecond=0)
+
+                return fecha
+
             else:
-                return datetime.strptime(data.replace("Z", ""), '%Y-%m-%d')
+                return datetime.strptime(data, '%Y-%m-%d')
 
     @classmethod
     def convertToUrl(self, ruta, file_name):
