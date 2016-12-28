@@ -31,7 +31,7 @@ else {
 // OBJS:
 var card_filtros = null
 var card_resultados = null
-
+var pagina = null
 
 /*-----------------------------------------------*\
             LOAD
@@ -46,7 +46,17 @@ $(document).ready(function () {
 
     // Inicializar Alertify
     pagina.init_Alertify()
+
+    // Asigna eventos a teclas
+    $(document).keypress(function (e) {
+
+        // Tecla Enter
+        if (e.which == 13) {
+            card_filtros.click_BotonBuscar(e)
+        }
+    })
 })
+
 
 $(window).resize(function() {
 
@@ -59,6 +69,9 @@ $(window).resize(function() {
 \*-----------------------------------------------*/
 
 function TargetaFiltros() {
+
+    this.$id = $('#filtros_id')
+    this.$btn_collapsed = $('#btn_collapsed')
 
     this.$empresa = $('#id_empresa')
     this.$uuid = $('#id_uuid')
@@ -91,6 +104,9 @@ TargetaFiltros.prototype.init = function () {
     // Botones
     this.$boton_buscar.on('click', this, this.click_BotonBuscar)
     this.$boton_limpiar.on('click', this, this.click_BotonLimpiar)
+
+    this.$id.on('shown.bs.collapse', this, this.descolapsar)
+    this.$id.on('hidden.bs.collapse', this, this.colapsar)
 }
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
@@ -153,7 +169,12 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
         comprobacion: this.$comprobacion.val(),
     }
 }
-
+TargetaFiltros.prototype.colapsar = function (e) {
+    e.data.$btn_collapsed.addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+}
+TargetaFiltros.prototype.descolapsar = function (e) {
+    e.data.$btn_collapsed.addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+}
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -207,7 +228,10 @@ GridResultados.prototype.init = function (e) {
 
     this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
 
-    this.kgrid = this.$id.kendoGrid({
+    this.kgrid = this.$id.kendoGrid(this.get_Config())
+}
+GridResultados.prototype.get_Config = function () {
+    return {
         dataSource: this.kfuente_datos,
         columnMenu: true,
         groupable: false,
@@ -218,12 +242,16 @@ GridResultados.prototype.init = function (e) {
         columns: this.get_Columnas(),
         dataBound: this.llenar,
         pageable: true,
-    })
+        noRecords: {
+            template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
+        },        
+    }
 }
 GridResultados.prototype.get_Columnas = function (e) {
     return [
-        { field: "emisor_rfc", title: "Emisor RFC", width: "140px" },
-        { field: "emisor_nombre", title: "Emisor Nombre", width: "350px" },    
+        { field: "empresa", title: "Empresa", width: "80px"},
+        { field: "emisor_rfc", title: "Proveedor RFC", width: "140px" },
+        { field: "emisor_nombre", title: "Proveedor Nombre", width: "350px" },    
         { field: "uuid", title: "UUID", width: "290px" },       
         {   
             field: "fecha", 
@@ -499,80 +527,6 @@ GridResultados.prototype.descargar_PDF = function (e) {
     var win = window.open(url, '_blank')
 
     win.focus()
-}
-GridResultados.prototype.exportar_Datos = function (e) {
-
-    e.preventDefault();
-
-    if (card_filtros.validar_Filtros() == true) {
-        var filas_excel = [{
-            cell: [
-                { value: 'serie' },
-                { value: 'folio' },
-                { value: 'fecha' },
-                { value: 'formaDePago' },
-                { value: 'noCertificado' },
-                { value: 'subTotal' },
-                { value: 'tipoCambio' },
-                { value: 'moneda' },
-                { value: 'sello' },
-                { value: 'total' },
-                { value: 'tipoDeComprobante' },
-                { value: 'metodoDePago' },
-                { value: 'lugarExpedicion' },
-                { value: 'numCtaPago' },
-                { value: 'condicionesDePago' },
-                { value: 'emisor_rfc' },
-                { value: 'emisor_nombre' },
-                { value: 'emisor_calle' },
-                { value: 'emisor_noExterior' },
-                { value: 'emisor_noInterior' },
-                { value: 'emisor_colonia' },
-                { value: 'emisor_localidad' },
-                { value: 'emisor_municipio' },
-                { value: 'emisor_estado' },
-                { value: 'emisor_pais' },
-                { value: 'emisor_codigoPostal' },
-                { value: 'emisor_expedidoEn_calle' },
-                { value: 'emisor_expedidoEn_noExterior' },
-                { value: 'emisor_expedidoEn_noInterior' },
-                { value: 'emisor_expedidoEn_colonia' },
-                { value: 'emisor_expedidoEn_municipio' },
-                { value: 'emisor_expedidoEn_estado' },
-                { value: 'emisor_expedidoEn_pais' },
-                { value: 'emisor_regimen' },
-                { value: 'receptor_rfc' },
-                { value: 'receptor_nombre' },
-                { value: 'receptor_calle' },
-                { value: 'receptor_noExterior' },
-                { value: 'receptor_noInterior' },
-                { value: 'receptor_colonia' },
-                { value: 'receptor_localidad' },
-                { value: 'receptor_municipio' },
-                { value: 'receptor_estado' },
-                { value: 'receptor_pais' },
-                { value: 'receptor_codigoPostal' },
-                { value: 'conceptos' },
-                { value: 'totalImpuestosTrasladados' },
-                { value: 'totalImpuestosRetenidos' },
-                { value: 'impuestos_trasladados' },
-                { value: 'impuestos_retenidos' },
-                { value: 'uuid' },
-                { value: 'fechaTimbrado' },
-                { value: 'noCertificadoSAT' },
-                { value: 'selloSAT' },
-                { value: 'empresa' },
-                { value: 'comentarios' },
-                { value: 'comprobacion' },
-                { value: 'url' },
-                { value: 'tiene_pdf' },
-                { value: 'estadoSat' },
-            ]
-        }]
-    }
-    else {
-        alertify.notify("Favor de seleccionar al menos un filtro");
-    }      
 }
 GridResultados.prototype.marcar_Pago = function (_uuid, _valor) {
 

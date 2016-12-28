@@ -1,14 +1,226 @@
-a, a:hover, a:focus {
+@font-face {
+    font-family: moon;
+    src: url(/static/fonts/moon/Moon_Light.otf) format("opentype");
+}
+
+@font-face {
+    font-family: moon-bold;
+    src: url(/static/fonts/moon/Moon_Bold.otf) format("opentype");
+}
+
+@font-face {
+    font-family: brandon;
+    src: url(/static/fonts/brandon/Regular.otf) format("opentype");
+}
+
+@font-face {
+    font-family: brandon-bold;
+    src: url(/static/fonts/brandon/Regular_bold.otf) format("opentype");
+}
+
+@font-face {
+    font-family: brandon-italic;
+    src: url(/static/fonts/brandon/Regular_Italic.otf) format("opentype");
+}
+
+html, body {
+    height: 100%;
+}
+
+.app-header {
+    background-color: #f2724f;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+        .app-header-logo {
+           width: 3em;
+           height: 3em;
+        }
+
+        .app-header-title {
+            color: white;
+            font-size: 1.8em;
+            vertical-align: middle;
+            font-family: moon;
+        }
+
+        .app-header-button {
+            background-color: white !important;
+        }    
+
+
+    .app-menu {
+        border-top: 0;
+    }    
+
+        .app-menu-options {
+            margin-bottom: 0 !important;
+            font-family: brandon;
+            font-weight: light;
+        }
+
+        .app-menu-options li a span{
+            color: white;
+        }
+
+        .app-menu-options .open .dropdown-menu { 
+            background-color: white !important;
+        }
+
+        .app-menu-options .open .app-menu-opc { 
+            background-color: #ef553b !important;
+        }
+
+        .app-menu-options .open .app-menu-opc-user { 
+            background-color: #1B1B1B !important;
+        }       
+
+            .app-menu-opc {
+                color: white !important;
+            }
+
+            .app-menu-opc:hover {
+                background-color: #ef553b !important;
+            }
+
+            .app-menu-opc-user {
+                color: white !important;
+                background-color: #414a4e !important;
+            }
+
+            .app-menu-opc-user:hover {
+                background-color: #1B1B1B !important;
+            }            
+
+                .app-menu-opc-sub {
+                    color: #333 !important;
+                }
+
+                .app-menu-opc-sub:hover {
+                    background-color: #f5f5f5 !important;
+                }
+
+    .app-breadcrumb-inactive  a {
+        color: #a1aaae !important;
+    }
+
+    .app-breadcrumb-active {
+        color: #414a4e !important;
+    }
+
+    .app-page-title {
+        font-family: brandon;
+        margin-top: 18px !important;
+    }
+
+    .app-filtros .panel .panel-heading .panel-title {
+        font-family: brandon;
+    }
+
+    .app-filtros .panel .panel-heading a {
+        text-decoration: none;
+    }
+
+    .app-filtros .panel .panel-body label {
+        font-family: brandon;
+        font-size: 12px;
+    }
+
+    .app-resultados {
+        height: 68%;
+    }
+
+        .app-resultados-tooblar {
+            border-radius: 4px 4px 0 0 !important;
+            margin-bottom: 0;
+            border-bottom: 0;
+        }
+
+        .app-resultados-grid {
+            height: 100%;
+            font-size: .8em;
+            font-family: Tahoma, Verdana, sans-serif;
+        }
+
+        .app-resultados-grid .k-grid-header {
+            font-family: brandon-bold;
+        }
+
+        .app-resultados-grid__empy {
+            font-size: 35px;
+            text-align: center;
+            margin-top: 2em;
+            font-family: moon;
+        }        
+
+            .k-grid, .k-scheduler, .k-menu, .k-editor {
+                border-radius: 0 0 4px 4px !important;
+            }
+
+            .k-link input[type=checkbox] {
+                margin: 4px 2px 0 0
+            }
+
+            .app-grid-boton-editar {
+                color: white !important;
+                background-color: #ED9F34 !important;
+            }
+
+@media only screen and (min-width : 768px) {
+
+    .app-header-container {
+        padding-right: 0;
+    }
+
+        .app-header-logo {
+           width: 5em;
+           height: 5em;
+        }
+
+        .app-header-title {
+            color: white;
+            font-size: 2em;
+            vertical-align: middle;
+            font-family: moon;
+        }
+
+        .app-menu-options li a {
+            line-height: 2.9em;
+        }
+
+
+    .app-page-title {
+        font-family: brandon;
+        font-size: 24px;
+        margin-top: 20px !important;
+
+    }
+
+        .app-resultados-grid__empy {
+            font-size: 35px;
+            text-align: center;
+            margin-top: 4em;
+            font-family: moon;
+        }       
+
+}
+
+
+/* .vcenter {
+    display: inline-block;
+    
+    float: none;
+} */
+
+
+
+/* a, a:hover, a:focus {
     color: #ffffff;
     text-decoration: none;
 }
 
-html, body {
-	height: 100%;
-	color: #2c3e50;
-	font-family: sans-serif;
-	/* background-color: #90CF12; */
-}
+
 
 h1 {
 	font-size: 30px;
@@ -32,18 +244,8 @@ h3 {
     color: #cccccc;
 }
 
-.contenedor {
-	height: 70%;
-}
 
-.contenedor .toolbar {
-    margin-bottom: 1em;
-}
 
-.grid {
-	height: 100%;
-	font-size: .8em;
-}
 
 .logoapp {
 	height: 60px;
@@ -106,3 +308,4 @@ h3 {
 
 
 
+ */ 

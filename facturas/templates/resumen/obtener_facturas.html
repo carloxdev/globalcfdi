@@ -7,93 +7,79 @@
 {% block css %}
 
 <!-- Kendo -->
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.common-bootstrap.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.bootstrap.min.css' %}"/>
 
 <!-- Alertifyjs --> 
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
 
 <!-- jQuery UI --> 
-<link rel="stylesheet" href="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/jquery-ui/jquery-ui.min.css' %}"/>
 
-<!-- Custom --> 
-<link rel="stylesheet" href="{% static 'log/log_lista.css' %}" />
 
 {% endblock css %}
 
 {% block contenido %}
 
 <ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active">Obtener Facturas</li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Obtener Facturas</li>
 </ol>
 
-<div class="container-fluid">
+<div class="container-fluid app-filtros">
 
+	<!-- Filtros -->
 	<div class="row">
-
-		<!-- Filtros -->
 		<div class="col-md-12">
+			<form action="" method="POST"> {% csrf_token %}
+				<div class="panel panel-info">
 
-			<form action="" method="POST">
-				{% csrf_token %}
-				<div class="panel-group">
-					<div class="panel panel-default">
-					  	<div class="panel-heading">
-					      <h3 class="panel-title">
-					      	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					        <a data-toggle="collapse" href="#filtros_id">Filtros
-							  
-					        </a>
-					      </h3>
-					  	</div>
-						<div id="filtros_id" class="panel-collapse">
-					  		<div class="panel-body">
-					
-								<div class="col-md-6">
-									<div class="form-group filtros">
-										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
-										{{ form.empresa }}
-									</div>
-
-								</div>
-
-								<div class="col-md-6">
-
-									<div class="form-group filtros">
-										
-										<div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12">
-												<label>Fecha:</label>
-											</div>
-										</div>
-
-										<div class="row">
-											<div class="col-sm-6 col-md-6 col-lg-6">
-												{{ form.fecha_inicio }}
-											</div>
-
-											<div class="col-sm-6 col-md-6 col-lg-6">
-												{{ form.fecha_final }}
-											</div>
-										</div>																				
-									</div>
-								</div>
-							
+				  	<div class="panel-heading">
+			      		<h3 class="panel-title">
+			      		
+				      		<span class="glyphicon glyphicon-search" aria-hidden="true">
+				      		</span>
+							Filtros
+			      		</h3>				      		
+				  	</div>
+			  		<div class="panel-body">
+			
+						<div class="col-md-6">
+							<div class="form-group input-group-sm">
+								<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
+								{{ form.empresa }}
 							</div>
-						  	<div class="panel-footer">
-						  		<button type="submit" class="btn btn-primary" id="id_buscar">
-						  			Obtener
-						  		</button>
-						  		<!-- <button type="button" class="btn btn-default" id="id_limpiar">
-						  			Limpiar
-						  		</button>						  		 -->
-						  	</div>
 						</div>
-					</div>	
-				</div>
+
+						<div class="col-md-6">
+
+							<div class="form-group">
+								
+								<div class="row">
+
+									<div class="col-sm-6 col-md-6 col-lg-6 input-group-sm">
+										<label>Fecha:</label>
+										{{ form.fecha_inicio }}
+									</div>
+
+									<div class="col-sm-6 col-md-6 col-lg-6 input-group-sm">
+										<label>&nbsp;</label>
+										{{ form.fecha_final }}
+									</div>
+								</div>
+							</div>
+						</div>				
+						
+					</div>
+
+				  	<div class="panel-footer">
+						<button type="submit" class="btn btn-success btn-sm" id="id_buscar">
+			  				Obtener
+			  			</button>
+				  	</div>
+				</div>	
 			</form>
 		</div>
 
@@ -113,15 +99,14 @@
 					</div>
 				{% endif %}
 			{% endif %}
-		</div>
-
+		</div>		
 	</div>
 </div>
 
 
-<div class="container-fluid contenedor {% if bandera != "INICIO_PROCESO" %} hidden {% endif %}">
+<div class="container-fluid app-resultados {% if bandera != "INICIO_PROCESO" %} hidden {% endif %}">
 
-	<div id="resultados" class="grid" >
+	<div id="resultados" class="app-resultados-grid" >
 	</div>
 </div>
 
@@ -136,13 +121,13 @@
 <script src="{% static 'libs/moment/moment.js' %}"></script>
 
 <!-- Kendo Js-->
-<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
-<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/kendo.web.min.js' %}"></script>
 
 <!-- jQuery-UI -->
-<script src="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+<script src="{% static 'libs/jquery-ui/jquery-ui.min.js' %}"></script>
 
-<!-- Js del Sitio -->
+<!-- SmartCFDI -->
 <script src="{% static 'resumen/obtener_facturas.js' %}"></script>
 
 {% endblock scripts %}

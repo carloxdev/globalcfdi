@@ -1,8 +1,8 @@
 /**
- * alertifyjs 1.6.0 http://alertifyjs.com
+ * alertifyjs 1.8.0 http://alertifyjs.com
  * AlertifyJS is a javascript framework for developing pretty browser dialogs and notifications.
- * Copyright 2015 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
- * Licensed under MIT <http://opensource.org/licenses/mit-license.php>*/
+ * Copyright 2016 Mohammad Younes <Mohammad@alertifyjs.com> (http://alertifyjs.com) 
+ * Licensed under GPL 3 <https://opensource.org/licenses/gpl-3.0>*/
 ( function ( window ) {
     'use strict';
     
@@ -23,23 +23,24 @@
      * @type {Object}
      */
     var defaults = {
-        modal:true,
+        autoReset:true,
         basic:false,
-        frameless:false,
-        movable:true,
-        moveBounded:false,
-        resizable:true,
         closable:true,
         closableByDimmer:true,
+        frameless:false,
+        maintainFocus:true, //global default not per instance, applies to all dialogs
         maximizable:true,
-        startMaximized:false,
+        modal:true,
+        movable:true,
+        moveBounded:false,
+        overflow:true,
+        padding: true,
         pinnable:true,
         pinned:true,
-        padding: true,
-        overflow:true,
-        maintainFocus:true,
+        preventBodyShift:false, //global default not per instance, applies to all dialogs
+        resizable:true,
+        startMaximized:false,
         transition:'pulse',
-        autoReset:true,
         notifier:{
             delay:5,
             position:'bottom-right'
@@ -86,11 +87,16 @@
      * 
      * @return {undefined}
      */
-    function removeClass(element,classNames){
-        var classes = classNames.split(' ');
-        for(var x=0;x<classes.length;x+=1){
-            element.className = element.className.replace(' ' + classes[x], '');
+    function removeClass(element, classNames) {
+        var original = element.className.split(' ');
+        var toBeRemoved = classNames.split(' ');
+        for (var x = 0; x < toBeRemoved.length; x += 1) {
+            var index = original.indexOf(toBeRemoved[x]);
+            if (index > -1){
+                original.splice(index,1);
+            }
         }
+        element.className = original.join(' ');
     }
 
     /**
@@ -308,6 +314,19 @@
             cancel: false
         };
     }
+    /**
+    * Helper for dispatching events.
+    *
+    * @param  {string} evenType The type of the event to disptach.
+    * @param  {object} instance The dialog instance disptaching the event.
+    *
+    * @return {object}
+    */
+    function dispatchEvent(eventType, instance) {
+        if ( typeof instance.get(eventType) === 'function' ) {
+            instance.get(eventType).call(instance);
+        }
+    }
 
 
     /**
@@ -340,32 +359,32 @@
             },
             //common class names
             classes = {
+                animationIn: 'ajs-in',
+                animationOut: 'ajs-out',
                 base: 'alertify',
-                prefix: 'ajs-',
+                basic:'ajs-basic',
+                capture: 'ajs-capture',
+                closable:'ajs-closable',
+                fixed: 'ajs-fixed',
+                frameless:'ajs-frameless',
                 hidden: 'ajs-hidden',
+                maximize: 'ajs-maximize',
+                maximized: 'ajs-maximized',
+                maximizable:'ajs-maximizable',
+                modeless: 'ajs-modeless',
+                movable: 'ajs-movable',
                 noSelection: 'ajs-no-selection',
                 noOverflow: 'ajs-no-overflow',
                 noPadding:'ajs-no-padding',
-                modeless: 'ajs-modeless',
-                movable: 'ajs-movable',
-                resizable: 'ajs-resizable',
-                capture: 'ajs-capture',
-                fixed: 'ajs-fixed',
-                closable:'ajs-closable',
-                maximizable:'ajs-maximizable',
-                maximize: 'ajs-maximize',
-                restore: 'ajs-restore',
-                pinnable:'ajs-pinnable',
-                unpinned:'ajs-unpinned',
                 pin:'ajs-pin',
-                maximized: 'ajs-maximized',
-                animationIn: 'ajs-in',
-                animationOut: 'ajs-out',
+                pinnable:'ajs-pinnable',
+                prefix: 'ajs-',
+                resizable: 'ajs-resizable',
+                restore: 'ajs-restore',
                 shake:'ajs-shake',
-                basic:'ajs-basic',
-                frameless:'ajs-frameless'
+                unpinned:'ajs-unpinned',
             };
-			
+
         /**
          * Helper: initializes the dialog instance
          * 
@@ -374,7 +393,7 @@
         function initialize(instance){
             
             if(!instance.__internal){
-				
+
                 //no need to expose init after this.
                 delete instance.__init;
               
@@ -383,13 +402,13 @@
                     instance.__settings = copy(instance.settings);
                 }
                 //in case the script was included before body.
-                //after first dialog gets initialized, it won't be null anymore!				
+                //after first dialog gets initialized, it won't be null anymore!
                 if(null === reflow){
                     // set tabindex attribute on body element this allows script to give it
                     // focus after the dialog is closed
                     document.body.setAttribute( 'tabindex', '0' );
                 }
-				
+
                 //get dialog buttons/focus setup
                 var setup;
                 if(typeof instance.setup === 'function'){
@@ -468,6 +487,14 @@
                         onshow:undefined,
                         onclose:undefined,
                         onfocus:undefined,
+                        onmove:undefined,
+                        onmoved:undefined,
+                        onresize:undefined,
+                        onresized:undefined,
+                        onmaximize:undefined,
+                        onmaximized:undefined,
+                        onrestore:undefined,
+                        onrestored:undefined
                     },
                     resetHandler:undefined,
                     beginMoveHandler:undefined,
@@ -480,19 +507,18 @@
                     transitionOutHandler:undefined,
                     destroy:undefined
                 };
-				
-                                
+
                 var elements = {};
                 //root node
                 elements.root = document.createElement('div');
                 
                 elements.root.className = classes.base + ' ' + classes.hidden + ' ';
-				
+
                 elements.root.innerHTML = templates.dimmer + templates.modal;
                 
                 //dimmer
                 elements.dimmer = elements.root.firstChild;
-				
+
                 //dialog
                 elements.modal = elements.root.lastChild;
                 elements.modal.innerHTML = templates.dialog;
@@ -573,32 +599,19 @@
                 internal.transitionInHandler = delegate(instance, handleTransitionInEvent);
                 internal.transitionOutHandler = delegate(instance, handleTransitionOutEvent);
 
-                
                 //settings
-                instance.set('title', setup.options.title === undefined ? alertify.defaults.glossary.title : setup.options.title);
-				
-                instance.set('modal', setup.options.modal === undefined ? alertify.defaults.modal : setup.options.modal);
-                instance.set('basic', setup.options.basic === undefined ? alertify.defaults.basic : setup.options.basic);
-                instance.set('frameless', setup.options.frameless === undefined ? alertify.defaults.frameless : setup.options.frameless);
-							
-                instance.set('movable', setup.options.movable === undefined ? alertify.defaults.movable : setup.options.movable);
-                instance.set('moveBounded', setup.options.moveBounded === undefined ? alertify.defaults.moveBounded : setup.options.moveBounded);
-                instance.set('resizable', setup.options.resizable === undefined ? alertify.defaults.resizable : setup.options.resizable);
-                instance.set('autoReset', setup.options.autoReset === undefined ? alertify.defaults.autoReset : setup.options.autoReset);
-				
-                instance.set('closable', setup.options.closable === undefined ? alertify.defaults.closable : setup.options.closable);
-                instance.set('closableByDimmer', setup.options.closableByDimmer === undefined ? alertify.defaults.closableByDimmer : setup.options.closableByDimmer);
-                instance.set('maximizable', setup.options.maximizable === undefined ? alertify.defaults.maximizable : setup.options.maximizable);
-                instance.set('startMaximized', setup.options.startMaximized === undefined ? alertify.defaults.startMaximized : setup.options.startMaximized);
-				
-                instance.set('pinnable', setup.options.pinnable === undefined ? alertify.defaults.pinnable : setup.options.pinnable);
-                instance.set('pinned', setup.options.pinned === undefined ? alertify.defaults.pinned : setup.options.pinned);
-				
-                instance.set('transition', setup.options.transition === undefined ? alertify.defaults.transition : setup.options.transition);
-
-                instance.set('padding', setup.options.padding === undefined ? alertify.defaults.padding : setup.options.padding);
-                instance.set('overflow', setup.options.overflow === undefined ? alertify.defaults.overflow : setup.options.overflow);
-				
+                for(var opKey in internal.options){
+                    if(setup.options[opKey] !== undefined){
+                        // if found in user options
+                        instance.set(opKey, setup.options[opKey]);
+                    }else if(alertify.defaults.hasOwnProperty(opKey)) {
+                        // else if found in defaults options
+                        instance.set(opKey, alertify.defaults[opKey]);
+                    }else if(opKey === 'title' ) {
+                        // else if title key, use alertify.defaults.glossary
+                        instance.set(opKey, alertify.defaults.glossary[opKey]);
+                    }
+                }
 
                 // allow dom customization
                 if(typeof instance.build === 'function'){
@@ -635,12 +648,34 @@
                     requiresNoOverflow+=1;
                 }
             }
-            if(requiresNoOverflow === 0){
+            if(requiresNoOverflow === 0 && document.body.className.indexOf(classes.noOverflow) >= 0){
                 //last open modal or last maximized one
                 removeClass(document.body, classes.noOverflow);
+                preventBodyShift(false);
             }else if(requiresNoOverflow > 0 && document.body.className.indexOf(classes.noOverflow) < 0){
                 //first open modal or first maximized one
+                preventBodyShift(true);
                 addClass(document.body, classes.noOverflow);
+            }
+        }
+        var top = '', topScroll = 0;
+        /**
+         * Helper: prevents body shift.
+         *
+         */
+        function preventBodyShift(add){
+            if(alertify.defaults.preventBodyShift && document.documentElement.scrollHeight > document.documentElement.clientHeight){
+                if(add ){//&& openDialogs[openDialogs.length-1].elements.dialog.clientHeight <= document.documentElement.clientHeight){
+                    topScroll = scrollY;
+                    top = window.getComputedStyle(document.body).top;
+                    addClass(document.body, classes.fixed);
+                    document.body.style.top = -scrollY + 'px';
+                } else {
+                    scrollY = topScroll;
+                    document.body.style.top = top;
+                    removeClass(document.body, classes.fixed);
+                    restoreScrollPosition();
+                }
             }
         }
 		
@@ -670,27 +705,27 @@
 
                 //make modal
                 removeClass(instance.elements.root, classes.modeless);
-				
+
                 //only if open
                 if(instance.isOpen()){
                     unbindModelessEvents(instance);
-					
+
                     //in case a pinned modless dialog was made modal while open.
                     updateAbsPositionFix(instance);
-					
+
                     ensureNoOverflow();
                 }
             }else{
                 //make modelss
                 addClass(instance.elements.root, classes.modeless);
-								
+
                 //only if open
                 if(instance.isOpen()){
                     bindModelessEvents(instance);
-					
+
                     //in case pin/unpin was called while a modal is open
                     updateAbsPositionFix(instance);
-										
+
                     ensureNoOverflow();
                 }
             }
@@ -892,7 +927,7 @@
                             callback.call(instance,key, old, value);
                         }
                         result.items.push({'key': key, 'value': value , 'found':true});
-						
+
                     }else{
                         result.items.push({'key': key, 'value': value , 'found':false});
                     }
@@ -903,7 +938,7 @@
             }
             return result;
         }
-		
+
 
         /**
          * Triggers a close event.
@@ -989,11 +1024,15 @@
          * @return {undefined}
          */
         function maximize(instance) {
+            // allow custom `onmaximize` method
+            dispatchEvent('onmaximize', instance);
             //maximize the dialog 
             addClass(instance.elements.root, classes.maximized);
             if (instance.isOpen()) {
                 ensureNoOverflow();
             }
+            // allow custom `onmaximized` method
+            dispatchEvent('onmaximized', instance);
         }
 
         /**
@@ -1004,11 +1043,15 @@
          * @return {undefined}
          */
         function restore(instance) {
+            // allow custom `onrestore` method
+            dispatchEvent('onrestore', instance);
             //maximize the dialog 
             removeClass(instance.elements.root, classes.maximized);
             if (instance.isOpen()) {
                 ensureNoOverflow();
             }
+            // allow custom `onrestored` method
+            dispatchEvent('onrestored', instance);
         }
 
         /**
@@ -1406,9 +1449,7 @@
             cancelKeyup = false;
 
             // allow custom `onfocus` method
-            if (typeof instance.get('onfocus') === 'function') {
-                instance.get('onfocus').call(instance);
-            }
+            dispatchEvent('onfocus', instance);
 
             // unbind the event
             off(instance.elements.dialog, transition.type, instance.__internal.transitionInHandler);
@@ -1576,6 +1617,9 @@
                         moveDelegate = moveElement;
                     }
                     
+                    // allow custom `onmove` method
+                    dispatchEvent('onmove', instance);
+
                     refreshTop = !instance.isModal() && instance.isPinned();
                     movable = instance;
                     moveDelegate(eventSrc, element);
@@ -1615,10 +1659,12 @@
          */
         function endMove() {
             if (movable) {
-                var element = movable.elements.dialog;
+                var instance = movable;
                 movable = bounds = null;
                 removeClass(document.body, classes.noSelection);
-                removeClass(element, classes.capture);
+                removeClass(instance.elements.dialog, classes.capture);
+                // allow custom `onmoved` method
+                dispatchEvent('onmoved', instance);
             }
         }
 
@@ -1758,6 +1804,9 @@
                     eventSrc = event;
                 }
                 if (eventSrc) {
+                    // allow custom `onresize` method
+                    dispatchEvent('onresize', instance);
+                    
                     resizable = instance;
                     handleOffset = instance.elements.resizeHandle.offsetHeight / 2;
                     var element = instance.elements.dialog;
@@ -1807,11 +1856,13 @@
          */
         function endResize() {
             if (resizable) {
-                var element = resizable.elements.dialog;
+                var instance = resizable;
                 resizable = null;
                 removeClass(document.body, classes.noSelection);
-                removeClass(element, classes.capture);
+                removeClass(instance.elements.dialog, classes.capture);
                 cancelClick = true;
+                // allow custom `onresized` method
+                dispatchEvent('onresized', instance);
             }
         }
 
@@ -2134,6 +2185,9 @@
              */
             moveTo:function(x,y){
                 if(!isNaN(x) && !isNaN(y)){
+                    // allow custom `onmove` method
+                    dispatchEvent('onmove', this);
+                    
                     var element = this.elements.dialog,
                         current = element,
                         offsetLeft = 0,
@@ -2163,6 +2217,9 @@
 
                     element.style.left = left + 'px';
                     element.style.top = top + 'px';
+                    
+                    // allow custom `onmoved` method
+                    dispatchEvent('onmoved', this);
                 }
                 return this;
             },
@@ -2185,7 +2242,10 @@
                 ;
 
                 if(!isNaN(w) && !isNaN(h) && this.get('resizable') === true){
-
+                    
+                    // allow custom `onresize` method
+                    dispatchEvent('onresize', this);
+                    
                     if(('' + width).match(regex)){
                         w = w / 100 * document.documentElement.clientWidth ;
                     }
@@ -2202,6 +2262,9 @@
                     element.style.minHeight = this.elements.header.offsetHeight + this.elements.footer.offsetHeight + 'px';
                     element.style.width = w + 'px';
                     element.style.height = h + 'px';
+                    
+                    // allow custom `onresized` method
+                    dispatchEvent('onresized', this);
                 }
                 return this;
             },
@@ -2299,9 +2362,9 @@
                 
                 // ensure initialization
                 initialize(this);
-								
+
                 if ( !this.__internal.isOpen ) {
-					
+
                     // add to open dialogs
                     this.__internal.isOpen = true;
                     openDialogs.push(this);
@@ -2321,12 +2384,12 @@
                     if(modal !== undefined){
                         this.set('modal', modal);
                     }
-					
+
                     //save scroll to prevent document jump
                     saveScrollPosition();
 
                     ensureNoOverflow();
-					
+
                     // allow custom dialog class on show
                     if(typeof className === 'string' && className !== ''){
                         this.__internal.className = className;
@@ -2339,7 +2402,7 @@
                     }else if(this.isMaximized()){
                         restore(this);
                     }
-					
+
                     updateAbsPositionFix(this);
 
                     removeClass(this.elements.root, classes.animationOut);
@@ -2368,9 +2431,7 @@
                     }
 
                     // allow custom `onshow` method
-                    if ( typeof this.get('onshow') === 'function' ) {
-                        this.get('onshow').call(this);
-                    }
+                    dispatchEvent('onshow', this);
 
                 }else{
                     // reset move updates
@@ -2393,9 +2454,9 @@
              */
             close: function () {
                 if (this.__internal.isOpen ) {
-					
+
                     unbindEvents(this);
-					
+
                     removeClass(this.elements.root, classes.animationIn);
                     addClass(this.elements.root, classes.animationOut);
 
@@ -2418,16 +2479,14 @@
                     }
 
                     // allow custom `onclose` method
-                    if ( typeof this.get('onclose') === 'function' ) {
-                        this.get('onclose').call(this);
-                    }
-					
-                    //remove from open dialogs               
+                    dispatchEvent('onclose', this);
+
+                    //remove from open dialogs
                     openDialogs.splice(openDialogs.indexOf(this),1);
                     this.__internal.isOpen = false;
-					
+
                     ensureNoOverflow();
-					
+
                 }
                 return this;
             },
@@ -3487,6 +3546,9 @@
                         if (typeof returnValue !== 'undefined') {
                             closeEvent.cancel = !returnValue;
                         }
+                    }
+                    if(!closeEvent.cancel){
+                        input.value = this.settings.value;
                     }
                     break;
                 }

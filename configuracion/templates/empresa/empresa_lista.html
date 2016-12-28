@@ -8,9 +8,9 @@
 {% block css %}
 
 <!-- Kendo -->
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.rtl.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.common-bootstrap.min.css' %}"/>
+<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.bootstrap.min.css' %}"/>
 
 <!-- Alertifyjs --> 
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
@@ -19,28 +19,26 @@
 <!-- Font Awesome --> 
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
-<!-- APP -->
-<link rel="stylesheet" href="{% static 'empresa/empresa_lista.css' %}" />
-
 {% endblock css %}
 
 {% block contenido %}
 
 <ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active">Empresas</li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Empresas</li>
 </ol>
 
-<div class="container-fluid">
-	<div class="row titulo">
-		<div class="col-md-12">
-			<a class="btn btn-primary btn-sm app-nuevo" href="{% url 'configuracion.empresa_nuevo' %}">Nueva Empresa</a>
-		</div>
-	</div>
-</div>
 
-<div class="container-fluid contenedor">
-	<div id="resultados" class="grid" >
+<div class="container-fluid app-resultados">
+
+	<div class="well well-sm app-resultados-tooblar">
+		<a class="btn btn-primary btn-sm" href="{% url 'configuracion.empresa_nuevo' %}">
+			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+			Nueva
+		</a>		
+	</div>
+
+	<div id="resultados" class="app-resultados-grid" >
 	</div>			
 </div>
 
@@ -52,8 +50,8 @@
 <script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
 
 <!-- Kendo Js-->
-<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
-<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/kendo.web.min.js' %}"></script>
 
 <!-- APP -->
 <script src="{% static 'empresa/empresa_lista.js' %}"></script>

@@ -43,7 +43,8 @@ from .models import Log
 from .models import Resumen
 
 # Formularios:
-from .forms import FacturaProveedorFormFiltros
+from .forms import FacturaRecibidaFormFiltros
+from .forms import FacturaEmitidaFormFiltros
 from .forms import ObtenerForm
 from .forms import LogFormFiltros
 from .forms import ResumenFormFiltros
@@ -205,7 +206,7 @@ class FacturaProveedorList(View):
 
     def get(self, request):
 
-        formulario = FacturaProveedorFormFiltros(request.user)
+        formulario = FacturaRecibidaFormFiltros(request.user)
 
         contexto = {
             'form': formulario
@@ -258,7 +259,7 @@ class FacturaClienteList(View):
         self.template_name = 'factura_cliente/fac_cliente_lista.html'
 
     def get(self, request):
-        formulario = FacturaProveedorFormFiltros(request.user)
+        formulario = FacturaEmitidaFormFiltros(request.user)
 
         contexto = {
             'form': formulario
@@ -309,7 +310,7 @@ class ComprobanteEmpleadoList(View):
         self.template_name = 'comprobante_empleado/com_empleado_lista.html'
 
     def get(self, request):
-        formulario = FacturaProveedorFormFiltros(request.user)
+        formulario = FacturaEmitidaFormFiltros(request.user)
 
         contexto = {
             'form': formulario

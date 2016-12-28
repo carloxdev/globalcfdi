@@ -1,6 +1,9 @@
 
-var card_filtros = null
-var card_resultados = null
+/*-----------------------------------------------*\
+            GLOBAL VARIABLES
+\*-----------------------------------------------*/
+
+// URLS:
 var url = window.location
 var url_consulta = ""
 var url_editar = ""
@@ -14,6 +17,11 @@ else {
     url_editar = url.origin + "/empresas/editar/"
 }
 
+// OBJS:
+var card_filtros = null
+var card_resultados = null
+var pagina = null
+
 
 /*-----------------------------------------------*\
             LOAD
@@ -23,13 +31,18 @@ $(document).ready(function () {
 
     card_resultados = new TargetaResultados()
 
-    alertify.set('notifier', 'position', 'top-right')
-    alertify.set('notifier', 'delay', 10)
+    pagina = new Pagina()
+
+    // Inicializar Alertify
+    pagina.init_Alertify()
+
 })
 
 $(window).resize(function() {
+
     card_resultados.kGrid.data("kendoGrid").resize()
 })
+
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -37,21 +50,52 @@ $(window).resize(function() {
 
 function TargetaResultados() {
 
-    this.$divGrid = $('#resultados')
-    this.kFields = null
-    this.kFuenteDatos = null
-    this.kRows = null
-    this.kColumns = null
-    this.kToolbar = null
-    this.kGrid = null
+    // this.toolbar = new ToolBar()
 
+    this.grid = new GridResultados()
+}
+
+/*-----------------------------------------------*\
+            OBJETO: Grid Resultados
+\*-----------------------------------------------*/
+
+function GridResultados() {
+
+    this.$id = $("#resultados")
+
+    this.kfuente_datos = null
+    this.kgrid = null
     this.init()
 }
-TargetaResultados.prototype.init = function () {
+GridResultados.prototype.init = function (e) {
 
     kendo.culture("es-MX")
-    
-    this.kFields = {
+
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+
+    this.kgrid = this.$id.kendoGrid(this.get_Config())
+}
+GridResultados.prototype.get_Config = function () {
+
+    return {
+        dataSource: this.kfuente_datos,
+        columnMenu: true,
+        groupable: false,
+        sortable: true,
+        resizable: true,
+        editable: true,
+        pageable: true,
+        selectable: true,
+        scrollable: true,
+        columns: this.get_Columnas(),
+        noRecords: {
+            template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
+        },                        
+    }
+}
+GridResultados.prototype.get_Campos = function () {
+
+    return {
         clave: { editable: false, type: "string" },
         razon_social: { editable: false, type: "string" },
         logo: { editable: false, type: "string" },
@@ -63,8 +107,51 @@ TargetaResultados.prototype.init = function () {
         created_date: { editable: false, type: "string" },
         updated_date: { editable: false, type: "string" },
     }
+}
+GridResultados.prototype.get_Columnas = function (e) {
+    
+    return [
 
-    this.kFuenteDatos = new kendo.data.DataSource({
+        { field: "clave", title: "Clave", width: "90px" },
+        { field: "razon_social", title: "Razon Social", width: "200px" },
+        // { field: "logo", title: "logo", width: "200px" },
+        { field: "rfc", title: "RFC", width: "130px" },
+        { field: "ciec", title: "CIEC", width: "130px" },
+        { 
+            field: "activa", 
+            title: "Estado", 
+            width: "80px",
+            template: "#= activa ? 'Activa' : 'Inactiva' #"
+        },
+        { field: "usuario", title: "Usuario", width: "130px" },
+        { field: "email", title: "Email", width: "170px" },
+        { 
+            field: "created_date", 
+            title: "Creado el", 
+            width: "100px",
+            template: "#= kendo.toString(kendo.parseDate(created_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+        },
+        { 
+            field: "updated_date", 
+            title: "Actualizado el", 
+            width: "120px",
+            template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+
+        },
+        {
+           command: {
+               text: "Editar",
+               click: this.editar_Registro,
+               className: "app-grid-boton-editar",
+           },
+           title: " ",
+           width: "110px"
+        },
+    ]
+}
+GridResultados.prototype.get_FuenteDatosConfig = function (e) {
+
+    return {
 
         serverPaging: true,
         pageSize: 20,
@@ -75,106 +162,24 @@ TargetaResultados.prototype.init = function () {
                 type: "GET",
                 dataType: "json",
             },
-            // parameterMap: function (data, action) {
-            //     if (action === "read") {
-
-            //         return {
-            //             page: data.page,
-            //             pageSize: data.pageSize,
-            //             empresa__clave: card_filtros.$empresa.val(),
-            //             fecha_min: card_filtros.$fecha_inicio.val(),
-            //             fecha_max: card_filtros.$fecha_fin.val(),
-            //             emisor_rfc: card_filtros.$emisor_rfc.val(),
-            //             emisor_nombre: card_filtros.$emisor_nombre.val(),
-            //             uuid: card_filtros.$uuid.val(),
-            //             estadoSat: card_filtros.$estado_sat.val(),
-            //             folio: card_filtros.$folio.val(),
-            //             serie: card_filtros.$serie.val(),
-            //             fechaTimbrado_min: card_filtros.$fecha_timbrado_inicio.val(),
-            //             fechaTimbrado_max: card_filtros.$fecha_timbrado_fin.val(),
-            //             comprobacion: card_filtros.$comprobacion.val(),
-            //         }
-            //     }
-            // }
         },
         schema: {
             data: "results",
             total: "count",
             model: {
                 id: "uuid",    
-                fields: this.kFields    
+                fields: this.get_Campos()    
             }
         },
         error: function (e) {
-			alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
         },
-    })
-
-    this.kToolbar = [
-        {
-            name: "copyRows",
-            text: "Copy Rows",
-            click: function (e) {
-                alert('test');
-            }
-        },
-    ]
-
-    this.kColumns = [
-        { field: "clave", title: "Clave", width: "100px" },
-        { field: "razon_social", title: "Razon Social", width: "200px" },
-        // { field: "logo", title: "logo", width: "200px" },
-        { field: "rfc", title: "RFC", width: "150px" },
-        { field: "ciec", title: "CIEC", width: "150px" },
-        { 
-            field: "activa", 
-            title: "Estado", 
-            width: "80px",
-            template: "#= activa ? 'Activa' : 'Inactiva' #"
-        },
-        { field: "usuario", title: "Usuario", width: "150px" },
-        { field: "email", title: "Email", width: "150px" },
-        { 
-            field: "created_date", 
-            title: "Creado por", 
-            width: "100px",
-            template: "#= kendo.toString(kendo.parseDate(created_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
-        },
-        { 
-            field: "updated_date", 
-            title: "Actualizado por", 
-            width: "110px",
-            template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
-
-        },
-        {
-           command: {
-               text: "Editar",
-               click: this.editar_Registro,
-           },
-           title: " ",
-           width: "110px"
-        },
-    ]
-
-    this.kGrid = this.$divGrid.kendoGrid({
-        dataSource: this.kFuenteDatos,
-        columnMenu: true,
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        editable: true,
-        pageable: true,
-        selectable: true,
-        scrollable: true,
-        columns: this.kColumns,
-    })
-
+    }
 }
-TargetaResultados.prototype.buscar = function (e) {
-    this.kFuenteDatos.page(1)
+GridResultados.prototype.buscar = function () {
+    this.kfuente_datos.page(1)
 }
-TargetaResultados.prototype.editar_Registro = function (e) {
+GridResultados.prototype.editar_Registro = function (e) {
 
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))

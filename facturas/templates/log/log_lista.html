@@ -6,68 +6,72 @@
 
 {% block css %}
 
-<!-- Kendo -->
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.rtl.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.common.min.css' %}"/>
-<link rel="stylesheet" href="{% static 'libs/kendo_2015_2_624/styles/kendo.default.min.css' %}"/>
+	<!-- Kendo -->
+	<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.rtl.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.common-bootstrap.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'libs/kendo/styles/kendo.bootstrap.min.css' %}"/>
 
-<!-- Alertifyjs --> 
-<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
-<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
+	<!-- Alertifyjs --> 
+	<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
+	<link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
 
-<!-- jQuery UI --> 
-<link rel="stylesheet" href="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.css' %}"/>
+	<!-- jQuery UI --> 
+	<link rel="stylesheet" href="{% static 'libs/jquery-ui/jquery-ui.min.css' %}"/>
 
-<!-- Custom --> 
-<link rel="stylesheet" href="{% static 'log/log_lista.css' %}" />
+	<!-- SmartCFDI --> 
+	<link rel="stylesheet" href="{% static 'log/log_lista.css' %}" />
 
 {% endblock css %}
 
 {% block contenido %}
 
 <ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active">Logs</li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Logs</li>
 </ol>
 
-<div class="container-fluid">
+<div class="container-fluid app-filtros">
 
+	<!-- Filtros -->
 	<div class="row">
-
-		<!-- Filtros -->
 		<div class="col-md-12">
 			<form action="">
-				<div class="panel-group">
-					<div class="panel panel-default">
-					  	<div class="panel-heading">
-					      <h3 class="panel-title">
-					      	<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					        <a data-toggle="collapse" href="#filtros_id">
-					        	Filtros
-					        </a>
-					      </h3>
-					  	</div>
+				<div class="panel panel-info">
+				  	<div class="panel-heading">
+				  		<a data-toggle="collapse" href="#filtros_id">
+				      		<h3 class="panel-title">
+				      		
+					      		<span class="glyphicon glyphicon-search" aria-hidden="true">
+					      		</span>
+								Filtros						
 
-						<div id="filtros_id" class="panel-collapse collapse">
-							<div class="panel-body">
-
+								<span class="glyphicon glyphicon-chevron-down pull-right" id="btn_collapsed" aria-hidden="true">
+								</span>										      
+				      		</h3>				      
+						</a>				      		
+				  	</div>
+					<div id="filtros_id" class="panel-collapse collapse">
+				  		<div class="panel-body">
+				
 								<div class="col-md-3">
 
-									<div class="form-group filtros">
+									<div class="form-group input-group-sm">
 										<label for="{{ form.empresa.id_for_label }}">Empresa:</label>
 										{{ form.empresa }}
 									</div>
 								</div>
 
 								<div class="col-md-3">
-									<div class="form-group filtros">
+
+									<div class="form-group input-group-sm">
 										<label for="{{ form.estado.id_for_label }}">Estado:</label>
 										{{ form.estado }}
 									</div>
 								</div>
 
 								<div class="col-md-3">
-									<div class="form-group filtros">
+
+									<div class="form-group input-group-sm">
 										<label for="{{ form.operacion.id_for_label }}">Operacion:</label>
 										{{ form.operacion }}
 									</div>
@@ -75,48 +79,49 @@
 
 								<div class="col-md-3">
 
-									<div class="form-group filtros">
+									<div class="form-group">
 										
 										<div class="row">
-											<div class="col-sm-12 col-md-12 col-lg-12">
-												<label>Fecha Operacion:</label>
-											</div>
-										</div>
 
-										<div class="row">
-											<div class="col-sm-6 col-md-6 col-lg-6">
+											<div class="col-sm-6 col-md-6 col-lg-6 input-group-sm">
+												<label>Fecha Operacion:</label>
 												{{ form.fecha_operacion_inicio }}
 											</div>
 
-											<div class="col-sm-6 col-md-6 col-lg-6">
+											<div class="col-sm-6 col-md-6 col-lg-6 input-group-sm">
+												<label>&nbsp;</label>
 												{{ form.fecha_operacion_final }}
 											</div>
 										</div>																				
 									</div>									
 								</div>
-
-							</div>	
-						  	<div class="panel-footer">
-						  		<button type="button" class="btn btn-primary" id="id_buscar">
-						  			Buscar
-						  		</button>
-						  		<button type="button" class="btn btn-default" id="id_limpiar">
-						  			Limpiar
-						  		</button>						  		
-						  	</div>							
+							
 						</div>
-					  	
-					</div>				
-				</div>
+
+					  	<div class="panel-footer">
+					  		<button type="button" class="btn btn-default btn-sm" id="id_limpiar">Limpiar
+				  			</button>									  			
+							<button type="button" class="btn btn-info btn-sm pull-right" id="id_buscar">
+				  				Buscar
+				  			</button>
+					  	</div>
+					</div>
+				</div>	
 			</form>
 		</div>
-	
 	</div>
-
 </div>
 
-<div class="container-fluid contenedor">
-	<div id="resultados" class="grid" >
+
+<div class="container-fluid app-resultados">
+
+	<div class="well well-sm app-resultados-tooblar">
+		<button type="button" class="btn btn-default btn-xs" id="botonExportar">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> Exportar
+		</button>
+	</div>
+
+	<div id="resultados" class="app-resultados-grid" >
 	</div>			
 </div>
 
@@ -128,13 +133,13 @@
 <script src="{% static 'libs/alertifyjs/alertify.min.js' %}"></script>
 
 <!-- Kendo Js-->
-<script src="{% static 'libs/kendo_2015_2_624/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
-<script src="{% static 'libs/kendo_2015_2_624/js/kendo.web.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/cultures/kendo.culture.es-MX.min.js' %}"></script>
+<script src="{% static 'libs/kendo/js/kendo.web.min.js' %}"></script>
 
 <!-- jQuery-UI -->
-<script src="{% static 'libs/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+<script src="{% static 'libs/jquery-ui/jquery-ui.min.js' %}"></script>
 
-<!-- Js del Sitio -->
+<!-- SmartCFDI -->
 <script src="{% static 'log/log_lista.js' %}"></script>
 
 {% endblock scripts %}

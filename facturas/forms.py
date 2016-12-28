@@ -86,7 +86,7 @@ class LogFormFiltros(forms.Form):
         return opciones
 
 
-class FacturaProveedorFormFiltros(forms.Form):
+class FacturaRecibidaFormFiltros(forms.Form):
 
     empresa = forms.ChoiceField(
         widget=forms.Select(
@@ -127,14 +127,88 @@ class FacturaProveedorFormFiltros(forms.Form):
     )
 
     def __init__(self, _usuario, *args, **kwargs):
-        super(FacturaProveedorFormFiltros, self).__init__(*args, **kwargs)
+        super(FacturaRecibidaFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
             COMPROBACION_ESTADOS)
 
     def obtener_Empresas(self, _usuario):
 
-        empresa = []
+        empresa = [('', 'Todas'), ]
+
+        if _usuario.is_staff:
+            registros = Empresa.objects.all()
+        else:
+            registros = Empresa.objects.filter(usuario=_usuario)
+
+        for registro in registros:
+            empresa.append(
+                (registro.clave, registro.razon_social)
+            )
+
+        return empresa
+
+    def obtener_Comprobaciones(self, _opciones):
+
+        opciones = [('', 'Todas'), ]
+
+        for registro in _opciones:
+            opciones.append(
+                registro
+            )
+
+        return opciones
+
+
+class FacturaEmitidaFormFiltros(forms.Form):
+
+    empresa = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    folio = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    serie = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    uuid = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    receptor_rfc = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    receptor_nombre = forms.CharField(max_length=255, widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    fecha_timbrado_inicio = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    fecha_timbrado_final = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    fecha_inicio = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    fecha_final = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
+    estadoSat = forms.ChoiceField(
+        choices=ESTADOSAT_OPCIONES,
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+    comprobacion = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
+
+    def __init__(self, _usuario, *args, **kwargs):
+        super(FacturaEmitidaFormFiltros, self).__init__(*args, **kwargs)
+        self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
+        self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
+            COMPROBACION_ESTADOS)
+
+    def obtener_Empresas(self, _usuario):
+
+        empresa = [('', 'Todas'), ]
 
         if _usuario.is_staff:
             registros = Empresa.objects.all()
@@ -221,7 +295,7 @@ class ResumenFormFiltros(forms.Form):
 
     def obtener_Empresas(self, _usuario):
 
-        empresa = []
+        empresa = [('', 'Todas'), ]
 
         if _usuario.is_staff:
             registros = Empresa.objects.all()

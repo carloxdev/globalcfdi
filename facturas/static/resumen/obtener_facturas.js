@@ -31,13 +31,25 @@ var card_resultados = null
 
 $(document).ready(function () {
 
+    // Inicializar objetos
     card_filtros = new TargetaFiltros()
     card_resultados = new TargetaResultados()
     pagina = new Pagina()
 
+    // Inicializar Alertify
     pagina.init_Alertify()
 
     moment.locale('es')
+
+    // Asigna eventos a teclas
+    $(document).keypress(function (e) {
+
+        // Tecla Enter
+        if (e.which == 13) {
+            card_filtros.click_BotonBuscar(e)
+        }
+    })        
+
 });
 
 $(window).resize(function() {
@@ -54,6 +66,7 @@ $(window).resize(function() {
 
 function TargetaFiltros() {
 
+
     this.$empresa = $('#id_empresa')
     this.$fecha_inicio = $('#id_fecha_inicio')
     this.$fecha_fin = $('#id_fecha_final')
@@ -65,6 +78,7 @@ TargetaFiltros.prototype.init = function () {
 
     this.$fecha_inicio.datepicker(this.get_DateConfig())
     this.$fecha_fin.datepicker(this.get_DateConfig())
+
 }
 TargetaFiltros.prototype.get_DateConfig = function () {
 

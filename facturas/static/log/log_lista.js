@@ -1,6 +1,8 @@
+/*-----------------------------------------------*\
+            GLOBAL VARIABLES
+\*-----------------------------------------------*/
 
-var card_filtros = null
-var card_resultados = null
+// URLS:
 var url = window.location
 var url_consulta = ""
 var url_archivos = ""
@@ -14,6 +16,12 @@ else {
     url_archivos = url.origin + "/media/"
 }
 
+// OBJS:
+var card_filtros = null
+var card_resultados = null
+var pagina = null
+
+
 /*-----------------------------------------------*\
             LOAD
 \*-----------------------------------------------*/
@@ -23,8 +31,19 @@ $(document).ready(function () {
     card_filtros = new TargetaFiltros()
     card_resultados = new TargetaResultados()
 
-    alertify.set('notifier', 'position', 'top-right')
-    alertify.set('notifier', 'delay', 10)
+    pagina = new Pagina()
+
+    // Inicializar Alertify
+    pagina.init_Alertify()
+
+    // Asigna eventos a teclas
+    $(document).keypress(function (e) {
+
+        // Tecla Enter
+        if (e.which == 13) {
+            card_filtros.click_BotonBuscar(e)
+        }
+    })
 })
 
 
@@ -39,6 +58,9 @@ $(window).resize(function() {
 \*-----------------------------------------------*/
 
 function TargetaFiltros() {
+
+    this.$id = $('#filtros_id')
+    this.$btn_collapsed = $('#btn_collapsed')
 
     this.$empresa = $('#id_empresa')
 
@@ -57,7 +79,19 @@ function TargetaFiltros() {
 }
 TargetaFiltros.prototype.init = function () {
 
-    var datepicker_init = {
+    this.$fecha_operacion_inicio.datepicker(this.get_DateConfig)
+    this.$fecha_operacion_fin.datepicker(this.get_DateConfig)
+
+    // Botones
+    this.$boton_buscar.on('click', this, this.click_BotonBuscar);
+    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
+
+    this.$id.on('shown.bs.collapse', this, this.descolapsar)
+    this.$id.on('hidden.bs.collapse', this, this.colapsar)    
+}
+TargetaFiltros.prototype.get_DateConfig = function () {
+
+    return {
         autoSize: true,
         dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
         dayNamesMin: ['Dom', 'Lu', 'Ma', 'Mi', 'Je', 'Vi', 'Sa'],
@@ -68,13 +102,6 @@ TargetaFiltros.prototype.init = function () {
         changeMonth: true,
         changeYear: true,
     }
-
-    this.$fecha_operacion_inicio.datepicker(datepicker_init)
-    this.$fecha_operacion_fin.datepicker(datepicker_init)
-
-    // Botones
-    this.$boton_buscar.on('click', this, this.click_BotonBuscar);
-    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
 }
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
@@ -91,6 +118,29 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
     e.data.$fecha_operacion_inicio.val("")
     e.data.$fecha_operacion_fin.val("")
 }
+TargetaFiltros.prototype.colapsar = function (e) {
+    e.data.$btn_collapsed.addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
+}
+TargetaFiltros.prototype.descolapsar = function (e) {
+    e.data.$btn_collapsed.addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
+}
+TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
+
+    return {
+        page: _page,
+        pageSize: _pageSize,
+        empresa__clave: this.$empresa.val(),
+        estado: this.$estado.val(),
+        operacion: this.$operacion.val(),
+        fecha_operacion_min: this.$fecha_operacion_inicio.val(),
+        fecha_operacion_max: this.$fecha_operacion_fin.val(),        
+    }
+}
+
+
+
+
+
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -98,20 +148,54 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
 
 function TargetaResultados() {
 
-    this.$divGrid = $('#resultados')
-    this.kFields = null
-    this.kFuenteDatos = null    
-    this.kRows = null
-    this.kColumns = null
-    this.kGrid = null
+    // this.toolbar = new ToolBar()
 
+    this.grid = new GridResultados()
+}
+
+
+/*-----------------------------------------------*\
+            OBJETO: Grid Resultados
+\*-----------------------------------------------*/
+
+function GridResultados() {
+
+    this.$id = $("#resultados")
+
+    this.kfuente_datos = null
+    this.kgrid = null
     this.init()
 }
-TargetaResultados.prototype.init = function () {
+GridResultados.prototype.init = function (e) {
 
     kendo.culture("es-MX")
 
-    this.kFields = {
+    this.kfuente_datos = new kendo.data.DataSource(this.get_FuenteDatosConfig())
+
+    this.kgrid = this.$id.kendoGrid(this.get_Config())
+}
+GridResultados.prototype.get_Config = function () {
+
+    return {
+        dataSource: this.kfuente_datos,
+        columnMenu: true,
+        groupable: false,
+        sortable: true,
+        resizable: true,
+        pageable: true,
+        selectable: true,
+        editable: false,
+        scrollable: true,
+        columns: this.get_Columnas(),
+        dataBound: this.llenar_Grid,
+        noRecords: {
+            template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
+        },                        
+    }
+}
+GridResultados.prototype.get_Campos = function () {
+
+    return {
         empresa: { editable: false, type: "string" },
         nombre: { editable: false, type: "string" },
         estado: { editable: false, type: "string" },
@@ -122,49 +206,10 @@ TargetaResultados.prototype.init = function () {
         created_date: { editable: false, type: "string" },
         updated_date: { editable: false, type: "string" },
     }
-
-    this.kFuenteDatos = new kendo.data.DataSource({
-
-        serverPaging: true,
-        pageSize: 20,
-        transport: {
-            read: {
-
-                url: url_consulta,
-                type: "GET",
-                dataType: "json",
-            },
-            parameterMap: function (data, action) {
-                if (action === "read") {
-
-                    return {
-                        page: data.page,
-                        pageSize: data.pageSize,
-                        empresa__clave: card_filtros.$empresa.val(),
-                        estado: card_filtros.$estado.val(),
-                        operacion: card_filtros.$operacion.val(),
-                        fecha_operacion_min: card_filtros.$fecha_operacion_inicio.val(),
-                        fecha_operacion_max: card_filtros.$fecha_operacion_fin.val(),
-                    }
-                }
-            }
-        },
-        schema: {
-            data: "results",
-            total: "count",
-            model: {
-                fields: this.kFields
-            },
-            sort: {
-                field: "created_date", dir: "desc"
-            }
-        },
-        error: function (e) {
-			alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
-        },
-    })
-
-    this.kColumns = [
+}
+GridResultados.prototype.get_Columnas = function (e) {
+    
+    return [
         { field: "empresa", title: "Empresa", width: "120px" },
         { field: "nombre", title: "Nombre", width: "250px" },
         { field: "estado", title: "Estado", width: "100px" },
@@ -197,33 +242,53 @@ TargetaResultados.prototype.init = function () {
            width: "90px"
         },
     ]
-
-    this.kGrid = this.$divGrid.kendoGrid({
-        dataSource: this.kFuenteDatos,
-        columnMenu: true,
-        groupable: false,
-        sortable: true,
-        resizable: true,
-        pageable: true,
-        selectable: true,
-        editable: false,
-        scrollable: true,
-        columns: this.kColumns,
-        dataBound: this.llenar_Grid,
-    })
 }
-TargetaResultados.prototype.buscar = function (e) {
+GridResultados.prototype.get_FuenteDatosConfig = function (e) {
 
-    this.kFuenteDatos.page(1)
+    return {
+
+        serverPaging: true,
+        pageSize: 20,
+        transport: {
+            read: {
+
+                url: url_consulta,
+                type: "GET",
+                dataType: "json",
+            },
+            parameterMap: function (data, action) {
+                if (action === "read") {
+                    return card_filtros.get_Filtros(data.page, data.pageSize)
+                }
+            }
+        },
+        schema: {
+            data: "results",
+            total: "count",
+            model: {
+                fields: this.get_Campos()
+            },
+            sort: {
+                field: "created_date", dir: "desc"
+            }
+        },
+        error: function (e) {
+            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+        },
+    }
 }
-TargetaResultados.prototype.descargar_Log = function (e) {
+GridResultados.prototype.buscar = function () {
+    this.kfuente_datos.page(1)
+}
+GridResultados.prototype.descargar_Log = function (e) {
+
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
     var url = url_archivos + fila.url
     var win = window.open(url, '_blank')
     win.focus()
 }
-TargetaResultados.prototype.llenar_Grid = function (e) {
+GridResultados.prototype.llenar_Grid = function (e) {
 
     e.preventDefault()
 
@@ -242,27 +307,4 @@ TargetaResultados.prototype.llenar_Grid = function (e) {
             $(this).addClass('cell--procesando')
         } 
     })
-
-
-    
-
-    // var row = this.dataItems()
-
-    // $.each(row, function (indice, elemento) {
-        
-    //     if (elemento.estado == "EXITO") {
-    //         // card_resultados.kGrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')
-    //         row.cells[3].bgColor = "#1C9E39";
-    //     }
-    //     else if (elemento.estado == "DETALLES") {
-    //         row.cells[3].bgColor = "#FBE40C";
-    //     }
-    //     else if (elemento.estado == "ERROR") {
-    //         row.cells[3].bgColor = "#F60009";
-    //     }
-    //     else {
-    //         row.cells[3].bgColor = "#FDFEFD";   
-    //     }
-   
-    // })
 }

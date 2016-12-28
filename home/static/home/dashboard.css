@@ -1,3 +1,14 @@
+
+.breadcrumb {
+    margin-bottom: 0;
+}
+
+.page-header {
+    margin-top: 0;
+}
+
+/* Sin revisar */
+
 .titulo {
 	text-align: center;	
 }
@@ -30,16 +41,6 @@
     margin-left: 15px;
     margin-right: 15px;
     padding: 15px;
-}
-
-
-.page-header {
-    margin-top: 0;
-}
-
-
-.breadcrumb {
-    margin-bottom: 0;
 }
 
 .logo {

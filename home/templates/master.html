@@ -7,7 +7,11 @@
 	<title>{% block title %} {% endblock title %}</title>
 
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+	<!-- Bootstrap -->
 	<link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" />
+
+	<!-- SmartCFDI -->
 	<link rel="stylesheet" href="{% static 'master.css' %}" />
 
 	{% block css %}
@@ -17,64 +21,67 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default app-header">
 
-		<div class="container-fluid">
+		<div class="container-fluid app-header-container">
 		
 			<div class="navbar-header">
 
-				<img src="{% static 'images/smartCFDI.jpg' %}" class="logoapp" alt="SmartCFDI"> 
-				
+				<img src="{% static 'images/logos/smart-slogo.png' %}" class="app-header-logo" alt="SmartCFDI"> 
 
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu">
+				<span class="app-header-title">Smart - CFDI</span>
+
+				<button type="button" class="navbar-toggle collapsed app-header-button" data-toggle="collapse" data-target="#menu">
 					<span class="sr-only">Menu</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
+
 			</div>
 
-			<div class="collapse navbar-collapse" id="menu">
-				<ul class="nav navbar-nav navbar-right">
+			<div class="collapse navbar-collapse app-menu" id="menu">
+
+				<ul class="nav navbar-nav navbar-right app-menu-options">
 					{% if user.is_authenticated %}
 
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+						<a href="#" class="dropdown-toggle app-menu-opc" data-toggle="dropdown" role="button">
 							Dashboards
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="{% url 'home.dashboard' %}">Todas las Empresas</a></li>
-							<li><a href="{% url 'home.dashboard_detalle' %}">Por Emplesa</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'home.dashboard' %}">Empresas activas</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'home.dashboard_detalle' %}">Por Emplesa</a></li>
 						</ul>							
 					</li>
 
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+						<a href="#" class="dropdown-toggle app-menu-opc" data-toggle="dropdown" role="button">
 							Comprobantes
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a href="{% url 'facturas.factura_proveedor_lista' %}">Proveedores</a></li>
-							<li><a href="{% url 'facturas.factura_cliente_lista' %}">Clientes</a></li>
-							<li><a href="{% url 'facturas.comprobante_empleado_lista' %}">Empleados</a></li>
-							<li><a href="{% url 'facturas.resumen_lista' %}">Resumen</a></li>
-							<li><a href="{% url 'facturas.log_lista' %}">Logs</a></li>
-							<li><a href="{% url 'facturas.obtener_facturas' %}">Obtener</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.factura_proveedor_lista' %}">Proveedores</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.factura_cliente_lista' %}">Clientes</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.comprobante_empleado_lista' %}">Empleados</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.resumen_lista' %}">Resumen</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.log_lista' %}">Logs</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'facturas.obtener_facturas' %}">Obtener</a></li>
 						</ul>							
 					</li>
 
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+						<a href="#" class="dropdown-toggle app-menu-opc" data-toggle="dropdown" role="button">
 							Configuracion
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">					
-							<li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
 						</ul>
 
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+						<a href="#" class="dropdown-toggle app-menu-opc-user" data-toggle="dropdown" role="button">
 							
 							{% if user.username == "root" %}
 								Administrador
@@ -86,9 +93,9 @@
 						</a>
 						<ul class="dropdown-menu">
 							{% if user.is_staff %}
-							<li><a href="{% url 'seguridad.usuario_lista' %}">Usuarios</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'seguridad.usuario_lista' %}">Usuarios</a></li>
 							{% endif%}									
-							<li><a href="{% url 'seguridad.logout' %}">Salir</a></li>
+							<li><a class="app-menu-opc-sub" href="{% url 'seguridad.logout' %}">Salir</a></li>
 						</ul>
 					</li>
 					{% else %}
@@ -100,15 +107,20 @@
 				</ul>
 			</div>
 		</div>
+	
 	</nav>
 
 	{% block contenido %}
 
 	{% endblock contenido %}
 
+	<!-- JQuery -->
 	<script src="{% static 'libs/jquery/jquery_2.2.4.js' %}"></script>
+
+	<!-- Bootstrap -->
 	<script src="{% static 'libs/bootstrap/js/bootstrap.js' %}"></script>
 
+	<!-- SmartCFDI -->
 	<script src="{% static 'master.js' %}"></script>
 
 	{% block scripts %}

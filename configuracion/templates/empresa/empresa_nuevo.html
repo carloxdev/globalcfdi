@@ -7,40 +7,34 @@
 {% block contenido %}
 
 <ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
-	<li class="active">Nueva</li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+	<li class="active app-breadcrumb-active">Nueva</li>
 </ol>
+
 
 <div class="container-fluid">
 
-	<div class="row titulo">
-		<div class="col-md-12">
-			<div class="page-header">
-				<h3>Nueva Empresa:</h3>
+	<form action="" method="POST" enctype="multipart/form-data">
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				Datos de la Empresa:
 			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2 col-lg-offset-2">
-			<form action="" method="POST" enctype="multipart/form-data">
-
+			<div class="panel-body">
+			
 				{% csrf_token %}
 				{{ form.as_p }}
+				
+			</div>
 
-				{% if mensaje %}
-					<div class="alert alert-danger mensaje--center">
-						{{ mensaje }}
-					</div>
-				{% else %}
-					<div class="form-group">
-						<button class="btn btn-primary" type="submit">Guardar</button>	
-					</div>
-				{% endif %}
-			</form>
+			<div class="panel-footer">
+				<a href="{% url 'configuracion.empresa_lista' %}" type="button" class="btn btn-default">Regresar</a>
+				<button class="btn btn-success pull-right" type="submit">Guardar</button>	
+			</div>
 		</div>
-	</div>	
+	</form>
 </div>
 
 {% endblock contenido %}

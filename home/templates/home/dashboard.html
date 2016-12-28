@@ -14,8 +14,8 @@
 {% block contenido %} 
 
 <ol class="breadcrumb">
-	<li><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active">Dashboard</li>
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Empresas Activas</li>
 </ol>
 
 <div class="container-fluid">
@@ -23,7 +23,7 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="page-header">
-				<h3>Dasboard:</h3>
+				<h4 class="app-page-title">Reporte Anual 2016:</h4>
 			</div>
 		</div>
 	</div>
@@ -41,7 +41,7 @@
 							{% if resumen.empresa.logo %}
 							<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
 							{% else %}
-							<img src="{% static 'images/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
+							<img src="{% static 'images/decoradores/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
 							{% endif %}
 					    </div>
 					    <div class="col-xs-12 col-sm-12 col-md-8 nom_emp">
