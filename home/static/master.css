@@ -1,26 +1,31 @@
 @font-face {
     font-family: moon;
-    src: url(/static/fonts/moon/Moon_Light.otf) format("opentype");
+    src: url(/static/fonts/moon/Moon_Light.otf) format("opentype"),
+        url(/static/fonts/moon/Moon_Light.otf) format("opentype");
 }
 
 @font-face {
     font-family: moon-bold;
-    src: url(/static/fonts/moon/Moon_Bold.otf) format("opentype");
+    src: url(/static/fonts/moon/Moon_Bold.otf) format("opentype"),
+        url(/static/fonts/moon/Moon_Bold.otf) format("opentype");
 }
 
 @font-face {
     font-family: brandon;
-    src: url(/static/fonts/brandon/Regular.otf) format("opentype");
+    src: url(/static/fonts/brandon/Regular.otf) format("opentype"),
+        url(/static/fonts/brandon/Regular.otf) format("opentype");
 }
 
 @font-face {
     font-family: brandon-bold;
-    src: url(/static/fonts/brandon/Regular_bold.otf) format("opentype");
+    src: url(/static/fonts/brandon/Regular_bold.otf) format("opentype"),
+        url(/static/fonts/brandon/Regular_bold.otf) format("opentype");
 }
 
 @font-face {
     font-family: brandon-italic;
-    src: url(/static/fonts/brandon/Regular_Italic.otf) format("opentype");
+    src: url(/static/fonts/brandon/Regular_Italic.otf) format("opentype"),
+        url(/static/fonts/brandon/Regular_Italic.otf) format("opentype");
 }
 
 html, body {
