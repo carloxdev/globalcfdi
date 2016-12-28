@@ -106,7 +106,7 @@ TargetaFiltros.prototype.get_DateConfig = function () {
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
     e.preventDefault()
-    card_resultados.buscar()
+    card_resultados.grid.buscar()
 }
 TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
 

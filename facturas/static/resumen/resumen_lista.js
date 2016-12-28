@@ -49,8 +49,9 @@ $(document).ready(function () {
 
 $(window).resize(function() {
 
-    card_resultados.kGrid.data("kendoGrid").resize()
+    card_resultados.grid.kGrid.data("kendoGrid").resize()
 })
+
 
 /*-----------------------------------------------*\
             OBJETO: TargetaFiltros
@@ -75,13 +76,12 @@ function TargetaFiltros() {
 }
 TargetaFiltros.prototype.init = function () {
 
-
     this.$fecha_inicio.datepicker(this.get_DateConfig())
     this.$fecha_fin.datepicker(this.get_DateConfig())
 
     // Botones
-    this.$boton_buscar.on('click', this, this.click_BotonBuscar)
-    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar)
+    this.$boton_buscar.on('click', this, this.click_BotonBuscar);
+    this.$boton_limpiar.on('click', this, this.click_BotonLimpiar);
 
     this.$id.on('shown.bs.collapse', this, this.descolapsar)
     this.$id.on('hidden.bs.collapse', this, this.colapsar)
@@ -114,17 +114,6 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
     e.data.$fecha_inicio.val("")
     e.data.$fecha_fin.val("")
 }
-TargetaFiltros.prototype.validar_Filtros = function () {
-    bandera = false;
-
-    if ((this.$empresa.val() != "") ||
-        (this.$fecha_inicio.val() != "") ||
-        (this.$fecha_fin.val() != "")) {
-        bandera = true
-    }
-
-    return bandera;
-}
 TargetaFiltros.prototype.colapsar = function (e) {
     e.data.$btn_collapsed.addClass('glyphicon-chevron-down').removeClass('glyphicon-chevron-up');
 }
@@ -142,6 +131,8 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
         tipo: this.$tipo.val(),
     }
 }
+
+
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
@@ -183,15 +174,14 @@ GridResultados.prototype.get_Config = function () {
         groupable: false,
         sortable: true,
         resizable: true,
+        pageable: true,
         selectable: true,
         editable: false,
         scrollable: true,
         columns: this.get_Columnas(),
-        mobile: true,
-        pageable: true,
         noRecords: {
             template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
-        },                
+        },                        
     }
 }
 GridResultados.prototype.get_Campos = function () {
@@ -223,7 +213,7 @@ GridResultados.prototype.get_Columnas = function (e) {
             attributes:{ style:"text-align:right;" },            
         },
         { field: "created_date", title: "Creacion", width: "100px", format: "{0:dd-MM-yyyy}", attributes:{ style:"text-align:right;" },},   
-        { field: "updated_date", title: "Actulizacion", width: "100px", format: "{0:dd-MM-yyyy}", attributes:{ style:"text-align:right;" },},   
+        { field: "updated_date", title: "Actulizacion", width: "110px", format: "{0:dd-MM-yyyy}", attributes:{ style:"text-align:right;" },},   
     ]
 }
 GridResultados.prototype.get_FuenteDatosConfig = function (e) {
@@ -249,8 +239,8 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             data: "results",
             total: "count",
             model: {
-                fields: this.get_Campos()    
-            }
+                fields: this.get_Campos()
+            },
         },
         error: function (e) {
             alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)

@@ -36,11 +36,17 @@ html, body {
     background-color: #f2724f;
     border-radius: 0;
     margin-bottom: 0;
+    border: 0 !important;
 }
+
+    .app-header-container .navbar-header {        
+        margin-left: 0px;
+    }
 
         .app-header-logo {
            width: 3em;
            height: 3em;
+           margin-top: 4px;
         }
 
         .app-header-title {
@@ -106,9 +112,14 @@ html, body {
                     background-color: #f5f5f5 !important;
                 }
 
-    .app-breadcrumb-inactive  a {
-        color: #a1aaae !important;
+    .breadcrumb {
+        margin-bottom: 10px !important;
+        border-radius: 0px;
     }
+
+        .app-breadcrumb-inactive  a {
+            color: #a1aaae !important;
+        }
 
     .app-breadcrumb-active {
         color: #414a4e !important;
@@ -117,6 +128,10 @@ html, body {
     .app-page-title {
         font-family: brandon;
         margin-top: 18px !important;
+    }
+
+    .app-filtros .panel {
+        margin-bottom: 10px !important;        
     }
 
     .app-filtros .panel .panel-heading .panel-title {
@@ -181,6 +196,7 @@ html, body {
         .app-header-logo {
            width: 5em;
            height: 5em;
+           margin-top: 0px;
         }
 
         .app-header-title {
@@ -194,6 +210,10 @@ html, body {
             line-height: 2.9em;
         }
 
+
+/*     .app-filtros .panel {
+        margin-bottom: 10px !important;        
+    } */
 
     .app-page-title {
         font-family: brandon;
