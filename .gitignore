@@ -21,3 +21,9 @@ tst.py
 # Configuracion
 # ---------------------------------------
 SmartCFDI/settings.py
+
+
+# Configuracion
+# ---------------------------------------
+celerybeat-schedule
+celerybeat.pid
