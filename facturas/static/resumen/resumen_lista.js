@@ -49,7 +49,7 @@ $(document).ready(function () {
 
 $(window).resize(function() {
 
-    card_resultados.grid.kGrid.data("kendoGrid").resize()
+    card_resultados.grid.kgrid.data("kendoGrid").resize()
 })
 
 

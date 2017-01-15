@@ -40,7 +40,7 @@ $(document).ready(function () {
 
 $(window).resize(function() {
 
-    card_resultados.kGrid.data("kendoGrid").resize()
+    card_resultados.kgrid.data("kendoGrid").resize()
 })
 
 

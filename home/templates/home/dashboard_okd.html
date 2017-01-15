@@ -1,0 +1,104 @@
+
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% load humanize %}
+
+{% block title %} Dashboard {% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'home/dashboard.css' %}" />
+{% endblock css %} 
+
+{% block contenido %} 
+
+<ol class="breadcrumb">
+	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Empresas Activas</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+							
+				<div class="row">
+					
+					<div class="col-md-12">
+						<h4 class="app-page-title">Reporte Anual:</h4>
+						<select name="select" class="app-page-title">
+						  <option value="2015">2015</option> 
+						  <option value="2016" selected>2016</option>
+						  <option value="2017">2017</option>
+						</select>						
+					</div>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="row fila ">
+
+		{% if empresas_resumen %}
+
+			{% for resumen in empresas_resumen %}
+
+				<div class="col-md-4 targeta">
+				
+					<div class="row fila empresas">
+						<div class="col-xs-12 col-sm-12 col-md-4">
+							{% if resumen.empresa.logo %}
+							<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
+							{% else %}
+							<img src="{% static 'images/decoradores/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
+							{% endif %}
+					    </div>
+					    <div class="col-xs-12 col-sm-12 col-md-8 nom_emp">
+							{{ resumen.empresa.razon_social }}
+						</div>
+					    <div class="col-md-12 mes">
+							Reporte Anual 2016
+					    </div>
+					    <div class="col-md-6 col-xs-6 tab">
+							{{ resumen.proveedores_cantidad }} <br>
+							Folios Proveedores
+					    </div>
+					    <div class="col-md-6 col-xs-6 tab">
+							$ {{ resumen.proveedores_total | floatformat:2 | intcomma }} <br>
+							Importe
+					    </div>
+						<div class="col-md-6 col-xs-6 tab">
+							{{ resumen.clientes_cantidad }} <br>
+							Folios Clientes
+						    </div>
+					    <div class="col-md-6 col-xs-6 tab">
+							$ {{ resumen.clientes_total | floatformat:2 | intcomma }} <br>
+							Importe
+					    </div>
+						<div class="col-md-6 col-xs-6 tab">
+							{{ resumen.nomina_cantidad }} <br>
+							Folios Nomina
+						    </div>
+					    <div class="col-md-6 col-xs-6 tab">
+							$ {{ resumen.nomina_total | floatformat:2 | intcomma }} <br>
+							Importe
+					    </div>					    
+					</div>
+				</div>
+			{% endfor %}
+
+		{% else %}
+			<div class="col-md-12">
+				<h3 class="titulo">No se tiene ninguna empresa configurada</h3>
+			</div>
+
+		{% endif %}
+
+	</div>
+</div>
+
+{% endblock contenido %}

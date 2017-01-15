@@ -23,59 +23,145 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="page-header">
-				<h4 class="app-page-title">Reporte Anual 2016:</h4>
+							
+				<div class="row">
+					
+					<div class="col-md-12">
+						<h4 class="app-page-title">Reporte Anual:</h4>
+						<select name="select" class="app-page-title">
+						  <option value="2015">2015</option> 
+						  <option value="2016" selected>2016</option>
+						  <option value="2017">2017</option>
+						</select>						
+					</div>
+
+				</div>
+
 			</div>
 		</div>
 	</div>
 
-	<div class="row fila ">
+</div>
+
+<div class="container-fluid">
+
+	<div class="row">
 
 		{% if empresas_resumen %}
 
 			{% for resumen in empresas_resumen %}
 
-				<div class="col-md-4 targeta">
+				<div class="col-sm-6 col-md-4 app-targeta">
 				
-					<div class="row fila empresas">
-						<div class="col-xs-12 col-sm-12 col-md-4">
-							{% if resumen.empresa.logo %}
-							<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
-							{% else %}
-							<img src="{% static 'images/decoradores/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
-							{% endif %}
-					    </div>
-					    <div class="col-xs-12 col-sm-12 col-md-8 nom_emp">
-							{{ resumen.empresa.razon_social }}
+					<div class="container-fluid app-targeta-body">
+
+						<div class="row">
+
+							<div class="col-xs-12">
+
+									<div class="row">
+										
+										<div class="col-xs-4">
+											
+											{% if resumen.empresa.logo %}
+												<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
+											{% else %}
+												<img src="{% static 'images/decoradores/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
+											{% endif %}
+										</div>
+
+										<div class="col-xs-8 nombre">
+											{{ resumen.empresa.razon_social }}
+										</div>
+
+									</div>
+							</div>							
 						</div>
-					    <div class="col-md-12 mes">
-							Reporte Anual 2016
-					    </div>
-					    <div class="col-md-6 col-xs-6 tab">
-							{{ resumen.proveedores_cantidad }} <br>
-							Folios Proveedores
-					    </div>
-					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.proveedores_total | floatformat:2 | intcomma }} <br>
-							Importe
-					    </div>
-						<div class="col-md-6 col-xs-6 tab">
-							{{ resumen.clientes_cantidad }} <br>
-							Folios Clientes
-						    </div>
-					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.clientes_total | floatformat:2 | intcomma }} <br>
-							Importe
-					    </div>
-						<div class="col-md-6 col-xs-6 tab">
-							{{ resumen.nomina_cantidad }} <br>
-							Folios Nomina
-						    </div>
-					    <div class="col-md-6 col-xs-6 tab">
-							$ {{ resumen.nomina_total | floatformat:2 | intcomma }} <br>
-							Importe
-					    </div>					    
+
+						<div class="row">
+
+							<div class="col-xs-6">
+								<div class="app-subtargeta-body">
+									<div class="info-value">
+										{{ resumen.proveedores_cantidad }}	
+									</div>
+									<div class="info-text">
+										Folios Proveedor	
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+
+								<div class="app-subtargeta-body">
+									<div class="info-value">
+										$ {{ resumen.proveedores_total | floatformat:2 | intcomma }}
+									</div>
+									<div class="info-text">
+										Importe
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+
+								<div class="app-subtargeta-body">
+									<div class="info-value">
+										{{ resumen.clientes_cantidad }}
+									</div>
+									<div class="info-text">
+										Folios Cliente
+									</div>									
+								</div>
+							</div>
+
+							<div class="col-xs-6">
+								<div class="app-subtargeta-body">
+									<div class="info-value">
+										$ {{ resumen.clientes_total | floatformat:2 | intcomma }}
+									</div>
+									<div class="info-text">
+										Importe
+									</div>									
+								</div>
+
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-6">
+
+								<div class="app-subtargeta-body">
+									<div class="info-value">
+										{{ resumen.nomina_cantidad }}
+									</div>
+									<div class="info-text">
+										Folios Nomina	
+									</div>									
+								</div>
+
+							</div>
+
+							<div class="col-xs-6">
+
+								<div class="app-subtargeta-body">
+
+									<div class="info-value">
+										$ {{ resumen.nomina_total | floatformat:2 | intcomma }}
+									</div>
+									<div class="info-text">
+										Importe	
+									</div>
+								</div>
+							</div>
+						</div>
+						
 					</div>
+
 				</div>
+
 			{% endfor %}
 
 		{% else %}
@@ -85,7 +171,11 @@
 
 		{% endif %}
 
+			<div class="clearfix"></div>
+
 	</div>
+
 </div>
+
 
 {% endblock contenido %}
