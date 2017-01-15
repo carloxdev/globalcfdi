@@ -23,7 +23,8 @@ tst.py
 SmartCFDI/settings.py
 
 
-# Configuracion
+# Celery
 # ---------------------------------------
 celerybeat-schedule
 celerybeat.pid
+celerybeat-schedule.db
