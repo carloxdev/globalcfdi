@@ -33,10 +33,6 @@
             padding: 3px;
         }
 
-            .app-subtargeta {
-                
-            }        
-
             .app-info-labels {
                 padding-right: 10px !important;
             }
@@ -45,6 +41,10 @@
                 padding-left: 0px !important;
             }
 
+                .info-value--zero {
+                    color: #999999;
+                    font-size: 14px;
+                }
 
                 .app-subtargeta-body {
                     background-color: #ffffff;
@@ -55,7 +55,7 @@
                     .app-subtargeta-body .info-value {
                         /* font-weight: bold; */
                         font-size: 15px;
-                        font-family: Tahoma;
+                        font-family: Tahoma, sans-serif;;
                     }
 
                     .app-subtargeta-body .info-text {
@@ -72,7 +72,7 @@
                 .nombre {
                     font-weight: bold;
                     font-size: 14px;
-                    font-family: HN;
+                    font-family: HN, sans-serif;;
                     vertical-align: middle;
                 }
 

@@ -87,7 +87,7 @@
 
 						<div class="row">
 
-							<div class="col-xs-6 app-info-labels">
+							<div class="col-xs-6 app-info-labels {% if resumen.proveedores_cantidad == 0 %} info-value--zero {% endif %}">
 								<div class="app-subtargeta-body">
 									<div class="info-value">
 										{{ resumen.proveedores_cantidad }}	
@@ -98,11 +98,12 @@
 								</div>
 							</div>
 
-							<div class="col-xs-6 app-info-values">
+							<div class="col-xs-6 app-info-values {% if resumen.proveedores_total == 0 %} info-value--zero {% endif %}">
 
 								<div class="app-subtargeta-body">
 									<div class="info-value">
 										$ {{ resumen.proveedores_total | floatformat:2 | intcomma }}
+									
 									</div>
 									<div class="info-text">
 										Importe
@@ -112,7 +113,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xs-6 app-info-labels">
+							<div class="col-xs-6 app-info-labels {% if resumen.clientes_cantidad == 0 %} info-value--zero {% endif %}">
 
 								<div class="app-subtargeta-body">
 									<div class="info-value">
@@ -124,7 +125,7 @@
 								</div>
 							</div>
 
-							<div class="col-xs-6 app-info-values">
+							<div class="col-xs-6 app-info-values {% if resumen.clientes_total == 0 %} info-value--zero {% endif %}">
 								<div class="app-subtargeta-body">
 									<div class="info-value">
 										$ {{ resumen.clientes_total | floatformat:2 | intcomma }}
@@ -138,7 +139,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xs-6 app-info-labels">
+							<div class="col-xs-6 app-info-labels {% if resumen.nomina_cantidad == 0 %} info-value--zero {% endif %}">
 
 								<div class="app-subtargeta-body">
 									<div class="info-value">
@@ -151,7 +152,7 @@
 
 							</div>
 
-							<div class="col-xs-6 app-info-values">
+							<div class="col-xs-6 app-info-values {% if resumen.nomina_total == 0 %} info-value--zero {% endif %}">
 
 								<div class="app-subtargeta-body">
 
