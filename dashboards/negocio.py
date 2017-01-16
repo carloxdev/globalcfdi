@@ -17,20 +17,11 @@ class EmpresaResumen(object):
         self.proveedores_cantidad = 0
         self.proveedores_total = 0
 
-    def get_Nomina_Resumen(self):
-
-        # nomina_resumen = Resumen.objects.filter(
-        #     empresa=self.empresa,
-        #     tipo="EMPLEADOS"
-        # )
-
-        # for resumen in nomina_resumen:
-        #     self.nomina_cantidad += resumen.cantidad_guardadas
-        #     self.nomina_total += resumen.total
+    def get_Nomina_Resumen(self, _fecha_inicial, _fecha_final):
 
         facturas = ComprobanteEmpleado.objects.filter(
             empresa=self.empresa,
-            fecha__range=["2016-01-01", "2016-12-31"],
+            fecha__range=[_fecha_inicial, _fecha_final],
             estadoSat="Vigente"
         )
 
@@ -42,11 +33,11 @@ class EmpresaResumen(object):
             else:
                 self.nomina_total += factura.total * factura.tipoCambio
 
-    def get_Clientes_Resumen(self):
+    def get_Clientes_Resumen(self, _fecha_inicial, _fecha_final):
 
         facturas = FacturaCliente.objects.filter(
             empresa=self.empresa,
-            fecha__range=["2016-01-01", "2016-12-31"],
+            fecha__range=[_fecha_inicial, _fecha_final],
             estadoSat="Vigente"
         )
 
@@ -58,19 +49,11 @@ class EmpresaResumen(object):
             else:
                 self.clientes_total += factura.total * factura.tipoCambio
 
-        # clientes_resumen = Resumen.objects.filter(
-        #     empresa=self.empresa,
-        #     tipo="CLIENTES"
-        # )
-        # for resumen in clientes_resumen:
-        #     self.clientes_cantidad += resumen.cantidad_guardadas
-        #     self.clientes_total += resumen.total
-
-    def get_Proveedores_Resumen(self):
+    def get_Proveedores_Resumen(self, _fecha_inicial, _fecha_final):
 
         facturas = FacturaProveedor.objects.filter(
             empresa=self.empresa,
-            fecha__range=["2016-01-01", "2016-12-31"],
+            fecha__range=[_fecha_inicial, _fecha_final],
             estadoSat="Vigente"
         )
 
@@ -81,11 +64,3 @@ class EmpresaResumen(object):
                 self.proveedores_total += factura.total
             else:
                 self.proveedores_total += factura.total * factura.tipoCambio
-
-        # proveedores_resumen = Resumen.objects.filter(
-        #     empresa=self.empresa,
-        #     tipo="PROVEEDORES"
-        # )
-        # for resumen in proveedores_resumen:
-        #     self.proveedores_cantidad += resumen.cantidad_guardadas
-        #     self.proveedores_total += resumen.total

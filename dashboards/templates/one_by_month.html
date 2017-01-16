@@ -1,0 +1,46 @@
+{% extends 'master.html' %}
+
+{% load static from staticfiles %}
+
+{% load humanize %}
+
+{% block title %} Dashboard - Resumen por Mes {% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'one_by_month.css' %}" />
+{% endblock css %} 
+
+{% block contenido %} 
+
+<ol class="breadcrumb">
+	<li><a href="{% url 'home.index' %}">Inicio</a></li>
+	<li class="active app-breadcrumb-active">Resumen por Mes</li>
+</ol>
+
+<div class="container-fluid">
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="page-header">
+				<h3 class="app-page-title">Resumen por Mes:</h3>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+
+<div class="container-fluid">
+	<div class="row">
+		
+	
+		<div class="col-md-12">
+			<h3 class="titulo">Pagina en CONSTRUCCION</h3>
+		</div>
+		
+	</div>
+	</div>
+</div>
+
+{% endblock contenido %}
+

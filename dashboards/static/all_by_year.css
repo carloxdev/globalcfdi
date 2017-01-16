@@ -7,8 +7,6 @@
     margin-top: 0;
 }
 
-
-
 .app-targeta {
     padding: 10px;
     /* border: 1px solid pink; */
@@ -27,12 +25,22 @@
          .app-targeta-body .row {
             /* margin-top: 4px; */
             /* border: 1px solid red; */
-            padding: 5px;
+            padding: 3px;
         }
 
             .app-subtargeta {
                 
             }        
+
+            .app-info-labels {
+                padding-right: 10px !important;
+            }
+
+            .app-info-values {
+                padding-left: 0px !important;
+            }
+
+
                 .app-subtargeta-body {
                     background-color: #ffffff;
                     /* border: 1px solid black;    */
@@ -59,8 +67,12 @@
                 .nombre {
                     font-weight: bold;
                     font-size: 14px;
-                    font-family: Helvetica Neue;
+                    font-family: HN;
                     vertical-align: middle;
+                }
+
+                .nombre .app-empresa-estado {
+                    font-family: sans-serif;
                 }
 
 

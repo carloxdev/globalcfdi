@@ -5,17 +5,17 @@
 
 {% load humanize %}
 
-{% block title %} Dashboard {% endblock title %}
+{% block title %} Dashboard - Resumen por Año{% endblock title %}
 
 {% block css %}
-    <link rel='stylesheet' href="{% static 'dashboard/dashboard.css' %}" />
+    <link rel='stylesheet' href="{% static 'all_by_year.css' %}" />
 {% endblock css %} 
 
 {% block contenido %} 
 
 <ol class="breadcrumb">
 	<li class="app-breadcrumb-inactive"><a href="{% url 'home.index' %}">Inicio</a></li>
-	<li class="active app-breadcrumb-active">Empresas Activas</li>
+	<li class="active app-breadcrumb-active">Resumen por año</li>
 </ol>
 
 <div class="container-fluid">
@@ -35,6 +35,7 @@
 					</div>
 					</form>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -186,6 +187,6 @@
 {% block scripts %}
 
 <!-- SMART -->
-<script src="{% static 'dashboard/dashboard.js' %}"></script>
+<script src="{% static 'all_by_year.js' %}"></script>
 
 {% endblock %}

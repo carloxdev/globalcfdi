@@ -77,6 +77,7 @@ urlpatterns = [
     url(r'', include('seguridad.urls')),
     url(r'', include('configuracion.urls')),
     url(r'', include('facturas.urls')),
+    url(r'', include('dashboards.urls')),
 ]
 
 
