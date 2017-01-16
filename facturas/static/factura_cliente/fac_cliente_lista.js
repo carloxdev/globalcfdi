@@ -178,14 +178,38 @@ TargetaFiltros.prototype.descolapsar = function (e) {
     e.data.$btn_collapsed.addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
 }
 TargetaFiltros.prototype.show_FilterSelected = function () {
-    alertify.notify( 
-        "Facturas del f_inicio al f_fin de la(s) empresa(s): business"
-            .replace("f_inicio", this.$fecha_inicio.val())
-                .replace("f_fin", this.$fecha_fin.val())
-                    .replace("business", this.$empresa.find(":selected").text())
-    )
-}
 
+    moment.locale("es")
+
+    var mes_inicio = moment(this.$fecha_inicio.val()).format('MM')
+    var anio_inicio = moment(this.$fecha_inicio.val()).format('YYYY')
+    var mes_fin = moment(this.$fecha_fin.val()).format('MM')
+    var anio_fin = moment(this.$fecha_fin.val()).format('YYYY')
+
+    if (this.$empresa.find(":selected").text() == "Todas") {
+        var empresa = "en todas las empresas"    
+    }
+    else {
+        var empresa = "de la empresa " + this.$empresa.find(":selected").text()
+    }
+
+    if (mes_inicio == mes_fin) {
+
+        alertify.notify("Facturas emitidas en month del year, business"
+            .replace("month", moment(this.$fecha_inicio.val()).format('MMMM').toUpperCase())
+                .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
+                    .replace("business", empresa)
+        )
+    }
+    else if (anio_inicio == anio_fin) {
+
+        alertify.notify("Facturas emitidas en year business"
+                .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
+                    .replace("business", empresa)
+        )
+    }
+
+}
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
 \*-----------------------------------------------*/
