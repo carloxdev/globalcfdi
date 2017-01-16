@@ -14,7 +14,6 @@
 
 .app-targeta {
     padding: 10px;
-    /* border: 1px solid pink; */
 }
 
     .app-targeta-body {
@@ -22,9 +21,14 @@
         font-family: sans-serif;
         font-size: 10px;
         background-color: #ececec;
-        /* border: 1px solid #777; */
         border-radius: 5px;
-        padding: 10px;
+        padding: 8px;
+        border: 1px solid #DEE1E1;
+    }
+
+    .app-targeta-body:hover {
+        border-radius: 0px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
          .app-targeta-body .row {
@@ -50,12 +54,17 @@
                     background-color: #ffffff;
                     /* border: 1px solid black;    */
                     text-align: center;
+                    min-height: 40px;
                 } 
 
                     .app-subtargeta-body .info-value {
                         /* font-weight: bold; */
                         font-size: 15px;
                         font-family: Tahoma, sans-serif;;
+                    }
+
+                    .app-subtargeta-body .monto {
+                        font-size: 18px !important;
                     }
 
                     .app-subtargeta-body .info-text {

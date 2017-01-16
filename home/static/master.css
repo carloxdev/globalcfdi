@@ -42,6 +42,11 @@ a {
     text-decoration: none !important;
 }
 
+.badge-primary {
+
+    background-color: #2563AB;
+}
+
 .app-header {
     background-color: #f2724f;
     border-radius: 0;
@@ -166,7 +171,9 @@ a {
         .app-resultados-tooblar {
             border-radius: 4px 4px 0 0 !important;
             margin-bottom: 0;
+            border: .6px solid #C2C5C5;
             border-bottom: 0;
+            background-color: #F3F3F3;
         }
 
         .app-resultados-grid {

@@ -106,10 +106,13 @@ TargetaFiltros.prototype.init = function () {
 
     this.$id.on('shown.bs.collapse', this, this.descolapsar)
     this.$id.on('hidden.bs.collapse', this, this.colapsar)    
+
+    this.show_FilterSelected()
 }
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
     e.preventDefault()
+    e.data.$id.collapse("hide")
     card_resultados.grid.buscar()
 }
 TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
@@ -174,7 +177,14 @@ TargetaFiltros.prototype.colapsar = function (e) {
 TargetaFiltros.prototype.descolapsar = function (e) {
     e.data.$btn_collapsed.addClass('glyphicon-chevron-up').removeClass('glyphicon-chevron-down');
 }
-
+TargetaFiltros.prototype.show_FilterSelected = function () {
+    alertify.notify( 
+        "Facturas del f_inicio al f_fin de la(s) empresa(s): business"
+            .replace("f_inicio", this.$fecha_inicio.val())
+                .replace("f_fin", this.$fecha_fin.val())
+                    .replace("business", this.$empresa.find(":selected").text())
+    )
+}
 
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados

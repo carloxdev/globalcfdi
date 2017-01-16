@@ -78,7 +78,8 @@ class ResumenAllByYear(View):
 
         contexto = {
             'empresas_resumen': empresas_resumen,
-            'form': formulario
+            'form': formulario,
+            'anio': anio_actual
         }
 
         return render(request, self.template_name, contexto)
@@ -100,7 +101,8 @@ class ResumenAllByYear(View):
 
         contexto = {
             'empresas_resumen': empresas_resumen,
-            'form': formulario
+            'form': formulario,
+            'anio': anio_selected
         }
 
         return render(request, self.template_name, contexto)

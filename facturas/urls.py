@@ -17,17 +17,17 @@ from .views import ReconocerFactura
 # ----------------- FACTURAS PROVEEDORES ----------------- #
 urlpatterns = [
     url(
-        r'^comprobantes/proveedores/$',
+        r'^comprobantes/proveedores/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
         FacturaProveedorList.as_view(),
         name='facturas.factura_proveedor_lista'
     ),
     url(
-        r'^comprobantes/clientes/$',
+        r'^comprobantes/clientes/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
         FacturaClienteList.as_view(),
         name='facturas.factura_cliente_lista'
     ),
     url(
-        r'^comprobantes/empleados/$',
+        r'^comprobantes/empleados/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
         ComprobanteEmpleadoList.as_view(),
         name='facturas.comprobante_empleado_lista'
     ),

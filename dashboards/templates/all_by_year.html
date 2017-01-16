@@ -90,7 +90,14 @@
 							<div class="col-xs-6 app-info-labels {% if resumen.proveedores_cantidad == 0 %} info-value--zero {% endif %}">
 								<div class="app-subtargeta-body">
 									<div class="info-value">
-										{{ resumen.proveedores_cantidad }}	
+
+										{% if resumen.proveedores_cantidad != 0 %}
+											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+												<span class="badge badge-primary">{{ resumen.proveedores_cantidad }}</span>
+											</a>
+										{% else %}
+											<span class="badge">{{ resumen.proveedores_cantidad }}</span>
+										{% endif %}
 									</div>
 									<div class="info-text">
 										Folios Proveedor	
@@ -101,12 +108,8 @@
 							<div class="col-xs-6 app-info-values {% if resumen.proveedores_total == 0 %} info-value--zero {% endif %}">
 
 								<div class="app-subtargeta-body">
-									<div class="info-value">
+									<div class="info-value monto">
 										$ {{ resumen.proveedores_total | floatformat:2 | intcomma }}
-									
-									</div>
-									<div class="info-text">
-										Importe
 									</div>
 								</div>
 							</div>
@@ -117,7 +120,14 @@
 
 								<div class="app-subtargeta-body">
 									<div class="info-value">
-										{{ resumen.clientes_cantidad }}
+
+										{% if resumen.clientes_cantidad != 0 %}
+											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+												<span class="badge badge-primary">{{ resumen.clientes_cantidad }}</span>
+											</a>
+										{% else %}
+											<span class="badge">{{ resumen.clientes_cantidad }}</span>
+										{% endif %}										
 									</div>
 									<div class="info-text">
 										Folios Cliente
@@ -127,12 +137,9 @@
 
 							<div class="col-xs-6 app-info-values {% if resumen.clientes_total == 0 %} info-value--zero {% endif %}">
 								<div class="app-subtargeta-body">
-									<div class="info-value">
+									<div class="info-value monto">
 										$ {{ resumen.clientes_total | floatformat:2 | intcomma }}
 									</div>
-									<div class="info-text">
-										Importe
-									</div>									
 								</div>
 
 							</div>
@@ -143,7 +150,14 @@
 
 								<div class="app-subtargeta-body">
 									<div class="info-value">
-										{{ resumen.nomina_cantidad }}
+
+										{% if resumen.nomina_cantidad != 0 %}
+											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+												<span class="badge badge-primary">{{ resumen.nomina_cantidad }}</span>
+											</a>
+										{% else %}
+											<span class="badge">{{ resumen.nomina_cantidad }}</span>
+										{% endif %}											
 									</div>
 									<div class="info-text">
 										Folios Nomina	
@@ -156,11 +170,8 @@
 
 								<div class="app-subtargeta-body">
 
-									<div class="info-value">
+									<div class="info-value monto">
 										$ {{ resumen.nomina_total | floatformat:2 | intcomma }}
-									</div>
-									<div class="info-text">
-										Importe	
 									</div>
 								</div>
 							</div>

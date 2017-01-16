@@ -13,6 +13,8 @@ from django.views.generic.base import View
 
 # Librerias Python:
 import json
+import calendar
+from datetime import date
 
 # API Rest:
 from rest_framework import viewsets
@@ -204,9 +206,37 @@ class FacturaProveedorList(View):
     def __init__(self):
         self.template_name = 'factura_proveedor/fac_proveedor_lista.html'
 
-    def get(self, request):
+    def get(self, request, empresa, anio, mes):
 
         formulario = FacturaRecibidaFormFiltros(request.user)
+
+        initial = {}
+
+        if empresa != 0:
+            initial['empresa'] = empresa
+
+        if anio == '0' and mes == '0':
+
+            hoy = date.today()
+
+            days = calendar.monthrange(hoy.year, hoy.month)[1]
+
+            initial['fecha_inicio'] = "{}-{:02d}-{}".format(
+                str(hoy.year),
+                hoy.month,
+                "01"
+            )
+            initial['fecha_final'] = "{}-{:02d}-{:02d}".format(
+                str(hoy.year),
+                hoy.month,
+                days
+            )
+
+        elif anio != '0' and mes == '0':
+            initial['fecha_inicio'] = str(anio) + "-01-01"
+            initial['fecha_final'] = str(anio) + "-12-31"
+
+        formulario.initial = initial
 
         contexto = {
             'form': formulario
@@ -258,8 +288,37 @@ class FacturaClienteList(View):
     def __init__(self):
         self.template_name = 'factura_cliente/fac_cliente_lista.html'
 
-    def get(self, request):
+    def get(self, request, empresa, anio, mes):
+
         formulario = FacturaEmitidaFormFiltros(request.user)
+
+        initial = {}
+
+        if empresa != 0:
+            initial['empresa'] = empresa
+
+        if anio == '0' and mes == '0':
+
+            hoy = date.today()
+
+            days = calendar.monthrange(hoy.year, hoy.month)[1]
+
+            initial['fecha_inicio'] = "{}-{:02d}-{}".format(
+                str(hoy.year),
+                hoy.month,
+                "01"
+            )
+            initial['fecha_final'] = "{}-{:02d}-{:02d}".format(
+                str(hoy.year),
+                hoy.month,
+                days
+            )
+
+        elif anio != '0' and mes == '0':
+            initial['fecha_inicio'] = str(anio) + "-01-01"
+            initial['fecha_final'] = str(anio) + "-12-31"
+
+        formulario.initial = initial
 
         contexto = {
             'form': formulario
@@ -309,8 +368,37 @@ class ComprobanteEmpleadoList(View):
     def __init__(self):
         self.template_name = 'comprobante_empleado/com_empleado_lista.html'
 
-    def get(self, request):
+    def get(self, request, empresa, anio, mes):
+
         formulario = FacturaEmitidaFormFiltros(request.user)
+
+        initial = {}
+
+        if empresa != 0:
+            initial['empresa'] = empresa
+
+        if anio == '0' and mes == '0':
+
+            hoy = date.today()
+
+            days = calendar.monthrange(hoy.year, hoy.month)[1]
+
+            initial['fecha_inicio'] = "{}-{:02d}-{}".format(
+                str(hoy.year),
+                hoy.month,
+                "01"
+            )
+            initial['fecha_final'] = "{}-{:02d}-{:02d}".format(
+                str(hoy.year),
+                hoy.month,
+                days
+            )
+
+        elif anio != '0' and mes == '0':
+            initial['fecha_inicio'] = str(anio) + "-01-01"
+            initial['fecha_final'] = str(anio) + "-12-31"
+
+        formulario.initial = initial
 
         contexto = {
             'form': formulario
