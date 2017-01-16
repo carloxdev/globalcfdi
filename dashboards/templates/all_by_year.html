@@ -122,7 +122,7 @@
 									<div class="info-value">
 
 										{% if resumen.clientes_cantidad != 0 %}
-											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+											<a href="{% url 'facturas.factura_cliente_lista' resumen.empresa.clave anio '0' %}">
 												<span class="badge badge-primary">{{ resumen.clientes_cantidad }}</span>
 											</a>
 										{% else %}
@@ -152,7 +152,7 @@
 									<div class="info-value">
 
 										{% if resumen.nomina_cantidad != 0 %}
-											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+											<a href="{% url 'facturas.comprobante_empleado_lista' resumen.empresa.clave anio '0' %}">
 												<span class="badge badge-primary">{{ resumen.nomina_cantidad }}</span>
 											</a>
 										{% else %}

@@ -82,7 +82,7 @@ a {
 
         .app-menu-options {
             margin-bottom: 0 !important;
-            font-family: brandon;
+            font-family: brandon, sans-serif;
             font-weight: light;
         }
 
@@ -236,7 +236,7 @@ a {
     } */
 
     .app-page-title {
-        font-family: HN, sans-serif;;
+        font-family: HN, sans-serif;
         font-size: 24px;
         margin-top: 20px !important;
 
