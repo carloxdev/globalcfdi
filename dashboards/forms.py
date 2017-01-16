@@ -16,6 +16,6 @@ class DasboardFormFiltros(forms.Form):
     anio = forms.ChoiceField(
         choices=ANIOS,
         widget=forms.Select(
-            attrs={'class': 'app-page-title'}
+            attrs={'class': 'app-page-select'}
         )
     )

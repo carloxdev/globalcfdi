@@ -7,6 +7,11 @@
     margin-top: 0;
 }
 
+    .app-page-select {
+        font-size: 1.5em !important;
+        font-family: sans-serif !important;
+    }
+
 .app-targeta {
     padding: 10px;
     /* border: 1px solid pink; */

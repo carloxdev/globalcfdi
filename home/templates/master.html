@@ -11,6 +11,9 @@
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" />
 
+	<!-- Awesome Icons -->
+	<link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.min.css' %}" />	
+
 	<!-- SmartCFDI -->
 	<link rel="stylesheet" href="{% static 'master.css' %}" />
 
@@ -27,7 +30,9 @@
 		
 			<div class="navbar-header">
 
-				<img src="{% static 'images/logos/smart-slogo.png' %}" class="app-header-logo" alt="SmartCFDI"> 
+				<a href="{% url 'home.index' %}">
+					<img src="{% static 'images/logos/smart-slogo.png' %}" class="app-header-logo" alt="SmartCFDI"> 	
+				</a>
 
 				<span class="app-header-title">Smart - CFDI</span>
 
@@ -51,8 +56,18 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a class="app-menu-opc-sub" href="{% url 'dashboard.all_by_year' %}">Resumen por Año</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'dashboard.one_by_month' %}">Resumen por Mes</a></li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'dashboard.all_by_year' %}">
+									<i class="fa fa-bar-chart" aria-hidden="true"></i>
+									Resumen por Año
+								</a>
+							</li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'dashboard.one_by_month' %}">
+									<i class="fa fa-bar-chart" aria-hidden="true"></i>
+									Resumen por Mes
+								</a>
+							</li>
 						</ul>							
 					</li>
 
@@ -62,12 +77,42 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.factura_proveedor_lista' %}">Proveedores</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.factura_cliente_lista' %}">Clientes</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.comprobante_empleado_lista' %}">Empleados</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.resumen_lista' %}">Resumen</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.log_lista' %}">Logs</a></li>
-							<li><a class="app-menu-opc-sub" href="{% url 'facturas.obtener_facturas' %}">Obtener</a></li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.factura_proveedor_lista' %}">
+									<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+									Proveedores
+								</a>
+							</li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.factura_cliente_lista' %}">
+									<i class="fa fa-handshake-o" aria-hidden="true"></i>
+									Clientes
+								</a>
+							</li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.comprobante_empleado_lista' %}">
+									<i class="fa fa-address-card" aria-hidden="true"></i>
+									Empleados
+								</a>
+							</li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.obtener_facturas' %}">
+									<i class="fa fa-cloud-download" aria-hidden="true"></i>
+									Obtener
+								</a>
+							</li>							
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.log_lista' %}">
+									<i class="fa fa-bell" aria-hidden="true"></i>
+									Logs
+								</a>
+							</li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'facturas.resumen_lista' %}">
+									<i class="fa fa-coffee" aria-hidden="true"></i>
+									Resumen
+								</a>
+							</li>
 						</ul>							
 					</li>
 
@@ -77,7 +122,12 @@
 							<span class="caret"></span>
 						</a>
 						<ul class="dropdown-menu">					
-							<li><a class="app-menu-opc-sub" href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'configuracion.empresa_lista' %}">
+									<i class="fa fa-industry" aria-hidden="true"></i>
+									Empresas
+								</a>
+							</li>
 						</ul>
 
 					<li class="dropdown">
@@ -93,9 +143,19 @@
 						</a>
 						<ul class="dropdown-menu">
 							{% if user.is_staff %}
-							<li><a class="app-menu-opc-sub" href="{% url 'seguridad.usuario_lista' %}">Usuarios</a></li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'seguridad.usuario_lista' %}">
+									<i class="fa fa-users" aria-hidden="true"></i>
+									Usuarios
+								</a>
+								</li>
 							{% endif%}									
-							<li><a class="app-menu-opc-sub" href="{% url 'seguridad.logout' %}">Salir</a></li>
+							<li>
+								<a class="app-menu-opc-sub" href="{% url 'seguridad.logout' %}">
+									<i class="fa fa-sign-out" aria-hidden="true"></i>
+									Salir
+								</a>
+							</li>
 						</ul>
 					</li>
 					{% else %}

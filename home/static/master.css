@@ -38,6 +38,10 @@ html, body {
     height: 100%;
 }
 
+a {
+    text-decoration: none !important;
+}
+
 .app-header {
     background-color: #f2724f;
     border-radius: 0;
@@ -228,7 +232,7 @@ html, body {
     } */
 
     .app-page-title {
-        font-family: brandon;
+        font-family: HN;
         font-size: 24px;
         margin-top: 20px !important;
 
