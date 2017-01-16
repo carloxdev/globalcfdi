@@ -121,7 +121,7 @@ html, body {
     .breadcrumb {
         margin-bottom: 10px !important;
         border-radius: 0px;
-        border-bottom: 1px solid #C1C1C1;
+        border-bottom: 1px solid #DEE1E1;
     }
 
         .app-breadcrumb-inactive  a {

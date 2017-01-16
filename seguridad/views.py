@@ -35,7 +35,7 @@ class Login(View):
     def get(self, request):
 
         if request.user.is_authenticated():
-            return redirect(reverse('home.dashboard'))
+            return redirect(reverse('dashboard.all_by_year'))
 
         else:
             return render(request, self.template_name, {})
@@ -52,7 +52,7 @@ class Login(View):
 
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('home.dashboard'))
+                return redirect(reverse('dashboard.all_by_year'))
             else:
                 mensaje = "Cuenta desactivada"
 
