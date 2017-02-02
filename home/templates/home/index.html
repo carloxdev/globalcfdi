@@ -36,19 +36,19 @@
         <div class="collapse navbar-collapse" id="menu">
           <ul class="nav navbar-nav navbar-right">
             {% if user.is_authenticated %}
-            <li><a href="{% url 'home.dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'home:dashboard' %}">Dashboard</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
                 Comprobantes
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="{% url 'facturas.factura_proveedor_lista' %}">Proveedores</a></li>
-                <li><a href="{% url 'facturas.factura_cliente_lista' %}">Clientes</a></li>
-                <li><a href="{% url 'facturas.comprobante_empleado_lista' %}">Empleados</a></li>
-                <li><a href="{% url 'facturas.resumen_lista' %}">Resumen</a></li>
-                <li><a href="{% url 'facturas.log_lista' %}">Logs</a></li>
-                <li><a href="{% url 'facturas.obtener_facturas' %}">Obtener</a></li>
+                <li><a href="{% url 'facturas:proveedor_lista' %}">Proveedores</a></li>
+                <li><a href="{% url 'facturas:cliente_lista' %}">Clientes</a></li>
+                <li><a href="{% url 'facturas:empleado_lista' %}">Empleados</a></li>
+                <li><a href="{% url 'facturas:resumen_lista' %}">Resumen</a></li>
+                <li><a href="{% url 'facturas:log_lista' %}">Logs</a></li>
+                <li><a href="{% url 'facturas:obtener_facturas' %}">Obtener</a></li>
               </ul>             
             </li>
             <li class="dropdown">
@@ -57,7 +57,7 @@
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">          
-                <li><a href="{% url 'configuracion.empresa_lista' %}">Empresas</a></li>
+                <li><a href="{% url 'configuracion:empresa_lista' %}">Empresas</a></li>
               </ul>
 
             <li class="dropdown">
@@ -73,16 +73,16 @@
               </a>
               <ul class="dropdown-menu">
                 {% if user.is_staff %}
-                <li><a href="{% url 'seguridad.usuario_lista' %}">Usuarios</a></li>
+                <li><a href="{% url 'seguridad:usuario_lista' %}">Usuarios</a></li>
                 {% endif%}                  
-                <li><a href="{% url 'seguridad.logout' %}">Salir</a></li>
+                <li><a href="{% url 'seguridad:logout' %}">Salir</a></li>
               </ul>
             </li>
             {% else %}
-                <li><a href="{% url 'home.quienes_somos' %}">¿Quienes somos?</a></li>
-                <li><a href="{% url 'home.servicios' %}">Servicios</a></li>
-                <li><a href="{% url 'home.contactanos' %}">Contactanos</a></li>
-            <li><a href="{% url 'seguridad.login' %}">Login</a></li>
+                <li><a href="{% url 'home:quienes_somos' %}">¿Quienes somos?</a></li>
+                <li><a href="{% url 'home:servicios' %}">Servicios</a></li>
+                <li><a href="{% url 'home:contactanos' %}">Contactanos</a></li>
+            <li><a href="{% url 'seguridad:login' %}">Login</a></li>
             {% endif %}
           </ul>
         </div>

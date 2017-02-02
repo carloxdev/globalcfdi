@@ -35,7 +35,7 @@ class Login(View):
     def get(self, request):
 
         if request.user.is_authenticated():
-            return redirect(reverse('dashboard.all_by_year'))
+            return redirect(reverse('dashboards:all_by_year'))
 
         else:
             return render(request, self.template_name, {})
@@ -52,7 +52,7 @@ class Login(View):
 
             if user.is_active:
                 login(request, user)
-                return redirect(reverse('dashboard.all_by_year'))
+                return redirect(reverse('dashboards:all_by_year'))
             else:
                 mensaje = "Cuenta desactivada"
 
@@ -115,7 +115,7 @@ class UsuarioCreateView(View):
             usuario.save()
 
             return redirect(
-                reverse('seguridad.usuario_lista')
+                reverse('seguridad:usuario_lista')
             )
 
         else:
@@ -164,6 +164,7 @@ class UsuarioEditView(View):
             usuario.first_name = datos_formulario.get('first_name')
             usuario.last_name = datos_formulario.get('last_name')
             usuario.email = datos_formulario.get('email')
+            usuario.is_active = datos_formulario.get('is_active')
             usuario.is_staff = datos_formulario.get('is_staff')
 
             if datos_formulario.get('is_staff'):
@@ -178,7 +179,7 @@ class UsuarioEditView(View):
             usuario.save()
 
             return redirect(
-                reverse('seguridad.usuario_lista')
+                reverse('seguridad:usuario_lista')
             )
 
         contexto = {

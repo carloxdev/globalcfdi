@@ -23,6 +23,7 @@ from facturas.views import ResumenAPI
 from configuracion.views import EmpresaAPI
 
 router = routers.DefaultRouter()
+
 router.register(
     r'facturas_proveedor',
     FacturaProveedorAPI,
@@ -73,11 +74,11 @@ router.register(
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    url(r'', include('home.urls')),
-    url(r'', include('seguridad.urls')),
-    url(r'', include('configuracion.urls')),
-    url(r'', include('facturas.urls')),
-    url(r'', include('dashboards.urls')),
+    url(r'', include('home.urls', namespace="home")),
+    url(r'', include('seguridad.urls', namespace="seguridad")),
+    url(r'', include('configuracion.urls', namespace="configuracion")),
+    url(r'', include('facturas.urls', namespace="facturas")),
+    url(r'', include('dashboards.urls', namespace="dashboards")),
 ]
 
 

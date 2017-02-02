@@ -11,20 +11,22 @@ from .views import EmpresaUpdateView
 
 # ----------------- Empresas ----------------- #
 
+app_name = "configuracion"
+
 urlpatterns = [
     url(
         r'^empresas/$',
         EmpresaListView.as_view(),
-        name='configuracion.empresa_lista'
+        name='empresa_lista'
     ),
     url(
         r'^empresas/nuevo/$',
         EmpresaCreateView.as_view(),
-        name='configuracion.empresa_nuevo'
+        name='empresa_nuevo'
     ),
     url(
         r'^empresas/editar/(?P<pk>.*)/$',
         EmpresaUpdateView.as_view(),
-        name='configuracion.empresa_editar'
+        name='empresa_editar'
     ),
 ]

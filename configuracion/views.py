@@ -20,9 +20,9 @@ from django.views.generic.base import View
 from rest_framework import viewsets
 
 # Django Paginacion:
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
+# from django.core.paginator import Paginator
+# from django.core.paginator import EmptyPage
+# from django.core.paginator import PageNotAnInteger
 
 # Serializadores:
 from .serializers import EmpresaSerializer
@@ -49,30 +49,6 @@ class EmpresaListView(View):
 
     def get(self, request):
 
-        # Buscar Empresavb
-        # if request.user.is_staff:
-        #     empresas_list = Empresa.objects.all()
-        # else:
-        #     empresas_list = Empresa.objects.filter(usuario=request.user)
-
-        # paginador = Paginator(empresas_list, 10)
-
-        # pagina = request.GET.get('page')
-
-        # try:
-        #     empresas = paginador.page(pagina)
-
-        # except PageNotAnInteger:
-        #     # If page is not an integer, deliver first page.
-        #     empresas = paginador.page(1)
-        # except EmptyPage:
-        #     # If page is out of range (e.g. 9999), deliver last page of
-        #     # results.
-        #     empresas = paginador.page(paginador.num_pages)
-
-        # contexto = {
-        #     'empresas': empresas
-        # }
         return render(request, self.template_name, {})
 
 
@@ -95,7 +71,11 @@ class EmpresaCreateView(View):
 
     def post(self, request):
 
-        formulario = EmpresaCreateForm(request.POST, username=request.user)
+        formulario = EmpresaCreateForm(
+            request.POST,
+            request.FILES,
+            username=request.user
+        )
 
         if formulario.is_valid():
 
@@ -116,7 +96,7 @@ class EmpresaCreateView(View):
 
             empresa.save()
 
-            return redirect(reverse('configuracion.empresa_lista'))
+            return redirect(reverse('configuracion:empresa_lista'))
 
         else:
             contexto = {
@@ -159,7 +139,11 @@ class EmpresaUpdateView(View):
 
     def post(self, request, pk):
 
-        formulario = EmpresaEditForm(request.POST, username=request.user)
+        formulario = EmpresaEditForm(
+            request.POST,
+            request.FILES,
+            username=request.user
+        )
 
         empresa = get_object_or_404(Empresa, pk=pk)
         self.clave = empresa.clave
@@ -180,7 +164,7 @@ class EmpresaUpdateView(View):
             empresa.save()
 
             return redirect(
-                reverse('configuracion.empresa_lista')
+                reverse('configuracion:empresa_lista')
             )
 
         contexto = {

@@ -273,7 +273,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             }
         },
         error: function (e) {
-            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+            alertify.error("Status: " + e.status + "; Error message: " + e.errorThrown)
         },
     }
 }

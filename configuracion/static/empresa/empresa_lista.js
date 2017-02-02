@@ -88,6 +88,7 @@ GridResultados.prototype.get_Config = function () {
         selectable: true,
         scrollable: true,
         columns: this.get_Columnas(),
+        dataBound: this.llenar_Grid,
         noRecords: {
             template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
         },                        
@@ -121,7 +122,7 @@ GridResultados.prototype.get_Columnas = function (e) {
             field: "activa", 
             title: "Estado", 
             width: "80px",
-            template: "#= activa ? 'Activa' : 'Inactiva' #"
+            template: "#= activa == 'true' ? 'Activa' : 'Inactiva' #"
         },
         { field: "usuario", title: "Usuario", width: "130px" },
         { field: "email", title: "Email", width: "170px" },
@@ -184,4 +185,19 @@ GridResultados.prototype.editar_Registro = function (e) {
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
     window.location.href = url_editar + fila.pk;
+}
+GridResultados.prototype.llenar_Grid = function (e) {
+
+    e.preventDefault()
+
+    $('td').each( function () {
+
+        if($(this).text()=='Activa'){ 
+
+            $(this).addClass('cell--activa')
+        }
+        else if($(this).text()=='Inactiva'){ 
+            $(this).addClass('cell--deshabilitada')
+        }
+    })
 }

@@ -17,21 +17,22 @@ from .views import UsuarioListView
 from .views import UsuarioCreateView
 from .views import UsuarioEditView
 
-urlpatterns = [
+app_name = "seguridad"
 
+urlpatterns = [
 
     # ----------------- SEGURIDAD ----------------- #
 
     url(
-        r'^login/$',
+        r'^$',
         Login.as_view(),
-        name='seguridad.login'
+        name='login'
     ),
     url(
         r'^logout/$',
         auth_views.logout,
         {'next_page': settings.LOGIN_URL},
-        name='seguridad.logout'
+        name='logout'
     ),
 
 
@@ -40,17 +41,17 @@ urlpatterns = [
     url(
         r'^usuarios/$',
         UsuarioListView.as_view(),
-        name='seguridad.usuario_lista'
+        name='usuario_lista'
     ),
     url(
         r'^usuarios/nuevo/$',
         UsuarioCreateView.as_view(),
-        name='seguridad.usuario_nuevo'
+        name='usuario_nuevo'
     ),
     url(
         r'^usuarios/editar/(?P<pk>.*)/$',
         UsuarioEditView.as_view(),
-        name='seguridad.usuario_editar'
+        name='usuario_editar'
     ),
 
 ]

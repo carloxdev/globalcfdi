@@ -35,6 +35,10 @@ class Cfdineitor(object):
             app_config.smtp_server
         )
 
+    def test(self):
+
+        self.get_ByRange('mnkstudio', date(2017, 1, 3), date(2017, 1, 5))
+
     def get_ByRange(self, _empresa_clave, _f_inicio, _f_final):
 
         # Obtener fechas entre rango dado:
@@ -44,11 +48,11 @@ class Cfdineitor(object):
         empresa = ModeloEmpresa.get(_empresa_clave)
 
         # Crear esclavo Contador:
-        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+        esclavo = Contador(empresa, self.ruta_ejecucion)
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
+            # esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
             esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
@@ -62,10 +66,10 @@ class Cfdineitor(object):
         empresa = ModeloEmpresa.get(_empresa_clave)
 
         # Crear esclavo Contador:
-        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+        esclavo = Contador(empresa, self.ruta_ejecucion)
 
         # Descargar facturas:
-        esclavo.get_ByDay(TIPOS_FACTURA[0], hoy)
+        # esclavo.get_ByDay(TIPOS_FACTURA[0], hoy)
         esclavo.get_ByDay(TIPOS_FACTURA[1], hoy)
 
     def get_AllCompanies_Today(self):
@@ -127,7 +131,7 @@ class Cfdineitor(object):
         empresa = ModeloEmpresa.get(_empresa_clave)
 
         # Crear esclavo Contador:
-        esclavo = Contador(empresa, self.ruta_ejecucion, self.ambiente)
+        esclavo = Contador(empresa, self.ruta_ejecucion)
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:

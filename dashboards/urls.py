@@ -7,20 +7,22 @@ from django.conf.urls import url
 from .views import ResumenAllByYear
 from .views import ResumenOneByMonth
 
-urlpatterns = [
 
+app_name = "dashboards"
+
+urlpatterns = [
 
     # ----------------- Home Site ----------------- #
 
     url(
         r'^dashboard/all_by_year/$',
         ResumenAllByYear.as_view(),
-        name='dashboard.all_by_year'
+        name='all_by_year'
     ),
     url(
         r'^dashboard/one_by_month/$',
         ResumenOneByMonth.as_view(),
-        name='dashboard.one_by_month'
+        name='one_by_month'
     ),
 
 ]

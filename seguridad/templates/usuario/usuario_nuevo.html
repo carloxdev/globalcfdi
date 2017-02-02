@@ -8,18 +8,21 @@
 
 <ol class="breadcrumb">
 	<li class="app-breadcrumb-inactive">
-		<a href="{% url 'home.index' %}">
+		<a href="{% url 'home:index' %}">
 			<i class="fa fa-home" aria-hidden="true"></i>
 			Inicio
 		</a>
 	</li>
 	<li class="app-breadcrumb-inactive">
-		<a href="{% url 'seguridad.usuario_lista' %}">
+		<a href="{% url 'seguridad:usuario_lista' %}">
 			<i class="fa fa-users" aria-hidden="true"></i>
 			Usuarios
 		</a>
 	</li>
-	<li class="active app-breadcrumb-active">Nuevo</li>
+	<li class="active app-breadcrumb-active">
+		<i class="fa fa-user-plus" aria-hidden="true"></i>
+		Nuevo
+	</li>
 </ol>
 
 <div class="container-fluid">
@@ -39,7 +42,7 @@
 			</div>
 
 			<div class="panel-footer">
-				<a href="{% url 'seguridad.usuario_lista' %}" type="button" class="btn btn-default">Regresar</a>
+				<a href="{% url 'seguridad:usuario_lista' %}" type="button" class="btn btn-default">Regresar</a>
 				<button class="btn btn-success pull-right" type="submit">Guardar</button>	
 			</div>
 		</div>

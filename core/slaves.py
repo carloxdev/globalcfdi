@@ -22,11 +22,17 @@ TIPOS_FACTURA = ("RECIBIDAS", "EMITIDAS")
 
 class Contador(object):
 
-    def __init__(self, _empresa, _ruta_ejecucion, _ambiente):
+    def __init__(self, _empresa, _ruta_ejecucion):
 
         self.empresa = _empresa
         self.ruta_ejecucion = _ruta_ejecucion
-        self.ambiente = _ambiente
+
+    def valid_Credenciales(self):
+        
+        elSat = WebSat("sin_carpeta")
+        
+
+
 
     def get_ByDay(self, _tipo, _fecha):
 
@@ -127,7 +133,10 @@ class Contador(object):
 
                         # Crear objeto de resumen:
                         total = Validator.convertToFloat(
-                            comprobante.total) * Validator.convertToFloat(comprobante.tipoCambio)
+                            comprobante.total
+                        ) * Validator.convertToFloat(
+                            comprobante.tipoCambio
+                        )
 
                         registroResumen = ResumenRegistro(
                             comprobante.resumen_tipo,
@@ -217,7 +226,9 @@ class Contador(object):
                 lista_links_byHour = _funcion(_elFiltro)
 
                 if len(lista_links_byHour) >= 500:
-                    print "Hora {}: Se encontraron 500 facturas o mas".format(hora)
+                    print "Hora {}: Se encontraron 500 facturas o mas".format(
+                        hora
+                    )
                     no_encontradas += self.search_ByMinute(
                         _funcion,
                         _elFiltro,

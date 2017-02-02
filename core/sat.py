@@ -16,9 +16,9 @@ from tools.datos import Chronos
 
 
 class SitioLogin(object):
-    url = 'https://cfdiau.sat.gob.mx/nidp/app/login?id=SATUPCFDiCon&sid=0&option=credential&sid=0',
-    user = 'Ecom_User_ID',
-    password = 'Ecom_Password',
+    url = 'https://cfdiau.sat.gob.mx/nidp/app/login?id=SATUPCFDiCon&sid=0&option=credential&sid=0'
+    user = 'Ecom_User_ID'
+    password = 'Ecom_Password'
     submit = 'submit'
 
 
@@ -355,14 +355,14 @@ class WebSat(object):
                 )
             )
 
-            if resultados.get_attribute('id') == SitioFacturasRecibidas.resultados:
+            if resultados.get_attribute('id') == SitioFacturasEmitidas.resultados:
                 wait.until(EC.element_to_be_clickable(
-                    (By.NAME, SitioFacturasRecibidas.download)
+                    (By.NAME, SitioFacturasEmitidas.download)
                 )
                 )
 
                 links = self.navegador.find_elements_by_name(
-                    SitioFacturasRecibidas.download
+                    SitioFacturasEmitidas.download
                 )
                 return links
 

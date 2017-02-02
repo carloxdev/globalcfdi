@@ -3,90 +3,91 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>SmartCFDI - Inicio</title>
+	<meta charset="utf-8">
+	<title>SmartCFDI - Inicio</title>	
 
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" />
-  <link rel='stylesheet' href="{% static 'login.css' %}" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" />
+
+	<!-- Awesome Icons -->
+	<link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.min.css' %}" />	
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+
+	<link rel='stylesheet' href="{% static 'login.css' %}" />
 </head>
 <body>
 
-
-<div class="container-fluid"> 
-
-
-	<div class="row">
-
-		<div align="" class="col-xs-12 col-md-4">	
-			<img src="{% static 'images/logos/smartCFDI.jpg' %}" class="logologin" alt="SmartCFDI"> 
-			<h3 align="center">Login</h3>
-			<h3>¿Necesitas una cuenta de Smart CFDI? 
-				<a href="#" title="Crear cuenta SmartCFDI">Crear cuenta</a>
-
-
-			  </h3>
+	<div class="contenedor">
+		<div class="app-panel-form">
 			
-			<form method="POST" action="" role="form" class="form">
-				{% csrf_token %}
+			<div class="row app-form">
 				
-				<div class="form-group">
-					<label for="username">Usuario</label>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<span class="glyphicon glyphicon-user"></span>
-						</span>
-						<input class="form-control" type="text" id="username" name="user" placeholder="Nombre de usuario">	
-					</div>
-				</div>			
+				<div class="col-xs-10 col-xs-offset-1">
+					
+					<img src="{% static 'images/logos/smart-slogo.png' %}" class="img-responsive app-image-login" alt="user">	
 
-				<div class="form-group">
-					<label for="password">Contraseña</label>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<span class="glyphicon glyphicon-lock"></span>
-						</span>
-						<input class="form-control" type="password" id="password" name="password">							
-					</div>
-				</div>
+					<form method="POST" action="" class="app-form-inputs"> {% csrf_token %}
 
-				{% if mensaje %}
-				<div class="row">
-					<div class="col-md-12">
-						<div class="alert alert-danger">
-							<button class="close" data-dismiss="alert"><span>&times;</span></button>					
-							{{ mensaje }}
+						<div class="form-group">
+							<label for="username">Usuario</label>
+							<div class="input-group input-group-lg">
+								<span class="input-group-addon">
+									<i class="fa fa-user" aria-hidden="true"></i>
+								</span>
+								<input class="form-control " type="text" id="username" name="user" placeholder="Nombre de usuario">
+							</div>
 						</div>
-					</div>	
+
+						<div class="form-group">
+							<label for="password">Contraseña</label>
+							<div class="input-group input-group-lg">
+								<span class="input-group-addon">
+									<i class="fa fa-key" aria-hidden="true"></i>
+								</span>
+								<input class="form-control" type="password" id="password" name="password">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<button class="btn btn-primary btn-lg app-btn-entry">Entrar</button>
+						</div>
+
+						{% if mensaje %}
+							<div class="row">
+								<div class="col-md-12">
+									<div class="alert alert-danger">
+										<button class="close" data-dismiss="alert"><span>&times;</span></button>
+										{{ mensaje }}
+									</div>
+								</div>
+							</div>
+						{% endif %}
+												
+						<div class="form-group app-label-forgot">
+							<a href="#">¿Olvidaste tu contraseña?</a>
+						</div>
+					</form>
 				</div>
-				{% endif %}
-				
-				<div class="form-group">
-					<button class="btn btn-primary">Log in</button>
-				</div>
-				
-				<div class="form-group">
-					<a href="#" title="Recordar usuario">¿Olvidaste tu usuario? </a>
-					<a href="#" title="Recordar contraseña">¿Olvidaste tu contraseña?</a>
-				</div>
 
+			</div>
 
-
-			</form>
-
-		</div>
-
-		<div class="col-md-8 login-billboard-image clearfix hidden-xs hidden-sm">
-				<img src="{% static 'images/fondos/login.jpg' %}" class="" alt="login"> 
-		</div>
 			
+		</div>
+		
+		<div class="app-panel-image">
+			<div class="row app-bienvenida">
+				<div class="col-xs-10 col-xs-offset-1">
+					<!-- SmartCFDI -->
+				</div>
+			</div>
+		</div>
 	</div>
 
-</div>
 
-  <script src="{% static 'libs/jquery/jquery_2.2.4.js' %}"></script>
-  <script src="{% static 'libs/bootstrap/js/bootstrap.js' %}"></script>
+	  <script src="{% static 'libs/jquery/jquery_2.2.4.js' %}"></script>
+	  <script src="{% static 'libs/bootstrap/js/bootstrap.js' %}"></script>
 
 </body>
 </html>

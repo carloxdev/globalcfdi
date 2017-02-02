@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/alertify.min.css' %}" />
 <link rel="stylesheet" href="{% static 'libs/alertifyjs/css/themes/bootstrap.css' %}" />
 
-<!-- Font Awesome --> 
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<!-- APP -->
+<link rel="stylesheet" href="{% static 'empresa/empresa_lista.css' %}" />
 
 {% endblock css %}
 
@@ -25,19 +25,22 @@
 
 <ol class="breadcrumb">
 	<li class="app-breadcrumb-inactive">
-		<a href="{% url 'home.index' %}">
+		<a href="{% url 'home:index' %}">
 			<i class="fa fa-home" aria-hidden="true"></i>
 			Inicio
 		</a>
 	</li>
-	<li class="active app-breadcrumb-active">Empresas</li>
+	<li class="active app-breadcrumb-active">
+		<i class="fa fa-building-o" aria-hidden="true"></i>
+		Empresas
+	</li>
 </ol>
 
 
 <div class="container-fluid app-resultados">
 
 	<div class="well well-sm app-resultados-tooblar">
-		<a class="btn btn-primary btn-sm" href="{% url 'configuracion.empresa_nuevo' %}">
+		<a class="btn btn-primary btn-sm" href="{% url 'configuracion:empresa_nuevo' %}">
 			<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
 			Nueva
 		</a>		

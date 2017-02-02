@@ -196,7 +196,7 @@ TargetaFiltros.prototype.show_FilterSelected = function () {
 
     if (mes_inicio == mes_fin) {
 
-        alertify.notify("Facturas recibidas en month del year, business"
+        alertify.warning("Facturas recibidas en month del year, business"
             .replace("month", moment(this.$fecha_inicio.val()).format('MMMM').toUpperCase())
                 .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
                     .replace("business", empresa)
@@ -204,7 +204,7 @@ TargetaFiltros.prototype.show_FilterSelected = function () {
     }
     else if (anio_inicio == anio_fin) {
 
-        alertify.notify("Facturas recibidas en year business"
+        alertify.warning("Facturas recibidas en year business"
                 .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
                     .replace("business", empresa)
         )
@@ -487,7 +487,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             }
         },
         error: function (e) {
-            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+            alertify.warning("Status: " + e.status + "; Error message: " + e.errorThrown)
         },
     }
 }
@@ -516,7 +516,7 @@ GridResultados.prototype.buscar = function () {
 GridResultados.prototype.validar_XML = function (e) {
     e.preventDefault()
     
-    alertify.notify("Validando......")
+    alertify.warning("Validando......")
 
     // Obteniedo informacion del registro
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
@@ -645,7 +645,6 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         error: function (e) {
             alert("Status: " + e.status + "; Error message: " + e.errorThrown);
         },
-        serverFiltering: true
     }
 }
 ToolBar.prototype.init_Celdas = function (e) {

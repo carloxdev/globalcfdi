@@ -1,0 +1,11 @@
+.cell--activa {
+	background-color: #1C9E39;
+	color: white;
+	text-align: center;
+}
+
+.cell--deshabilitada {
+	background-color: #4C5A5F;
+	color: white;
+	text-align: center;
+}

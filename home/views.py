@@ -19,7 +19,7 @@ class Index(View):
     def get(self, request):
 
         if request.user.is_authenticated():
-            return redirect(reverse('dashboard.all_by_year'))
+            return redirect(reverse('dashboards:all_by_year'))
 
         else:
             return render(request, self.template_name, {})

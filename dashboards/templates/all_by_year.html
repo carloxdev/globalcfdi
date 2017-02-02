@@ -15,7 +15,7 @@
 
 <ol class="breadcrumb">
 	<li class="app-breadcrumb-inactive">
-		<a href="{% url 'home.index' %}">
+		<a href="{% url 'home:index' %}">
 			<i class="fa fa-home" aria-hidden="true"></i>
 			Inicio
 		</a>
@@ -57,7 +57,7 @@
 				
 					<div class="container-fluid app-targeta-body">
 
-						<div class="row">
+						<div class="row app-company">
 
 							<div class="col-xs-12">
 
@@ -66,9 +66,9 @@
 										<div class="col-xs-4">
 											
 											{% if resumen.empresa.logo %}
-												<img class="logo" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
+												<img class="img-responsive img-thumbnail" src="{{ MEDIA_URL }}{{ resumen.empresa.logo }}" alt="logo">
 											{% else %}
-												<img src="{% static 'images/decoradores/no-image.jpg' %}" class="img-responsive img-thumbnail" alt="imagen">
+												<img class="img-responsive img-thumbnail" src="{% static 'images/decoradores/no-image.jpg' %}" alt="imagen">
 											{% endif %}
 										</div>
 
@@ -92,7 +92,7 @@
 									<div class="info-value">
 
 										{% if resumen.proveedores_cantidad != 0 %}
-											<a href="{% url 'facturas.factura_proveedor_lista' resumen.empresa.clave anio '0' %}">
+											<a href="{% url 'facturas:proveedor_lista' resumen.empresa.clave anio '0' %}">
 												<span class="badge badge-primary">{{ resumen.proveedores_cantidad }}</span>
 											</a>
 										{% else %}
@@ -122,7 +122,7 @@
 									<div class="info-value">
 
 										{% if resumen.clientes_cantidad != 0 %}
-											<a href="{% url 'facturas.factura_cliente_lista' resumen.empresa.clave anio '0' %}">
+											<a href="{% url 'facturas:cliente_lista' resumen.empresa.clave anio '0' %}">
 												<span class="badge badge-primary">{{ resumen.clientes_cantidad }}</span>
 											</a>
 										{% else %}
@@ -152,7 +152,7 @@
 									<div class="info-value">
 
 										{% if resumen.nomina_cantidad != 0 %}
-											<a href="{% url 'facturas.comprobante_empleado_lista' resumen.empresa.clave anio '0' %}">
+											<a href="{% url 'facturas:empleado_lista' resumen.empresa.clave anio '0' %}">
 												<span class="badge badge-primary">{{ resumen.nomina_cantidad }}</span>
 											</a>
 										{% else %}

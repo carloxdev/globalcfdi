@@ -11,27 +11,29 @@ from .views import QuienesSomos
 
 # from .views import Ejemplo
 
+app_name = "home"
+
 urlpatterns = [
 
     url(
-        r'^$',
+        r'^index$',
         Index.as_view(),
-        name='home.index'
+        name='index'
     ),
     url(
         r'^servicios/$',
         Servicios.as_view(),
-        name='home.servicios'
+        name='servicios'
     ),
     url(
         r'^contactanos/$',
         Contactanos.as_view(),
-        name='home.contactanos'
+        name='contactanos'
     ),
     url(
         r'^quienessomos/$',
         QuienesSomos.as_view(),
-        name='home.quienes_somos'
+        name='quienes_somos'
     ),
     # url(
     #     r'^ejemplo/$',
