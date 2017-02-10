@@ -79,8 +79,8 @@ function TargetaFiltros() {
 }
 TargetaFiltros.prototype.init = function () {
 
-    this.$fecha_operacion_inicio.datepicker(this.get_DateConfig)
-    this.$fecha_operacion_fin.datepicker(this.get_DateConfig)
+    this.$fecha_operacion_inicio.datepicker(datepicker_init)
+    this.$fecha_operacion_fin.datepicker(datepicker_init)
 
     // Botones
     this.$boton_buscar.on('click', this, this.click_BotonBuscar);
@@ -88,20 +88,6 @@ TargetaFiltros.prototype.init = function () {
 
     this.$id.on('shown.bs.collapse', this, this.descolapsar)
     this.$id.on('hidden.bs.collapse', this, this.colapsar)    
-}
-TargetaFiltros.prototype.get_DateConfig = function () {
-
-    return {
-        autoSize: true,
-        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        dayNamesMin: ['Dom', 'Lu', 'Ma', 'Mi', 'Je', 'Vi', 'Sa'],
-        firstDay: 1,
-        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-        dateFormat: 'yy-mm-dd',
-        changeMonth: true,
-        changeYear: true,
-    }
 }
 TargetaFiltros.prototype.click_BotonBuscar = function (e) {
 
