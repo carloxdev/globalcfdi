@@ -11,4 +11,4 @@ from tecnology import Cfdineitor
 if __name__ == '__main__':
     run_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     app = Cfdineitor("PRODUCCION", run_path)
-    app.test()
+    app.get_ByRange('SIC', date(2017, 1, 3), date(2017, 1, 5))

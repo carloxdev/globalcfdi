@@ -14,20 +14,25 @@ from core.tecnology import Cfdineitor
 @task
 def obtener_Facturas(_empresa_clave, _fecha_inicio, _fecha_final):
 
-    print _empresa_clave
-    print _fecha_inicio
-    fecha_inicio = datetime.strptime(_fecha_inicio, "%Y-%m-%d")
-    fecha_final = datetime.strptime(_fecha_final, "%Y-%m-%d")
+    print "Empresa: {}".format(_empresa_clave)
+    print "Fecha Inicio: {}".format(_fecha_inicio)
+    print "Fecha Final: {}".format(_fecha_final)
 
-    run_path = os.path.abspath(
-        os.path.join(os.getcwd(), os.pardir, 'Sitio')
-    )
-    app = Cfdineitor("PRODUCCION", run_path)
-    app.get_ByRange(
-        _empresa_clave,
-        fecha_inicio,
-        fecha_final
-    )
+    try:
+        fecha_inicio = datetime.strptime(_fecha_inicio, "%Y-%m-%d")
+        fecha_final = datetime.strptime(_fecha_final, "%Y-%m-%d")
+
+        run_path = os.path.abspath(
+            os.path.join(os.getcwd(), os.pardir, 'Sitio')
+        )
+        app = Cfdineitor("PRODUCCION", run_path)
+        app.get_ByRange(
+            _empresa_clave,
+            fecha_inicio,
+            fecha_final
+        )
+    except Exception as e:
+        print str(e)
 
 
 @task

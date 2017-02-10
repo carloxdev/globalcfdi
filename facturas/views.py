@@ -539,14 +539,15 @@ class ObtenerFacturas(View):
             fecha_fin = str(datos_formulario.get('fecha_final'))
 
             try:
-                obtener_Facturas.delay(
-                    empresa,
-                    fecha_inicio,
-                    fecha_fin
+                obtener_Facturas.apply_async(
+                    args=[empresa, fecha_inicio, fecha_fin],
+                    kwargs={},
+                    task_id="get_invoices"
                 )
 
                 self.bandera = "INICIO_PROCESO"
-                self.mensaje = "En la siguiente tabla se mostrara el resultado de la descargar por Dia:"
+                self.mensaje = "En la siguiente tabla se " \
+                    "mostrara el resultado de la descargar por Dia:"""
 
             except Exception as e:
                 self.bandera = "ERROR"

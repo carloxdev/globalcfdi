@@ -52,7 +52,7 @@ class Cfdineitor(object):
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            # esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
+            esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
             esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
