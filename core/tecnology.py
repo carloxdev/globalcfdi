@@ -15,6 +15,9 @@ from tools.datos import Chronos
 from sitio import ModeloEmpresa
 from sitio import ModeloAmbiente
 
+# Librerias de terceros:
+from monthdelta import monthdelta
+
 
 class Cfdineitor(object):
 
@@ -34,10 +37,6 @@ class Cfdineitor(object):
             app_config.password_email,
             app_config.smtp_server
         )
-
-    def test(self):
-
-        self.get_ByRange('mnkstudio', date(2017, 1, 3), date(2017, 1, 5))
 
     def get_ByRange(self, _empresa_clave, _f_inicio, _f_final):
 
@@ -105,7 +104,8 @@ class Cfdineitor(object):
 
             if _log.estado == '':
                 _log.estado = "Operacion Interrumpida"
-                _log.resumen_text = "Lo operacion no termino de forma natural. Favor de comunicarse con el administrador"
+                _log.resumen_text = "Lo operacion no termino de " \
+                    "forma natural. Favor de comunicarse con el administrador"
 
             self.cartero.send_GmailMessage_WithAttach(
                 _empresa.email,
@@ -118,8 +118,11 @@ class Cfdineitor(object):
             self.cartero.send_GmailMessage_WithAttach(
                 _empresa.email,
                 "[{}] - [ERROR] en obtencion de facturas {}".format(
-                    _empresa.clave, _tipo),
-                "El proceso tuvo algun error en su inicio, que no logro generar LOG. Favor de comunicarse con el administrador",
+                    _empresa.clave, _tipo
+                ),
+                """El proceso tuvo algun error en su inicio,
+                que no logro generar LOG.
+                Favor de comunicarse con el administrador""",
             )
 
     def valid_ByRange(self, _empresa_clave, _f_inicio, _f_final):
@@ -140,11 +143,13 @@ class Cfdineitor(object):
 
     def valid_Last2Monts(self, _empresa_clave):
 
-        # Obtenemos rango de fechas
         hoy = date.today()
-        mes_anterior = hoy.month - 2
-        fecha_inicio = hoy.replace(month=mes_anterior, day=1)
+        fecha_inicio = hoy - monthdelta(2)
+        fecha_inicio = fecha_inicio.replace(day=1)
 
+        print fecha_inicio
+
+        # Obtenemos rango de fechas
         self.valid_ByRange(_empresa_clave, fecha_inicio, hoy)
 
     def valid_AllCompanies_Last2Monts(self):
