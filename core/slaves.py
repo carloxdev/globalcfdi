@@ -28,11 +28,8 @@ class Contador(object):
         self.ruta_ejecucion = _ruta_ejecucion
 
     def valid_Credenciales(self):
-        
-        elSat = WebSat("sin_carpeta")
-        
-
-
+        # elSat = WebSat("sin_carpeta")
+        return None
 
     def get_ByDay(self, _tipo, _fecha):
 
@@ -176,6 +173,12 @@ class Contador(object):
             log.estado = "ERROR"
             log.resument_text = str(error)
             print log.resumen_text
+
+            raise ErrorEjecucion(
+                "Contador.get_ByDay()",
+                type(error).__name__,
+                str(error)
+            )
 
         finally:
             log.end_capture()
@@ -393,7 +396,8 @@ class Contador(object):
                     else:
                         raise ErrorValidacion(
                             "Contador.set_Resumen()",
-                            "No se establecio un tipo de resumen valido en un registro"
+                            """No se establecio un tipo de resumen
+                            valido en un registro"""
                         )
 
             if _tipo == TIPOS_FACTURA[0]:
@@ -472,7 +476,8 @@ class Contador(object):
                         resumen.save()
                         print "Se actualizo el Resumen"
                     else:
-                        print "No hubo cambios desde la ultima descarga/validacion"
+                        print "No hubo cambios desde " \
+                            "la ultima descarga/validacion"
 
                 except Exception, error:
                     print str(error)

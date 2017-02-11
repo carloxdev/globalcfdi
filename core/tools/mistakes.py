@@ -113,6 +113,10 @@ class ErrorEjecucion(Exception):
                 self.mensaje = 'No se proporcionaron links a descargar'
                 self.tipo = 'ErrorEjecucion'
 
-        cadena = "{}[{}]....: {}".format(self.funcion, self.tipo, self.mensaje)
+        cadena = "{} [{}]....: {}".format(
+            self.funcion,
+            self.tipo,
+            self.mensaje
+        )
 
         return repr(cadena)

@@ -224,7 +224,10 @@ class FileManager(object):
                                 # Eliminar
                                 no_eliminados += 1
 
-                print "Eliminar archivos {} repetidos: {}".format(_extension, no_eliminados)
+                print "Eliminar archivos {} repetidos: {}".format(
+                    _extension,
+                    no_eliminados
+                )
 
             else:
                 print "El folder no existe: {}".format(_abspath)
@@ -282,7 +285,9 @@ class FileManager(object):
                         _basepath, folder_abspath, folderName)
                     self.create_Folder(folder_abspath)
 
-                print "Directorio creado con exito: {}".format(directory_abspath)
+                print "Directorio creado con exito: {}".format(
+                    directory_abspath
+                )
 
         except Exception, error:
 
