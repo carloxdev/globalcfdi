@@ -35,21 +35,29 @@ def obtener_Facturas(self, _empresa_clave, _fecha_inicio, _fecha_final):
         self.retry(countdown=4, exc=e)
 
 
-@task
-def obtener_Facturas_Daily():
+@task(bind=True, max_retries=5)
+def obtener_Facturas_Daily(self):
 
-    run_path = os.path.abspath(
-        os.path.join(os.getcwd(), os.pardir, 'Sitio')
-    )
-    app = Cfdineitor("PRODUCCION", run_path)
-    app.get_AllCompanies_Last3Days()
+    try:
+        run_path = os.path.abspath(
+            os.path.join(os.getcwd(), os.pardir, 'Sitio')
+        )
+        app = Cfdineitor("PRODUCCION", run_path)
+        app.get_AllCompanies_Last3Days()
+
+    except Exception as e:
+        self.retry(countdown=4, exc=e)
 
 
-@task
-def validar_Facturas_Daily():
+@task(bind=True, max_retries=5)
+def validar_Facturas_Daily(self):
 
-    run_path = os.path.abspath(
-        os.path.join(os.getcwd(), os.pardir, 'Sitio')
-    )
-    app = Cfdineitor("PRODUCCION", run_path)
-    app.valid_AllCompanies_Last2Monts()
+    try:
+        run_path = os.path.abspath(
+            os.path.join(os.getcwd(), os.pardir, 'Sitio')
+        )
+        app = Cfdineitor("PRODUCCION", run_path)
+        app.valid_AllCompanies_Last2Monts()
+
+    except Exception as e:
+        self.retry(countdown=4, exc=e)
