@@ -11,8 +11,8 @@ from celery import task
 from core.tecnology import Cfdineitor
 
 
-@task
-def obtener_Facturas(_empresa_clave, _fecha_inicio, _fecha_final):
+@task(bind=True, max_retries=3)
+def obtener_Facturas(self, _empresa_clave, _fecha_inicio, _fecha_final):
 
     print "Empresa: {}".format(_empresa_clave)
     print "Fecha Inicio: {}".format(_fecha_inicio)
@@ -32,7 +32,7 @@ def obtener_Facturas(_empresa_clave, _fecha_inicio, _fecha_final):
             fecha_final
         )
     except Exception as e:
-        print str(e)
+        self.retry(countdown=2, exc=e)
 
 
 @task

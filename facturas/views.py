@@ -539,10 +539,8 @@ class ObtenerFacturas(View):
             fecha_fin = str(datos_formulario.get('fecha_final'))
 
             try:
-                obtener_Facturas.apply_async(
-                    args=[empresa, fecha_inicio, fecha_fin],
-                    kwargs={},
-                    task_id="get_invoices"
+                obtener_Facturas.delay(
+                    empresa, fecha_inicio, fecha_fin
                 )
 
                 self.bandera = "INICIO_PROCESO"
@@ -551,7 +549,9 @@ class ObtenerFacturas(View):
 
             except Exception as e:
                 self.bandera = "ERROR"
-                self.mensaje = str(e)
+                self.mensaje = "Ocurio un error al llamar la tarea: {}".format(
+                    str(e)
+                )
 
         contexto = {
             'form': formulario,
