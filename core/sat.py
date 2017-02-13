@@ -16,10 +16,21 @@ from tools.datos import Chronos
 
 
 class SitioLogin(object):
-    url = 'https://cfdiau.sat.gob.mx/nidp/app/login?id=SATUPCFDiCon&sid=0&option=credential&sid=0'
+    url = 'https://cfdiau.sat.gob.mx/nidp/app/login' \
+        '?id=SATUPCFDiCon&sid=0&option=credential&sid=0'
     user = 'Ecom_User_ID'
     password = 'Ecom_Password'
     submit = 'submit'
+
+
+class SitioLoginFiel(object):
+    url = 'https://cfdiau.sat.gob.mx/nidp/app/login' \
+        '?id=SATx509Custom&sid=0&option=credential&sid=0'
+    input_certificado = 'certificate'
+    input_llave = 'privateKey'
+    input_contrasena = 'privateKeyPassword'
+    input_rfc = 'userID'
+    boton_submit = 'submit'
 
 
 class SitioCFDI(object):
@@ -27,7 +38,8 @@ class SitioCFDI(object):
 
 
 class SitioFacturasRecibidas(object):
-    url = 'https://portalcfdi.facturaelectronica.sat.gob.mx/ConsultaReceptor.aspx'
+    url = 'https://portalcfdi.facturaelectronica.sat.gob.mx/' \
+        'ConsultaReceptor.aspx'
     uuid = 'ctl00_MainContent_TxtUUID'
     date = 'ctl00_MainContent_RdoFechas'
     emisor = 'ctl00_MainContent_TxtRfcReceptor'
@@ -51,7 +63,8 @@ class SitioFacturasRecibidas(object):
 
 
 class SitioFacturasEmitidas(object):
-    url = 'https://portalcfdi.facturaelectronica.sat.gob.mx/ConsultaEmisor.aspx'
+    url = 'https://portalcfdi.facturaelectronica.sat.gob.mx/' \
+        'ConsultaEmisor.aspx'
     uuid = 'ctl00_MainContent_TxtUUID'
     date = 'ctl00_MainContent_RdoFechas'
     receptor = 'ctl00_MainContent_TxtRfcReceptor'
@@ -143,6 +156,64 @@ class WebSat(object):
                 str(error)
             )
 
+    def login_Fiel(self, _path_cert, _path_key, _password, _rfc):
+
+        try:
+
+            # Ir al sitio login:
+            self.navegador.get(SitioLoginFiel.url)
+
+            # Especificar Certificado:
+            input_cert = self.navegador.find_element_by_name(
+                SitioLoginFiel.input_certificado
+            )
+            input_cert.send_keys(_path_cert)
+
+            # Especificar Llave:
+            input_key = self.navegador.find_element_by_name(
+                SitioLoginFiel.input_llave
+            )
+            input_key.send_keys(_path_key)
+
+            # Especificar Contraseña:
+            input_pass = self.navegador.find_element_by_name(
+                SitioLoginFiel.input_contrasena
+            )
+            input_pass.send_keys(_password)
+
+            # Especificar RFC:
+            input_rfc = self.navegador.find_element_by_name(
+                SitioLoginFiel.input_rfc
+            )
+            script = "document.getElementsByName('{}')[0]." \
+                "removeAttribute('readonly');".format(
+                    SitioLoginFiel.input_rfc
+                )
+            self.navegador.execute_script(script)
+            input_rfc.send_keys(_rfc)
+
+            # Click en Submit:
+            boton_submit = self.navegador.find_element_by_name(
+                SitioLoginFiel.boton_submit
+            )
+            boton_submit.click()
+
+            # Esperamos a que carge la pagina
+            wait = WebDriverWait(self.navegador, 20)
+            wait.until(EC.title_contains('NetIQ Access'))
+
+            print "Login al sitio SAT Fiel......OK"
+
+        except Exception, error:
+
+            self.close()
+
+            raise ErrorEjecucion(
+                "WebSat.login_Fiel()",
+                type(error).__name__,
+                str(error)
+            )
+
     def login(self, _rfc, _ciec):
         try:
             # Ir a sitio login:
@@ -196,6 +267,11 @@ class WebSat(object):
                 'browser.helperApps.neverAsk.saveToDisk',
                 'text/xml, application/octet-stream, application/xml'
             )
+
+            # Habilita Java
+            # profile.accept_untrusted_certs(True)
+            profile.set_preference("security.enable_java", True)
+            profile.set_preference("plugin.state.java", 2)
 
             # Se establece direcctorio de descarga
             profile.set_preference(
@@ -521,7 +597,8 @@ class WebServiceSAT(object):
 
         try:
 
-            webservice = 'https://consultaqr.facturaelectronica.sat.gob.mx/consultacfdiservice.svc'
+            webservice = 'https://consultaqr.facturaelectronica.sat.gob.mx/' \
+                'consultacfdiservice.svc'
             mensajeSoap = """<?xml version="1.0" encoding="UTF-8"?>
                                 <soap:Envelope
                                     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
@@ -540,7 +617,8 @@ class WebServiceSAT(object):
             datos = mensajeSoap.format(
                 emisor_rfc, receptor_rfc, total, uuid).encode('utf-8')
             cabecera = {
-                'SOAPAction': '"http://tempuri.org/IConsultaCFDIService/Consulta"',
+                'SOAPAction': '"http://tempuri.org/'
+                'IConsultaCFDIService/Consulta"',
                 'Content-length': len(datos),
                 'Content-type': 'text/xml; charset="UTF-8"'
             }

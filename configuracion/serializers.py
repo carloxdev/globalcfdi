@@ -23,6 +23,9 @@ class EmpresaSerializer(serializers.HyperlinkedModelSerializer):
             'activa',
             'usuario',
             'email',
+            'certificado',
+            'llave',
+            'contrasena',
             'created_date',
             'updated_date',
         )

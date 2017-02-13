@@ -88,6 +88,9 @@ class EmpresaCreateView(View):
             empresa.activa = datos_formulario.get('activa')
             empresa.email = datos_formulario.get('email')
             empresa.logo = datos_formulario.get('logo')
+            empresa.certificado = datos_formulario.get('certificado')
+            empresa.llave = datos_formulario.get('llave')
+            empresa.contrasena = datos_formulario.get('contrasena')
 
             if request.user.is_staff:
                 empresa.usuario = datos_formulario.get('usuario')
@@ -119,15 +122,7 @@ class EmpresaUpdateView(View):
 
         formulario = EmpresaEditForm(
             username=request.user,
-            initial={
-                'razon_social': empresa.razon_social,
-                'rfc': empresa.rfc,
-                'ciec': empresa.ciec,
-                'activa': empresa.activa,
-                'usuario': empresa.usuario,
-                'email': empresa.email,
-                'logo': empresa.logo,
-            }
+            instance=empresa
         )
 
         contexto = {
@@ -139,27 +134,32 @@ class EmpresaUpdateView(View):
 
     def post(self, request, pk):
 
-        formulario = EmpresaEditForm(
-            request.POST,
-            request.FILES,
-            username=request.user
-        )
-
         empresa = get_object_or_404(Empresa, pk=pk)
         self.clave = empresa.clave
 
+        formulario = EmpresaEditForm(
+            request.POST,
+            request.FILES,
+            username=request.user,
+            instance=empresa
+        )
+
         if formulario.is_valid():
 
-            datos_formulario = formulario.cleaned_data
-            empresa.razon_social = datos_formulario.get('razon_social')
-            empresa.rfc = datos_formulario.get('rfc')
-            empresa.ciec = datos_formulario.get('ciec')
-            empresa.activa = datos_formulario.get('activa')
-            empresa.email = datos_formulario.get('email')
-            empresa.logo = datos_formulario.get('logo')
+            # datos_formulario = formulario.cleaned_data
+            # empresa.razon_social = datos_formulario.get('razon_social')
+            # empresa.rfc = datos_formulario.get('rfc')
+            # empresa.ciec = datos_formulario.get('ciec')
+            # empresa.activa = datos_formulario.get('activa')
+            # empresa.email = datos_formulario.get('email')
+            # empresa.logo = datos_formulario.get('logo')
+            # empresa.certificado = datos_formulario.get('certificado')
+            # empresa.llave = datos_formulario.get('llave')
+            # empresa.contrasena = datos_formulario.get('contrasena')
+            empresa = formulario.save(commit=False)
 
-            if request.user.username == 'root':
-                empresa.usuario = datos_formulario.get('usuario')
+            # if request.user.username == 'root':
+            #     empresa.usuario = datos_formulario.get('usuario')
 
             empresa.save()
 

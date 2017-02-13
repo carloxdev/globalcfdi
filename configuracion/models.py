@@ -7,14 +7,32 @@ from django.db import models
 # Models Django:
 from django.contrib.auth.models import User
 
+# Utilidades
+from .utilities import get_FilePath
+
 
 class Empresa(models.Model):
 
     clave = models.CharField(max_length=144, null=True)
     razon_social = models.CharField(max_length=144)
-    logo = models.ImageField(upload_to='empresas', blank=True, null=True)
-    rfc = models.CharField(max_length=144)
-    ciec = models.CharField(max_length=144)
+    logo = models.ImageField(
+        upload_to='empresas/imagenes',
+        blank=True,
+        null=True
+    )
+    rfc = models.CharField(max_length=144, null=True, blank=True)
+    ciec = models.CharField(max_length=144, null=True, blank=True)
+    certificado = models.FileField(
+        upload_to=get_FilePath,
+        blank=True,
+        null=True
+    )
+    llave = models.FileField(
+        upload_to=get_FilePath,
+        blank=True,
+        null=True
+    )
+    contrasena = models.CharField(max_length=144, null=True, blank=True)
     activa = models.BooleanField(default=False)
     usuario = models.ForeignKey(User)
     email = models.EmailField(blank=True, null=True)
@@ -24,12 +42,3 @@ class Empresa(models.Model):
 
     def __str__(self):
         return self.clave.encode("utf-8")
-
-
-# class Responsable(models.Model):
-#     nombre = models.CharField(max_length=144)
-#     correo = models.EmailField()
-#     empresa = models.ForeignKey(Empresa)
-
-#     def __str__(self):
-#         return "{} - {}".format(self.nombre, self.empresa)

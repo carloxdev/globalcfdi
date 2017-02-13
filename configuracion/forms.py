@@ -21,10 +21,6 @@ class EmpresaCreateForm(ModelForm):
     class Meta:
         model = Empresa
         fields = '__all__'
-        exclude = [
-            'created_date',
-            'updated_date',
-        ]
         widgets = {
             'clave': TextInput(attrs={'class': 'form-control'}),
             'razon_social': TextInput(attrs={'class': 'form-control'}),
@@ -32,6 +28,7 @@ class EmpresaCreateForm(ModelForm):
             'ciec': TextInput(attrs={'class': 'form-control'}),
             'email': TextInput(attrs={'class': 'form-control'}),
             'usuario': Select(attrs={'class': 'form-control'}),
+            'contrasena': TextInput(attrs={'class': 'form-control'}),
         }
 
 
@@ -49,8 +46,6 @@ class EmpresaEditForm(ModelForm):
         fields = '__all__'
         exclude = [
             'clave',
-            'created_date',
-            'updated_date',
         ]
         widgets = {
             'razon_social': TextInput(attrs={'class': 'form-control'}),
@@ -58,4 +53,5 @@ class EmpresaEditForm(ModelForm):
             'ciec': TextInput(attrs={'class': 'form-control'}),
             'email': TextInput(attrs={'class': 'form-control'}),
             'usuario': Select(attrs={'class': 'form-control'}),
+            'contrasena': TextInput(attrs={'class': 'form-control'}),
         }

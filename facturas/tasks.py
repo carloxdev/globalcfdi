@@ -34,6 +34,9 @@ def obtener_Facturas(self, _empresa_clave, _fecha_inicio, _fecha_final):
     except Exception as e:
         self.retry(countdown=4, exc=e)
 
+# @task(bind=True, max_retries=5)
+# def get_
+
 
 @task(bind=True, max_retries=5)
 def obtener_Facturas_Daily(self):

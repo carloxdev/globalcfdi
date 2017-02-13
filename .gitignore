@@ -17,6 +17,7 @@ static/*
 # ---------------------------------------
 tst.py
 *.rdb
+*.log
 
 # Configuracion
 # ---------------------------------------
@@ -28,3 +29,10 @@ SmartCFDI/settings.py
 celerybeat-schedule
 celerybeat.pid
 celerybeat-schedule.db
+
+# Migraciones
+# ---------------------------------------
+configuracion/migrations/*
+dashboards/migrations/*
+facturas/migrations/*
+seguridad/migrations/*

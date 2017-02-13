@@ -59,7 +59,6 @@ class Contador(object):
         try:
 
             log.begin_capture()
-
             relativepath = ruta.relativepath
             download_abspath = ruta.abspath
 
@@ -69,7 +68,12 @@ class Contador(object):
             print "\nACCESANDO A SAT.COM: "
             elSat = WebSat(download_abspath)
             elSat.open()
-            elSat.login(self.empresa.rfc, self.empresa.ciec)
+            elSat.login_Fiel(
+                self.empresa.certificado.path,
+                self.empresa.llave.path,
+                self.empresa.contrasena,
+                self.empresa.rfc
+            )
 
             elFiltro = Filtro(_fecha)
 
@@ -164,23 +168,24 @@ class Contador(object):
 
             print log.resumen_text
 
-            if no_encontradas == no_descargadas and no_encontradas == no_validadas:
+            if no_encontradas == no_descargadas \
+                    and no_encontradas == no_validadas:
                 log.estado = "EXITO"
             else:
                 log.estado = "DETALLES"
 
+            return log
+
         except Exception, error:
             log.estado = "ERROR"
             log.resument_text = str(error)
-            print log.resumen_text
 
-            raise ErrorEjecucion(
-                "Contador.get_ByDay()",
-                type(error).__name__,
-                str(error)
-            )
+            return log
 
         finally:
+            if elSat:
+                elSat.disconnect()
+
             log.end_capture()
             return log
 
