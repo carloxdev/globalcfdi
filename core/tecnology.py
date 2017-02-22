@@ -55,6 +55,8 @@ class Cfdineitor(object):
             print "Esperando 15 sec para siguiente descarga"
             time.sleep(15)
             esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
+            print "Esperando 15 sec para siguiente descarga"
+            time.sleep(15)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
 

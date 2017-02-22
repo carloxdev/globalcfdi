@@ -15,6 +15,7 @@ from django.views.generic.base import View
 import json
 import calendar
 from datetime import date
+from datetime import datetime
 
 # API Rest:
 from rest_framework import viewsets
@@ -44,12 +45,20 @@ from .models import ComprobanteEmpleado
 from .models import Log
 from .models import Resumen
 
+# Otros Modelos
+from configuracion.models import Empresa
+
+
 # Formularios:
 from .forms import FacturaRecibidaFormFiltros
 from .forms import FacturaEmitidaFormFiltros
 from .forms import ObtenerForm
 from .forms import LogFormFiltros
 from .forms import ResumenFormFiltros
+
+# Librerias Propias:
+from core.tools.datos import Chronos
+from core.slaves import TIPOS_FACTURA
 
 # Django Paginacion:
 # from django.core.paginator import Paginator
@@ -534,14 +543,36 @@ class ObtenerFacturas(View):
         if formulario.is_valid():
             datos_formulario = formulario.cleaned_data
 
-            empresa = datos_formulario.get('empresa')
+            empresa_clave = datos_formulario.get('empresa')
             fecha_inicio = str(datos_formulario.get('fecha_inicio'))
             fecha_fin = str(datos_formulario.get('fecha_final'))
 
+            print "Empresa: {}".format(empresa_clave)
+            print "Fecha Inicio: {}".format(fecha_inicio)
+            print "Fecha Final: {}".format(fecha_fin)
+
             try:
-                obtener_Facturas.delay(
-                    empresa, fecha_inicio, fecha_fin
-                )
+                # obtener_Facturas.delay(
+                #     empresa, fecha_inicio, fecha_fin
+                # )
+
+                f_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+                f_final = datetime.strptime(fecha_fin, "%Y-%m-%d")
+
+                fechas = Chronos.getDays_FromRange(f_inicio, f_final)
+
+                empresa = Empresa.objects.get(clave=empresa_clave)
+
+                # Descargar Emitidas y Recibidas por cada fecha
+                for fecha in fechas:
+
+                    obtener_Facturas.delay(
+                        empresa, fecha, TIPOS_FACTURA[0]
+                    )
+
+                    obtener_Facturas.delay(
+                        empresa, fecha, TIPOS_FACTURA[1]
+                    )
 
                 self.bandera = "INICIO_PROCESO"
                 self.mensaje = "En la siguiente tabla se " \
