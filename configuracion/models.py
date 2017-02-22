@@ -7,8 +7,11 @@ from django.db import models
 # Models Django:
 from django.contrib.auth.models import User
 
-# Utilidades
+# Librerias Propias
 from .utilities import get_FilePath
+from .validators import validate_cert
+from .validators import validate_key
+from .validators import validate_size
 
 
 class Empresa(models.Model):
@@ -25,12 +28,20 @@ class Empresa(models.Model):
     certificado = models.FileField(
         upload_to=get_FilePath,
         blank=True,
-        null=True
+        null=True,
+        validators=[
+            validate_cert,
+            validate_size
+        ]
     )
     llave = models.FileField(
         upload_to=get_FilePath,
         blank=True,
-        null=True
+        null=True,
+        validators=[
+            validate_key,
+            validate_size
+        ]
     )
     contrasena = models.CharField(max_length=144, null=True, blank=True)
     activa = models.BooleanField(default=False)
