@@ -14,6 +14,7 @@ if __name__ == '__main__':
         'JRCOjlm2',
         'GEX120719J42'
     )
+    elSat.search_InvoicesReceived(None)
 
 
 # fp.accept_untrusted_certs( true );
