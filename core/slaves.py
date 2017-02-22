@@ -174,20 +174,28 @@ class Contador(object):
             else:
                 log.estado = "DETALLES"
 
-            return log
+            # return log
 
         except Exception, error:
             log.estado = "ERROR"
             log.resument_text = str(error)
 
-            return log
+            print str(error)
+
+            raise ErrorEjecucion(
+                "Contador.get_ByDay()",
+                type(error).__name__,
+                str(error)
+            )
+
+            # return log
 
         finally:
             if elSat:
                 elSat.disconnect()
 
             log.end_capture()
-            return log
+            # return log
 
     def search_ByDay(self, _funcion, _elFiltro, _elSat):
 

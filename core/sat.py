@@ -108,6 +108,8 @@ class WebSat(object):
 
             except Exception, error:
 
+                print str(error)
+
                 raise ErrorEjecucion(
                     "WebSAT.disconnect()",
                     type(error).__name__,
@@ -150,6 +152,8 @@ class WebSat(object):
 
             self.close()
 
+            print str(error)
+
             raise ErrorEjecucion(
                 'WebSAT.download()',
                 type(error).__name__,
@@ -162,11 +166,6 @@ class WebSat(object):
 
             # Ir al sitio login:
             self.navegador.get(SitioLoginFiel.url)
-
-            wait_login = WebDriverWait(self.navegador, 20)
-            wait_login.until(
-                EC.presence_of_element_located((By.ID, "btnCert"))
-            )
 
             # Especificar Certificado:
             input_cert = self.navegador.find_element_by_name(
@@ -212,6 +211,8 @@ class WebSat(object):
         except Exception, error:
 
             self.close()
+
+            print str(error)
 
             raise ErrorEjecucion(
                 "WebSat.login_Fiel()",
@@ -284,6 +285,11 @@ class WebSat(object):
                 self.download_abspath
             )
 
+            profile.set_preference("browser.cache.disk.enable", False)
+            profile.set_preference("browser.cache.memory.enable", False)
+            profile.set_preference("browser.cache.offline.enable", False)
+            profile.set_preference("network.http.use-cache", False)
+
             profile.set_preference('toolkit.telemetry.prompted', 2)
             profile.set_preference('toolkit.telemetry.rejected', True)
             profile.set_preference('toolkit.telemetry.enabled', False)
@@ -327,6 +333,8 @@ class WebSat(object):
         except Exception, error:
 
             self.close()
+
+            print str(error)
 
             raise ErrorEjecucion(
                 "WebSat.open()",
@@ -455,6 +463,8 @@ class WebSat(object):
         except Exception, error:
 
             self.close()
+
+            print(error)
 
             raise ErrorEjecucion(
                 'WebSAT.search_InvoicesIssued()',
@@ -587,6 +597,8 @@ class WebSat(object):
         except Exception, error:
 
             self.close()
+
+            print str(error)
 
             raise ErrorEjecucion(
                 'WebSAT.search_InvoicesReceived()',
