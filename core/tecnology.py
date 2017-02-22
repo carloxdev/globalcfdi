@@ -4,7 +4,7 @@
 # Librerias Python:
 from datetime import date
 from datetime import timedelta
-
+import time
 
 # Librerias Propias:
 from slaves import Contador, TIPOS_FACTURA
@@ -52,6 +52,8 @@ class Cfdineitor(object):
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
             esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
+            print "Esperando 15 sec para siguiente descarga"
+            time.sleep(15)
             esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")

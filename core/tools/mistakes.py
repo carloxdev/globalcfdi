@@ -105,13 +105,12 @@ class ErrorEjecucion(Exception):
             if self.tipo == "IntegrityError":
                 self.mensaje = 'Ya existe el registro de resumen para este dia'
 
-    def __str__(self):
-
         if self.funcion == 'WebSAT.download()':
-
             if self.mensaje == "object of type 'NoneType' has no len()":
                 self.mensaje = 'No se proporcionaron links a descargar'
                 self.tipo = 'ErrorEjecucion'
+
+    def __str__(self):
 
         cadena = "{} [{}]....: {}".format(
             self.funcion,

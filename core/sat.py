@@ -163,6 +163,11 @@ class WebSat(object):
             # Ir al sitio login:
             self.navegador.get(SitioLoginFiel.url)
 
+            wait_login = WebDriverWait(self.navegador, 20)
+            wait_login.until(
+                EC.presence_of_element_located((By.ID, "btnCert"))
+            )
+
             # Especificar Certificado:
             input_cert = self.navegador.find_element_by_name(
                 SitioLoginFiel.input_certificado

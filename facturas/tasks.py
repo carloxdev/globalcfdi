@@ -32,6 +32,8 @@ def obtener_Facturas(self, _empresa_clave, _fecha_inicio, _fecha_final):
             fecha_final
         )
     except Exception as e:
+        print str(e)
+        print "Se volvera intentar en 4 sec."
         self.retry(countdown=4, exc=e)
 
 # @task(bind=True, max_retries=5)
