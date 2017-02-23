@@ -89,7 +89,7 @@ def obtener_Facturas(self, _empresa_clave, _fecha):
 
         esclavo = Contador(empresa, run_path)
         esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
-        # esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
+        esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
     except Exception as e:
         print "Se volvera intentar en 4 sec."
