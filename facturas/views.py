@@ -541,16 +541,14 @@ class ObtenerFacturas(View):
             empresa_clave = datos_formulario.get('empresa')
             fecha_inicio = str(datos_formulario.get('fecha_inicio'))
             fecha_fin = str(datos_formulario.get('fecha_final'))
+            tipo_comprobante = datos_formulario.get('tipo_comprobante')
 
             print "Empresa: {}".format(empresa_clave)
             print "Fecha Inicio: {}".format(fecha_inicio)
             print "Fecha Final: {}".format(fecha_fin)
+            print "Tipo Comprobante: {}".format(tipo_comprobante)
 
             try:
-                # obtener_Facturas.delay(
-                #     empresa, fecha_inicio, fecha_fin
-                # )
-
                 f_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
                 f_final = datetime.strptime(fecha_fin, "%Y-%m-%d")
 
@@ -560,7 +558,9 @@ class ObtenerFacturas(View):
                 for fecha in fechas:
 
                     obtener_Facturas.delay(
-                        empresa_clave, str(fecha)
+                        empresa_clave,
+                        str(fecha),
+                        tipo_comprobante
                     )
 
                 self.bandera = "INICIO_PROCESO"

@@ -5,10 +5,10 @@ from django import forms
 
 # Modelos de otras APPS:
 from configuracion.models import Empresa
-from facturas.models import COMPROBACION_ESTADOS
-from facturas.models import LOG_ESTADOS
-from facturas.models import LOG_OPERACION_TIPO
-from facturas.models import RESUMEN_TIPOS
+from facturas.models import Factura
+from facturas.models import Log
+from facturas.models import Resumen
+
 
 ESTADOSAT_OPCIONES = (
     ('', 'Todos'),
@@ -33,6 +33,11 @@ class LogFormFiltros(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
+    tipo_comprobante = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
     operacion = forms.ChoiceField(
         widget=forms.Select(
             attrs={'class': 'form-control'}
@@ -43,9 +48,10 @@ class LogFormFiltros(forms.Form):
         super(LogFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['estado'].choices = self.obtener_LogEstados(
-            LOG_ESTADOS)
+            Log.LOG_ESTADOS)
         self.fields['operacion'].choices = self.obtener_LogOperacionTipos(
-            LOG_OPERACION_TIPO)
+            Log.LOG_OPERACION_TIPO)
+        self.fields['tipo_comprobante'].choices = Log.LOG_TIPOS_COMPROBANTE
 
     def obtener_Empresas(self, _usuario):
 
@@ -130,7 +136,7 @@ class FacturaRecibidaFormFiltros(forms.Form):
         super(FacturaRecibidaFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
-            COMPROBACION_ESTADOS)
+            Factura.COMPROBACION_ESTADOS)
 
     def obtener_Empresas(self, _usuario):
 
@@ -204,7 +210,7 @@ class FacturaEmitidaFormFiltros(forms.Form):
         super(FacturaEmitidaFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
-            COMPROBACION_ESTADOS)
+            Factura.COMPROBACION_ESTADOS)
 
     def obtener_Empresas(self, _usuario):
 
@@ -241,7 +247,11 @@ class ObtenerForm(forms.Form):
             attrs={'class': 'form-control'}
         )
     )
-
+    tipo_comprobante = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        )
+    )
     fecha_inicio = forms.DateField(widget=forms.TextInput(
         attrs={'class': 'form-control'}))
     fecha_final = forms.DateField(widget=forms.TextInput(
@@ -251,6 +261,7 @@ class ObtenerForm(forms.Form):
         self.usuario = kwargs.pop('username')
         super(ObtenerForm, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(self.usuario)
+        self.fields['tipo_comprobante'].choices = Log.LOG_TIPOS_COMPROBANTE
 
     def obtener_Empresas(self, _usuario):
 
@@ -290,7 +301,7 @@ class ResumenFormFiltros(forms.Form):
         super(ResumenFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['tipo'].choices = self.obtener_ResumenTipos(
-            RESUMEN_TIPOS
+            Resumen.RESUMEN_TIPOS
         )
 
     def obtener_Empresas(self, _usuario):

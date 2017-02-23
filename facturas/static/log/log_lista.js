@@ -63,10 +63,9 @@ function TargetaFiltros() {
     this.$btn_collapsed = $('#btn_collapsed')
 
     this.$empresa = $('#id_empresa')
-
     this.$estado = $('#id_estado')
     this.$operacion = $('#id_operacion')
-
+    this.$tipo_comprobante = $('#id_tipo_comprobante')
     this.$fecha_operacion_inicio = $('#id_fecha_operacion_inicio')
     this.$fecha_operacion_fin = $('#id_fecha_operacion_final')
 
@@ -101,6 +100,7 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
     e.data.$empresa.val("")
     e.data.$estado.val("")
     e.data.$operacion.val("")
+    e.data.$tipo_comprobante.val("")
     e.data.$fecha_operacion_inicio.val("")
     e.data.$fecha_operacion_fin.val("")
 }
@@ -115,11 +115,13 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
     return {
         page: _page,
         pageSize: _pageSize,
+        
         empresa__clave: this.$empresa.val(),
         estado: this.$estado.val(),
         operacion: this.$operacion.val(),
         fecha_operacion_min: this.$fecha_operacion_inicio.val(),
-        fecha_operacion_max: this.$fecha_operacion_fin.val(),        
+        fecha_operacion_max: this.$fecha_operacion_fin.val(),
+        tipo_comprobante: this.$tipo_comprobante.val(),
     }
 }
 
@@ -186,6 +188,7 @@ GridResultados.prototype.get_Campos = function () {
         nombre: { editable: false, type: "string" },
         estado: { editable: false, type: "string" },
         operacion: { editable: false, type: "string" },
+        tipo_comprobante: { editable: false, type: "string" },
         fecha_operacion: { editable: false, type: "string" },
         descripcion: { editable: false, type: "string" },
         url: { editable: false, type: "string" },
@@ -199,6 +202,7 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "empresa", title: "Empresa", width: "120px" },
         { field: "nombre", title: "Nombre", width: "250px" },
         { field: "estado", title: "Estado", width: "100px" },
+        { field: "tipo_comprobante", title: "Tipo", width: "100px" },
         { field: "operacion", title: "Operacion", width: "100px" },
         { 
             field: "fecha_operacion", 

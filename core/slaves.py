@@ -17,10 +17,10 @@ from documentos import Log
 # Modelos del Sitio:
 from sitio import ModeloResumen
 
-TIPOS_FACTURA = ("RECIBIDAS", "EMITIDAS")
-
 
 class Contador(object):
+
+    TIPOS_FACTURA = ("REC", "EMI")
 
     def __init__(self, _empresa, _ruta_ejecucion):
 
@@ -77,14 +77,14 @@ class Contador(object):
 
             elFiltro = Filtro(_fecha)
 
-            if _tipo == TIPOS_FACTURA[0]:
+            if _tipo == self.TIPOS_FACTURA[0]:
                 no_encontradas = self.search_ByDay(
                     elSat.search_InvoicesReceived,
                     elFiltro,
                     elSat
                 )
 
-            elif _tipo == TIPOS_FACTURA[1]:
+            elif _tipo == self.TIPOS_FACTURA[1]:
                 no_encontradas = self.search_ByDay(
                     elSat.search_InvoicesIssued,
                     elFiltro,
@@ -411,7 +411,7 @@ class Contador(object):
                             valido en un registro"""
                         )
 
-            if _tipo == TIPOS_FACTURA[0]:
+            if _tipo == self.TIPOS_FACTURA[0]:
                 self.save_Resumen(
                     _fecha,
                     "PROVEEDORES",
@@ -420,7 +420,7 @@ class Contador(object):
                     provee_total_monto
                 )
 
-            elif _tipo == TIPOS_FACTURA[1]:
+            elif _tipo == self.TIPOS_FACTURA[1]:
 
                 self.save_Resumen(
                     _fecha,

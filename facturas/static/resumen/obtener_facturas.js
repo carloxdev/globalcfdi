@@ -68,6 +68,7 @@ function TargetaFiltros() {
 
 
     this.$empresa = $('#id_empresa')
+    this.$tipo_comprobante = $('#id_tipo_comprobante')
     this.$fecha_inicio = $('#id_fecha_inicio')
     this.$fecha_fin = $('#id_fecha_final')
 
@@ -99,7 +100,9 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
     return {
         page: _page,
         pageSize: _pageSize,
+        
         empresa__clave: this.$empresa.val(),
+        tipo_comprobante: this.$tipo_comprobante.val(),
         fecha_operacion_min: this.$fecha_inicio.val(),
         fecha_operacion_max: this.$fecha_fin.val(),
         created_date_min: this.get_FechaCreacion_Min(),
@@ -196,6 +199,7 @@ GridPrincipal.prototype.get_Campos = function (e) {
         empresa: { editable: false, type: "string" },
         nombre: { editable: false, type: "string" },
         estado: { editable: false, type: "string" },
+        tipo_comprobante: { editable: false, type: "string" },
         operacion: { editable: false, type: "string" },
         fecha_operacion: { editable: false, type: "string" },
         descripcion: { editable: false, type: "string" },
@@ -210,6 +214,7 @@ GridPrincipal.prototype.get_Columnas = function (e) {
         { field: "empresa", title: "Empresa", width: "120px" },
         { field: "nombre", title: "Nombre", width: "250px" },
         { field: "estado", title: "Estado", width: "100px" },
+        { field: "tipo_comprobante", title: "Tipo", width: "100px" },
         { field: "operacion", title: "Operacion", width: "100px" },
         { 
             field: "fecha_operacion", 
