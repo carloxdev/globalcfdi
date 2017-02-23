@@ -8,35 +8,6 @@ from django.db import models
 from configuracion.models import Empresa
 
 
-RESUMEN_TIPOS = (
-    ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
-    ('CLIENTES', 'FACTURAS DE CLIENTES'),
-    ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
-)
-
-COMPROBACION_ESTADOS = (
-    ('RECONOCIDO', 'RECONOCIDO'),
-    ('NO_RECONOCIDO', 'NO RECONOCIDO'),
-)
-
-LOG_ESTADOS = (
-    ('EXITO', 'EXITO'),
-    ('ERROR', 'ERROR'),
-    ('DETALLE', 'DETALLE'),
-    ('PROCESANDO', 'PROCESANDO'),
-)
-
-LOG_OPERACION_TIPO = (
-    ('GET', 'OBTENER'),
-    ('SAVE', 'GUARDAR'),
-    ('VALIDATE', 'VALIDAR'),
-)
-
-PAGADO_ESTADO = {
-    ('PENDIENTE', 'PENDIENTE'),
-    ('PAGADO', 'PAGADO'),
-}
-
 MONEDA_PESOS = [
     "NACIONAL",
     "PESOS MEXICANOS",
@@ -53,6 +24,12 @@ MONEDA_PESOS = [
 
 
 class Resumen(models.Model):
+
+    RESUMEN_TIPOS = (
+        ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
+        ('CLIENTES', 'FACTURAS DE CLIENTES'),
+        ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
+    )
 
     fecha = models.DateField()
     tipo = models.CharField(
@@ -84,6 +61,25 @@ class Resumen(models.Model):
 
 
 class Log(models.Model):
+
+    LOG_ESTADOS = (
+        ('EXITO', 'EXITO'),
+        ('ERROR', 'ERROR'),
+        ('DETALLE', 'DETALLE'),
+        ('PROCESANDO', 'PROCESANDO'),
+    )
+
+    LOG_OPERACION_TIPO = (
+        ('GET', 'OBTENER'),
+        ('SAVE', 'GUARDAR'),
+        ('VALIDATE', 'VALIDAR'),
+    )
+
+    LOG_TIPOS_COMPROBANTE = (
+        ('REC', 'RECIBIDOS'),
+        ('EMI', 'EMITIDOS'),
+    )
+
     empresa = models.ForeignKey(Empresa, null=True)
     nombre = models.CharField(
         max_length=255,
@@ -93,6 +89,11 @@ class Log(models.Model):
     estado = models.CharField(
         max_length=10,
         choices=LOG_ESTADOS,
+        null=True
+    )
+    tipo_comprobante = models.CharField(
+        max_length=4,
+        choices=LOG_TIPOS_COMPROBANTE,
         null=True
     )
     operacion = models.CharField(
@@ -116,6 +117,17 @@ class Log(models.Model):
 
 
 class Factura(models.Model):
+
+    PAGADO_ESTADO = {
+        ('PENDIENTE', 'PENDIENTE'),
+        ('PAGADO', 'PAGADO'),
+    }
+
+    COMPROBACION_ESTADOS = (
+        ('RECONOCIDO', 'RECONOCIDO'),
+        ('NO_RECONOCIDO', 'NO RECONOCIDO'),
+    )
+
     # Comprobante
     serie = models.CharField(max_length=255, null=True, blank=True)
     folio = models.CharField(max_length=255, null=True, blank=True)

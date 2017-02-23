@@ -274,6 +274,7 @@ class LogSerializer(serializers.HyperlinkedModelSerializer):
     empresa = serializers.SerializerMethodField()
     estado = serializers.SerializerMethodField()
     operacion = serializers.SerializerMethodField()
+    tipo_comprobante = serializers.SerializerMethodField()
 
     class Meta:
         model = Log
@@ -281,6 +282,7 @@ class LogSerializer(serializers.HyperlinkedModelSerializer):
             'empresa',
             'nombre',
             'estado',
+            'tipo_comprobante',
             'operacion',
             'fecha_operacion',
             'descripcion',
@@ -305,6 +307,12 @@ class LogSerializer(serializers.HyperlinkedModelSerializer):
     def get_operacion(self, obj):
         try:
             return obj.get_operacion_display()
+        except:
+            return ""
+
+    def get_tipo_comprobante(self, obj):
+        try:
+            return obj.get_tipo_comprobante_display()
         except:
             return ""
 

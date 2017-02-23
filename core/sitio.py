@@ -475,6 +475,7 @@ class ModeloLog(object):
                 nombre=_log.nombre,
                 estado=_log.estado,
                 operacion=_log.operacion,
+                tipo_comprobante=_log.tipo,
                 empresa=_log.empresa,
                 fecha_operacion=_log.fecha_operacion,
                 url=_log.url

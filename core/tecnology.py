@@ -7,7 +7,7 @@ from datetime import timedelta
 import time
 
 # Librerias Propias:
-from slaves import Contador, TIPOS_FACTURA
+from slaves import Contador
 from tools.comunicacion import Postman
 from tools.datos import Chronos
 
@@ -51,12 +51,8 @@ class Cfdineitor(object):
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
-            print "Esperando 15 sec para siguiente descarga"
-            time.sleep(15)
-            esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
-            print "Esperando 15 sec para siguiente descarga"
-            time.sleep(15)
+            esclavo.get_ByDay(esclavo.TIPOS_FACTURA[0], fecha)
+            esclavo.get_ByDay(esclavo.TIPOS_FACTURA[1], fecha)
 
         # self.informar_Resultados(log, esclavo.empresa, "RECIBIDAS")
 
@@ -72,8 +68,8 @@ class Cfdineitor(object):
         esclavo = Contador(empresa, self.ruta_ejecucion)
 
         # Descargar facturas:
-        # esclavo.get_ByDay(TIPOS_FACTURA[0], hoy)
-        esclavo.get_ByDay(TIPOS_FACTURA[1], hoy)
+        # esclavo.get_ByDay(esclavo.TIPOS_FACTURA[0], hoy)
+        esclavo.get_ByDay(esclavo.TIPOS_FACTURA[1], hoy)
 
     def get_AllCompanies_Today(self):
 
@@ -142,8 +138,8 @@ class Cfdineitor(object):
 
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
-            esclavo.validate_ByDay(TIPOS_FACTURA[0], fecha)
-            esclavo.validate_ByDay(TIPOS_FACTURA[1], fecha)
+            esclavo.validate_ByDay(esclavo.TIPOS_FACTURA[0], fecha)
+            esclavo.validate_ByDay(esclavo.TIPOS_FACTURA[1], fecha)
 
     def valid_Last2Monts(self, _empresa_clave):
 

@@ -66,6 +66,7 @@ class LogFilter(filters.FilterSet):
             'empresa__clave',
             'estado',
             'operacion',
+            'tipo_comprobante',
             'fecha_operacion_min',
             'fecha_operacion_max',
             'created_date_min',

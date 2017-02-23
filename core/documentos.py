@@ -929,10 +929,10 @@ class Comprobante(Archivo):
                 error.mensaje
             )
 
-        if _tipo == "RECIBIDAS":
+        if _tipo == "REC":
             self.resumen_tipo = "PROVEEDORES"
 
-        elif _tipo == "EMITIDAS":
+        elif _tipo == "EMI":
             if self.registroPatronal:
                 self.resumen_tipo = "EMPLEADOS"
             else:
@@ -985,6 +985,7 @@ class Comprobante(Archivo):
                         self.resumen_tipo
                     )
                 )
+                return 0
 
             print "Estado en BD: {}".format(record.estadoSat)
 
@@ -1028,6 +1029,7 @@ class Comprobante(Archivo):
                         self.resumen_tipo
                     )
                 )
+                return 0
 
             return 1
 
