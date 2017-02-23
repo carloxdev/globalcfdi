@@ -3,13 +3,17 @@
 # Librerias Python:
 import os
 
+# Otros Modelos
+from configuracion.models import Empresa
+
 # Librerias de Terceros
 from celery import task
+from dateutil import parser
 
 # Librerias Propias:
 from core.tecnology import Cfdineitor
-
 from core.slaves import Contador
+from core.slaves import TIPOS_FACTURA
 
 
 # @task(bind=True, max_retries=5)
@@ -73,17 +77,21 @@ from core.slaves import Contador
 #         self.retry(countdown=4, exc=e)
 
 @task(bind=True, max_retries=5)
-def obtener_Facturas(self, _empresa, _fecha, _tipo_factura):
+def obtener_Facturas(self, _empresa_clave, _fecha):
     try:
         run_path = os.path.abspath(
             os.path.join(os.getcwd(), os.pardir, 'Sitio')
         )
 
-        esclavo = Contador(_empresa, run_path)
-        esclavo.get_ByDay(_tipo_factura, _fecha)
+        fecha = parser.parse(_fecha)
+
+        empresa = Empresa.objects.get(clave=_empresa_clave)
+
+        esclavo = Contador(empresa, run_path)
+        esclavo.get_ByDay(TIPOS_FACTURA[0], fecha)
+        # esclavo.get_ByDay(TIPOS_FACTURA[1], fecha)
 
     except Exception as e:
-        print str(e)
         print "Se volvera intentar en 4 sec."
         self.retry(countdown=4, exc=e)
 

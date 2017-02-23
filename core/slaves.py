@@ -180,8 +180,6 @@ class Contador(object):
             log.estado = "ERROR"
             log.resument_text = str(error)
 
-            print str(error)
-
             raise ErrorEjecucion(
                 "Contador.get_ByDay()",
                 type(error).__name__,

@@ -45,10 +45,6 @@ from .models import ComprobanteEmpleado
 from .models import Log
 from .models import Resumen
 
-# Otros Modelos
-from configuracion.models import Empresa
-
-
 # Formularios:
 from .forms import FacturaRecibidaFormFiltros
 from .forms import FacturaEmitidaFormFiltros
@@ -58,7 +54,6 @@ from .forms import ResumenFormFiltros
 
 # Librerias Propias:
 from core.tools.datos import Chronos
-from core.slaves import TIPOS_FACTURA
 
 # Django Paginacion:
 # from django.core.paginator import Paginator
@@ -561,17 +556,11 @@ class ObtenerFacturas(View):
 
                 fechas = Chronos.getDays_FromRange(f_inicio, f_final)
 
-                empresa = Empresa.objects.get(clave=empresa_clave)
-
                 # Descargar Emitidas y Recibidas por cada fecha
                 for fecha in fechas:
 
                     obtener_Facturas.delay(
-                        empresa, fecha, TIPOS_FACTURA[0]
-                    )
-
-                    obtener_Facturas.delay(
-                        empresa, fecha, TIPOS_FACTURA[1]
+                        empresa_clave, str(fecha)
                     )
 
                 self.bandera = "INICIO_PROCESO"

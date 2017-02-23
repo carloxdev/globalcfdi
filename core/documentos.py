@@ -1045,10 +1045,11 @@ class Log(Archivo):
         self.empresa = _empresa
         self.fecha_operacion = _fecha_operacion
 
-        name = "{}-{}-{}_{}-{}.log".format(
+        name = "{}-{}-{}_{}_{}-{}.log".format(
             self.operacion,
             self.tipo,
             self.empresa.clave,
+            self.fecha_operacion.strftime("%d%m%y"),
             time.strftime("%d%m%y"),
             time.strftime("%H%M%S")
         )
