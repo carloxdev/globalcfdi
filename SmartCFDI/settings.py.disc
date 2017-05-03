@@ -5,6 +5,7 @@ import djcelery
 
 from celery.schedules import crontab
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,14 +29,13 @@ ALLOWED_HOSTS = [
 ]
 
 
-LOGIN_URL = 'seguridad.login'
+LOGIN_URL = 'seguridad:login'
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'material',
-    # 'material.frontend',
-    # 'material.admin',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,9 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     # 'autorizacion.apps.AutorizacionConfig',
     'seguridad.apps.SeguridadConfig',
+    'dashboards.apps.DashboardsConfig',
     'djcelery',
     'corsheaders',
 ]
+
+GRAPPELLI_ADMIN_TITLE = "SmartCFDI"
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,6 +121,7 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -171,7 +175,6 @@ DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = '/static/'
-# STATIC_URL = DOMINIO + '/static/'
 STATIC_ROOT = os.sep.join(
     os.path.abspath(__file__).split(os.sep)[:-2] + ['static']
 )
@@ -181,5 +184,4 @@ STATICFILES_FINDERS = (
 )
 
 MEDIA_URL = '/media/'
-# MEDIA_URL = DOMINIO + '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
