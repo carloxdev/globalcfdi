@@ -23,7 +23,6 @@ tst.py
 # ---------------------------------------
 SmartCFDI/settings.py
 
-
 # Celery
 # ---------------------------------------
 celerybeat-schedule

@@ -22,3 +22,11 @@ def validate_size(fieldfile_obj):
     megabyte_limit = 2.0
     if filesize > megabyte_limit * 1024 * 1024:
         raise ValidationError("Tamaño Máximo de Archivo {}MB".format(str(megabyte_limit)))
+
+
+def validate_clave(_value):
+
+    if ' ' in _value:
+        raise ValidationError(
+            "El campo no debe contener espacios."
+        )

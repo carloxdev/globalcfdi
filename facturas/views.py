@@ -513,6 +513,17 @@ class ResumenList(View):
         return render(request, self.template_name, contexto)
 
 
+class ResumenAPI(viewsets.ModelViewSet):
+    queryset = Resumen.objects.all().order_by('fecha',)
+    serializer_class = ResumenSerializer
+    pagination_class = GenericPagination
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = ResumenFilter
+
+
+# ----------------- OBTENER ----------------- #
+
 @method_decorator(login_required, name='dispatch')
 class ObtenerFacturas(View):
 
@@ -579,12 +590,3 @@ class ObtenerFacturas(View):
             'bandera': self.bandera,
         }
         return render(request, self.template_name, contexto)
-
-
-class ResumenAPI(viewsets.ModelViewSet):
-    queryset = Resumen.objects.all().order_by('fecha',)
-    serializer_class = ResumenSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ResumenFilter

@@ -20,7 +20,6 @@ else {
 // OBJS:
 var card_filtros = null
 var card_resultados = null
-var pagina = null
 
 
 /*-----------------------------------------------*\
@@ -30,11 +29,6 @@ var pagina = null
 $(document).ready(function () {
 
     card_resultados = new TargetaResultados()
-
-    pagina = new Pagina()
-
-    // Inicializar Alertify
-    pagina.init_Alertify()
 
 })
 

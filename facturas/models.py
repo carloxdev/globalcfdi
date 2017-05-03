@@ -119,13 +119,13 @@ class Log(models.Model):
 class Factura(models.Model):
 
     PAGADO_ESTADO = {
-        ('PENDIENTE', 'PENDIENTE'),
-        ('PAGADO', 'PAGADO'),
+        ('PEN', 'PENDIENTE'),
+        ('PAG', 'PAGADO'),
     }
 
     COMPROBACION_ESTADOS = (
-        ('RECONOCIDO', 'RECONOCIDO'),
-        ('NO_RECONOCIDO', 'NO RECONOCIDO'),
+        ('REC', 'RECONOCIDO'),
+        ('NRE', 'NO RECONOCIDO'),
     )
 
     # Comprobante
@@ -252,9 +252,9 @@ class Factura(models.Model):
     empresa = models.ForeignKey(Empresa)
     comentarios = models.TextField(null=True, blank=True)
     comprobacion = models.CharField(
-        max_length=13,
+        max_length=4,
         choices=COMPROBACION_ESTADOS,
-        default="NO_RECONOCIDO",
+        default="REC",
         null=True
     )
     url = models.CharField(max_length=255, null=True, blank=True)
@@ -263,9 +263,9 @@ class Factura(models.Model):
         max_length=255, null=True, blank=True, default="SIN VALIDAR")
 
     pago = models.CharField(
-        max_length=13,
+        max_length=4,
         choices=PAGADO_ESTADO,
-        default="PEDIENTE",
+        default="PEN",
         blank=True,
         null=True
     )

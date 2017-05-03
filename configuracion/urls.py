@@ -7,6 +7,7 @@ from django.conf.urls import url
 from .views import EmpresaListView
 from .views import EmpresaCreateView
 from .views import EmpresaUpdateView
+from .views import EmpresaTestCredentials
 
 
 # ----------------- Empresas ----------------- #
@@ -28,5 +29,10 @@ urlpatterns = [
         r'^empresas/editar/(?P<pk>.*)/$',
         EmpresaUpdateView.as_view(),
         name='empresa_editar'
+    ),
+    url(
+        r'^empresas/test_credentials/(?P<pk>.*)/$',
+        EmpresaTestCredentials.as_view(),
+        name='empresa_verificacion'
     ),
 ]

@@ -9,22 +9,47 @@ from django.contrib.auth.models import User
 
 # Librerias Propias
 from .utilities import get_FilePath
+from .utilities import get_ImagePath
+
 from .validators import validate_cert
 from .validators import validate_key
 from .validators import validate_size
+from .validators import validate_clave
 
 
 class Empresa(models.Model):
 
-    clave = models.CharField(max_length=144, null=True)
+    VERIFICACION_ESTADO = (
+        ('VER', 'Verificada'),
+        ('PEN', 'Sin Verificar'),
+        ('PRO', 'Verificando'),
+        ('ERR', 'Error en verificacion'),
+    )
+
+    clave = models.CharField(
+        max_length=144,
+        null=True,
+        validators=[validate_clave],
+        unique=True
+    )
     razon_social = models.CharField(max_length=144)
     logo = models.ImageField(
-        upload_to='empresas/imagenes',
+        upload_to=get_ImagePath,
         blank=True,
         null=True
     )
-    rfc = models.CharField(max_length=144, null=True, blank=True)
-    ciec = models.CharField(max_length=144, null=True, blank=True)
+    rfc = models.CharField(
+        max_length=144,
+        null=True,
+        blank=True,
+        validators=[validate_clave]
+    )
+    ciec = models.CharField(
+        max_length=144,
+        null=True,
+        blank=True,
+        validators=[validate_clave]
+    )
     certificado = models.FileField(
         upload_to=get_FilePath,
         blank=True,
@@ -43,7 +68,17 @@ class Empresa(models.Model):
             validate_size
         ]
     )
-    contrasena = models.CharField(max_length=144, null=True, blank=True)
+    contrasena = models.CharField(
+        max_length=144,
+        null=True,
+        blank=True,
+        validators=[validate_clave]
+    )
+    verificada = models.CharField(
+        max_length=4,
+        choices=VERIFICACION_ESTADO,
+        default="PEN"
+    )
     activa = models.BooleanField(default=False)
     usuario = models.ForeignKey(User)
     email = models.EmailField(blank=True, null=True)

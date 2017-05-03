@@ -4,6 +4,7 @@
 from django.forms import ModelForm
 from django.forms import TextInput
 from django.forms import Select
+from django.forms import PasswordInput
 
 # Modelos:
 from .models import Empresa
@@ -20,7 +21,10 @@ class EmpresaCreateForm(ModelForm):
 
     class Meta:
         model = Empresa
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = [
+            'verificada',
+        ]
         widgets = {
             'clave': TextInput(attrs={'class': 'form-control'}),
             'razon_social': TextInput(attrs={'class': 'form-control'}),
@@ -28,7 +32,7 @@ class EmpresaCreateForm(ModelForm):
             'ciec': TextInput(attrs={'class': 'form-control'}),
             'email': TextInput(attrs={'class': 'form-control'}),
             'usuario': Select(attrs={'class': 'form-control'}),
-            'contrasena': TextInput(attrs={'class': 'form-control'}),
+            'contrasena': PasswordInput(attrs={'class': 'form-control'}),
         }
 
 
@@ -43,9 +47,10 @@ class EmpresaEditForm(ModelForm):
 
     class Meta:
         model = Empresa
-        fields = '__all__'
+        # fields = '__all__'
         exclude = [
             'clave',
+            'verificada',
         ]
         widgets = {
             'razon_social': TextInput(attrs={'class': 'form-control'}),

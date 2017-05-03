@@ -18,9 +18,7 @@ from core.slaves import Contador
 @task(bind=True, max_retries=5)
 def obtener_Facturas(self, _empresa_clave, _fecha, _tipo):
     try:
-        run_path = os.path.abspath(
-            os.path.join(os.getcwd(), os.pardir, 'Sitio')
-        )
+        run_path = os.path.abspath(os.path.join(os.getcwd(), os.pardir, 'Sitio'))
 
         fecha = parser.parse(_fecha)
 
@@ -30,7 +28,7 @@ def obtener_Facturas(self, _empresa_clave, _fecha, _tipo):
         esclavo.get_ByDay(_tipo, fecha)
 
     except Exception as e:
-        print "Se volvera intentar en 4 sec."
+        print "Se volvera intentar en 4 seg."
         self.retry(countdown=4, exc=e)
 
 

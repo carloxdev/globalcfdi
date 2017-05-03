@@ -1,6 +1,14 @@
 /*-----------------------------------------------*\
+            GLOBAL VARIABLES
+\*-----------------------------------------------*/
+
+// OBJS:
+var pagina = null
+
+/*-----------------------------------------------*\
             LOAD
 \*-----------------------------------------------*/
+
 
 $(document).ready(function () {
 
@@ -14,12 +22,19 @@ $(document).ready(function () {
 
 function Pagina () {
 
+    this.init()
 }
-Pagina.prototype.init_Alertify = function () {
-    alertify.set('notifier', 'position', 'top-right')
-    alertify.set('notifier', 'delay', 10)	
+Pagina.prototype.init = function () {
+    
+    this.set_AlertifyConfig()
+}
+Pagina.prototype.set_AlertifyConfig = function() {
 
-	alertify.defaults.theme.ok = "btn btn-primary";
-	alertify.defaults.theme.cancel = "btn btn-danger";
-	alertify.defaults.theme.input = "form-control";
+    alertify.set('notifier', 'position', 'top-right')
+    alertify.set('notifier', 'delay', 10)   
+
+    alertify.defaults.theme.ok = "btn btn-primary";
+    alertify.defaults.theme.cancel = "btn btn-danger";
+    alertify.defaults.theme.input = "form-control";
+
 }

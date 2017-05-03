@@ -38,7 +38,19 @@
 		<div class="panel panel-default">
 
 			<div class="panel-heading">
-				Empresa: <strong class="app-id-registro">{% if clave %} {{ clave }} {% endif %}</strong>
+				Empresa: <strong class="app-id-registro">{% if empresa.clave %} {{ empresa.clave }} {% endif %}</strong>
+				<span class="badge" id="empresa_pk">{{ empresa.pk }}</span>
+
+				{% if empresa.verificada == "VER" %}
+					<span class="label label-success verifi-label pull-right">{{ empresa.get_verificada_display }}</span>
+				{% elif empresa.verificada == "PEN" %}
+					<span class="label label-default verifi-label pull-right">{{ empresa.get_verificada_display }}</span>
+				{% elif empresa.verificada == "PRO" %}
+					<span class="label label-warning verifi-label pull-right">{{ empresa.get_verificada_display }}</span>					
+				{% else %}
+					<span class="label label-danger verifi-label pull-right">{{ empresa.get_verificada_display }}</span>
+				{% endif %}
+				
 			</div>
 
 			<div class="panel-body">
@@ -49,7 +61,8 @@
 			</div>
 
 			<div class="panel-footer">
-				<a href="{% url 'configuracion:empresa_lista' %}"type="button" class="btn btn-default">Regresar</a>
+				<a href="{% url 'configuracion:empresa_lista' %}" type="button" class="btn btn-default">Regresar</a>
+				<a href="{% url 'configuracion:empresa_verificacion' empresa.pk %}" class="btn btn-info">Probar Credenciales</a>
 				<button class="btn btn-success pull-right" type="submit">Guardar</button>	
 			</div>
 		</div>
@@ -58,3 +71,12 @@
 </div>
 
 {% endblock contenido %}
+
+{% block scripts %}
+
+	<!-- SmartCFDI -->
+	<script src="{% static 'empresa/empresa.js' %}"></script>
+
+{% endblock scripts %}	
+
+

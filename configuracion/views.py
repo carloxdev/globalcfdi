@@ -37,8 +37,11 @@ from .models import Empresa
 from .forms import EmpresaCreateForm
 from .forms import EmpresaEditForm
 
+# Tasks
+from .tasks import test_Credentials
 
 # ----------------- EMPRESA ----------------- #
+
 
 @method_decorator(login_required, name='dispatch')
 class EmpresaListView(View):
@@ -113,12 +116,10 @@ class EmpresaUpdateView(View):
 
     def __init__(self):
         self.template_name = 'empresa/empresa_editar.html'
-        self.clave = ''
 
     def get(self, request, pk):
 
         empresa = get_object_or_404(Empresa, pk=pk)
-        self.clave = empresa.clave
 
         formulario = EmpresaEditForm(
             username=request.user,
@@ -127,7 +128,7 @@ class EmpresaUpdateView(View):
 
         contexto = {
             'form': formulario,
-            'clave': self.clave
+            'empresa': empresa
         }
 
         return render(request, self.template_name, contexto)
@@ -172,6 +173,17 @@ class EmpresaUpdateView(View):
             'clave': self.clave
         }
         return render(request, self.template_name, contexto)
+
+
+@method_decorator(login_required, name='dispatch')
+class EmpresaTestCredentials(View):
+
+    def __init__(self):
+        self.template_name = "empresa/empresa_verificacion.html"
+
+    def get(self, request, pk):
+        test_Credentials.delay(pk)
+        return render(request, self.template_name, {})
 
 
 class EmpresaAPI(viewsets.ModelViewSet):

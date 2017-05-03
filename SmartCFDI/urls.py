@@ -79,6 +79,9 @@ urlpatterns = [
     url(r'', include('configuracion.urls', namespace="configuracion")),
     url(r'', include('facturas.urls', namespace="facturas")),
     url(r'', include('dashboards.urls', namespace="dashboards")),
+
+    url(r'^grappelli/', include('grappelli.urls')),  # grappelli URLS
+    url(r'^admin/', include(admin.site.urls)),  # admin site
 ]
 
 
