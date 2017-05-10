@@ -74,7 +74,6 @@ class Contador(object):
                 self.empresa.contrasena,
                 self.empresa.rfc
             )
-
             elFiltro = Filtro(_fecha)
 
             if _tipo == self.TIPOS_FACTURA[0]:

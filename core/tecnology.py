@@ -49,6 +49,7 @@ class Cfdineitor(object):
         # Crear esclavo Contador:
         esclavo = Contador(empresa, self.ruta_ejecucion)
 
+
         # Descargar Emitidas y Recibidas por cada fecha
         for fecha in fechas:
             esclavo.get_ByDay(esclavo.TIPOS_FACTURA[0], fecha)

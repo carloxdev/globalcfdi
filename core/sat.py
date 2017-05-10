@@ -13,6 +13,8 @@ from tools.mistakes import ErrorEjecucion
 from tools.mistakes import ErrorValidacion
 from tools.datos import Visualizador
 from tools.datos import Chronos
+import ipdb
+import time
 
 
 class SitioLogin(object):
@@ -126,7 +128,6 @@ class WebSat(object):
             if len(_links) != 0:
 
                 qtyLinks = len(_links)
-
                 for indice, link in enumerate(_links):
 
                     print '--- Descargando Factura {0} de {1}'.format(
@@ -473,11 +474,11 @@ class WebSat(object):
             )
 
     def search_InvoicesReceived(self, _filtro):
-
         try:
+
             # Redirigiendo a pagina de consulta
             self.navegador.get(SitioFacturasRecibidas.url)
-            wait = WebDriverWait(self.navegador, 15)
+            wait = WebDriverWait(self.navegador, 25)
             wait.until(EC.title_contains('Buscar CFDI'))
 
             # Configurando filtros
@@ -493,13 +494,11 @@ class WebSat(object):
                 input_uuid.send_keys(_filtro.uuid)
 
             else:
-
                 # Se selecciona la busqueda por FECHA DE EMISION
                 opcion = self.navegador.find_element_by_id(
                     SitioFacturasRecibidas.date
                 )
                 opcion.click()
-                wait.until(EC.staleness_of(opcion))
 
                 # Filtro: Fecha de Emision
                 input_fechaEmision = wait.until(
@@ -507,6 +506,9 @@ class WebSat(object):
                         (By.ID, SitioFacturasRecibidas.emisor)
                     )
                 )
+
+                wait.until(EC.staleness_of(opcion))
+
                 input_fechaEmision.send_keys(_filtro.emisor_rfc)
 
                 # Filtro: Anio
@@ -565,13 +567,21 @@ class WebSat(object):
                 SitioFacturasRecibidas.resultados
             )
 
+            scroll_to_element = "document.getElementById('"'{}'"').scrollIntoView(false);".format(
+                SitioFacturasRecibidas.submit
+                )
+
+            self.navegador.execute_script(scroll_to_element)
+
+        
             self.navegador.find_element_by_id(
                 SitioFacturasRecibidas.submit
             ).click()
 
+
             wait.until(EC.staleness_of(tabla_resultados))
 
-            resultados = wait.until(
+            resultados=wait.until(
                 Visualizador(
                     (By.ID, SitioFacturasRecibidas.resultados),
                     (By.ID, SitioFacturasRecibidas.noresultados)
@@ -584,7 +594,7 @@ class WebSat(object):
                 )
                 )
 
-                links = self.navegador.find_elements_by_name(
+                links=self.navegador.find_elements_by_name(
                     SitioFacturasRecibidas.download
                 )
                 return links
@@ -614,9 +624,9 @@ class WebServiceSAT(object):
 
         try:
 
-            webservice = 'https://consultaqr.facturaelectronica.sat.gob.mx/' \
+            webservice='https://consultaqr.facturaelectronica.sat.gob.mx/' \
                 'consultacfdiservice.svc'
-            mensajeSoap = """<?xml version="1.0" encoding="UTF-8"?>
+            mensajeSoap="""<?xml version="1.0" encoding="UTF-8"?>
                                 <soap:Envelope
                                     xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
                                     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -631,24 +641,24 @@ class WebServiceSAT(object):
                                     </soap:Body>
                                 </soap:Envelope>"""
 
-            datos = mensajeSoap.format(
+            datos=mensajeSoap.format(
                 emisor_rfc, receptor_rfc, total, uuid).encode('utf-8')
-            cabecera = {
+            cabecera={
                 'SOAPAction': '"http://tempuri.org/'
                 'IConsultaCFDIService/Consulta"',
                 'Content-length': len(datos),
                 'Content-type': 'text/xml; charset="UTF-8"'
             }
 
-            sesion_ = Session()
-            request_ = Request('POST', webservice,
+            sesion_=Session()
+            request_=Request('POST', webservice,
                                data=datos, headers=cabecera)
 
-            prepped = request_.prepare()
+            prepped=request_.prepare()
 
-            response = sesion_.send(prepped, timeout=5)
-            tree = ElementTree.fromstring(response.text)
-            estado = tree[0][0][0][1].text
+            response=sesion_.send(prepped, timeout=5)
+            tree=ElementTree.fromstring(response.text)
+            estado=tree[0][0][0][1].text
 
             return estado
 
