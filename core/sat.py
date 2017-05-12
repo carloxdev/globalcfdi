@@ -13,8 +13,6 @@ from tools.mistakes import ErrorEjecucion
 from tools.mistakes import ErrorValidacion
 from tools.datos import Visualizador
 from tools.datos import Chronos
-import ipdb
-import time
 
 
 class SitioLogin(object):
@@ -102,16 +100,24 @@ class WebSat(object):
 
         if self.navegador:
             try:
-                link = self.navegador.find_element_by_partial_link_text(
-                    'Cerrar Sesi'
+                # link = self.navegador.find_element_by_partial_link_text(
+                #     'Cerrar Sesi'
+                # )
+                scroll_to_element = "document.getElementById('"'{}'"').scrollIntoView(false);".format(
+                'anchorClose'
                 )
+
+                self.navegador.execute_script(scroll_to_element)
+                link = self.navegador.find_element_by_id(
+                    'anchorClose'
+                    )
+                
                 link.click()
                 print "Desconeccion del SAT....OK"
 
             except Exception, error:
-
+               
                 print str(error)
-
                 raise ErrorEjecucion(
                     "WebSAT.disconnect()",
                     type(error).__name__,
@@ -431,6 +437,12 @@ class WebSat(object):
             tabla_resultados = self.navegador.find_element_by_id(
                 SitioFacturasEmitidas.resultados
             )
+
+            scroll_to_element = "document.getElementById('"'{}'"').scrollIntoView(false);".format(
+                SitioFacturasEmitidas.submit
+                )
+
+            self.navegador.execute_script(scroll_to_element)
 
             self.navegador.find_element_by_id(
                 SitioFacturasEmitidas.submit

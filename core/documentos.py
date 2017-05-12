@@ -939,6 +939,7 @@ class Comprobante(Archivo):
                 self.resumen_tipo = "CLIENTES"
         else:
             self.resumen_tipo = "DESCONOCIDO"
+    
 
     def __str__(self):
         return """
@@ -1011,7 +1012,6 @@ class Comprobante(Archivo):
             _urlpath,
             self.nombre
         )
-
         try:
             if self.resumen_tipo == "PROVEEDORES":
                 ModeloFacturaProveedor.add(self)

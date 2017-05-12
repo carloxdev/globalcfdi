@@ -18,6 +18,7 @@ from documentos import Log
 from sitio import ModeloResumen
 
 
+
 class Contador(object):
 
     TIPOS_FACTURA = ("REC", "EMI")
@@ -97,7 +98,6 @@ class Contador(object):
                 )
 
             elSat.disconnect()
-
             if no_encontradas > 0:
 
                 print "\nELIMINADO ARCHIVOS REPETIDOS: "
@@ -119,7 +119,7 @@ class Contador(object):
                         )
                         print "\nLeyendo archivo: {}".format(archivo.nombre)
                         comprobante.read(_tipo)
-
+                        
                         # Guardar en BD:
                         resultado_saveToDB = comprobante.save_toBD(
                             self.empresa.clave,

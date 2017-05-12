@@ -163,7 +163,7 @@ class ModeloFacturaProveedor(object):
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
                 selloSAT=_comprobante.selloSAT,
                 url=_comprobante.url,
-                pago="PENDIENTE",
+                pago="PEN",
             )
 
             empresa = Empresa.objects.get(clave=_comprobante.empresa_clave)
@@ -264,7 +264,7 @@ class ModeloFacturaCliente(object):
                 noCertificadoSAT=_comprobante.noCertificadoSAT,
                 selloSAT=_comprobante.selloSAT,
                 url=_comprobante.url,
-                pago="PENDIENTE",
+                pago="PEN",
             )
             empresa = Empresa.objects.get(clave=_comprobante.empresa_clave)
             comprobante.empresa = empresa
