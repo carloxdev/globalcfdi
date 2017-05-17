@@ -142,6 +142,50 @@ class Comprobante(Archivo):
         # Horas Extras
         self.horasExtras = []
 
+        # Nomina12 Datos
+        self.v12_Version = ''
+        self.v12_TipoNomina = ''
+        self.v12_FechaPago = ''
+        self.v12_FechaInicialPago = ''
+        self.v12_FechaFinalPago = ''
+        self.v12_NumDiasPagados = ''
+        self.v12_TotalPercepciones = ''
+        self.v12_TotalDeducciones = ''
+
+        # Nomina12 Emisor
+        self.v12_RegistroPatronal = ''
+
+        # Nomina12 Receptor
+        self.v12_Curp = ''
+        self.v12_NumSeguridadSocial = ''
+        self.v12_FechaInicioRelLaboral = ''
+        self.v12_Antiguedad = ''
+        self.v12_TipoContrato = ''
+        self.v12_TipoJornada = ''
+        self.v12_TipoRegimen = ''
+        self.v12_NumEmpleado = ''
+        self.v12_Puesto = ''
+        self.v12_RiesgoPuesto = ''
+        self.v12_PeriodicidadPago = ''
+        self.v12_CuentaBancaria = ''
+        self.v12_SalarioBaseCotApor = ''
+        self.v12_SalarioDiarioIntegrado = ''
+        self.v12_ClaveEntFed = ''
+
+        # Nomina12 Percepciones
+        self.v12_TotalSueldos = '0'
+        self.v12_TotalGravado = '0'
+        self.v12_TotalExento = '0'
+        self.v12_percepciones = []
+
+        # Nomina12 Deducciones
+        self.v12_TotalOtrasDeducciones = '0'
+        self.v12_TotalImpuestosRetenidos = '0'
+        self.v12_deducciones = []
+
+        # Horas12 Extras
+        self.v12_horasExtras = []
+
         # Url, Estado:
         self.empresa_clave = ''
         self.url = ''
@@ -766,6 +810,233 @@ class Comprobante(Archivo):
                 str(error)
             )
 
+    def read_Nomina12_Node(self):
+
+        try:
+
+            nodo = self.raiz.find('cfdi:Complemento', self.name_spaces).find(
+                'nomina12:Nomina',
+                self.name_spaces
+            )
+            self.V12_Version = Validator.convertToChar(
+                nodo.get('Version')
+
+            )
+            self.V12_TipoNomina = Validator.convertToChar(
+                nodo.get('TipoNomina')
+            )
+            self.V12_FechaPago = Validator.convertToDate(
+                nodo.get('FechaPago')
+            )
+            self.V12_FechaInicialPago = Validator.convertToDate(
+                nodo.get('FechaInicialPago')
+            )
+            self.V12_FechaFinalPago = Validator.convertToDate(
+                nodo.get('FechaFinalPago')
+            )
+            self.V12_NumDiasPagados = Validator.convertToChar(
+                nodo.get('NumDiasPagados')
+            )
+            self.V12_TotalPercepciones = Validator.convertToFloat(
+                nodo.get('TotalPercepciones')
+            )
+            self.V12_TotalDeducciones = Validator.convertToFloat(
+                nodo.get('TotalDeducciones')
+            )
+
+            return True
+
+        except Exception, error:
+
+            raise ErrorEjecucion(
+                'Comprobante.read_Nomina12_Node()',
+                type(error).__name__,
+                str(error)
+            )
+
+    def read_Nomina12_Emisor_Node(self):
+
+        try:
+
+            nodo = self.raiz.find('cfdi:Complemento', self.name_spaces).find(
+                'nomina12:Nomina',
+                self.name_spaces
+            ).find('nomina12:Emisor', self.name_spaces)
+
+            self.v12_RegistroPatronal = Validator.convertToChar(
+                nodo.get('RegistroPatronal')
+
+            )
+
+            return True
+
+        except Exception, error:
+
+            raise ErrorEjecucion(
+                'Comprobante.read_Nomina12_Node()',
+                type(error).__name__,
+                str(error)
+            )
+
+
+
+
+    def read_Nomina12_Receptor_Node(self):
+
+        try:
+
+            nodo = self.raiz.find('cfdi:Complemento', self.name_spaces).find(
+                'nomina12:Nomina',
+                self.name_spaces
+            ).find('nomina12:Receptor', self.name_spaces)
+
+            self.v12_Curp = Validator.convertToChar(
+                nodo.get('Curp')
+            )
+            self.v12_NumSeguridadSocial = Validator.convertToChar(
+                nodo.get('NumSeguridadSocial')
+            )
+            self.v12_FechaInicioRelLaboral = Validator.convertToDate(
+                nodo.get('FechaInicioRelLaboral')
+            )
+            self.v12_Antiguedad = Validator.convertToChar(
+                nodo.get('Antiguedad')
+            )
+            self.v12_TipoContrato = Validator.convertToChar(
+                nodo.get('TipoContrato')
+            )
+            self.v12_TipoJornada = Validator.convertToChar(
+                nodo.get('TipoJornada')
+            )
+            self.v12_TipoRegimen = Validator.convertToChar(
+                nodo.get('TipoRegimen')
+            )
+            self.v12_NumEmpleado = Validator.convertToChar(
+                nodo.get('NumEmpleado')
+            )
+            self.v12_Puesto = Validator.convertToChar(
+                nodo.get('Puesto')
+            )
+            self.v12_RiesgoPuesto = Validator.convertToChar(
+                nodo.get('RiesgoPuesto')
+            )
+            self.v12_PeriodicidadPago = Validator.convertToChar(
+                nodo.get('PeriodicidadPago')
+            )
+            self.v12_CuentaBancaria = Validator.convertToChar(
+                nodo.get('CuentaBancaria')
+            )
+            self.v12_SalarioBaseCotApor = Validator.convertToChar(
+                nodo.get('SalarioBaseCotApor')
+            )
+            self.v12_SalarioDiarioIntegrado = Validator.convertToFloat(
+                nodo.get('SalarioDiarioIntegrado')
+            )
+            self.v12_ClaveEntFed = Validator.convertToFloat(
+                nodo.get('ClaveEntFed')
+            )
+
+            return True
+
+        except Exception, error:
+
+            raise ErrorEjecucion(
+                'Comprobante.read_Nomina12_Node()',
+                type(error).__name__,
+                str(error)
+            )
+
+
+    def read_Nomina12_Percepciones_Node(self):
+
+        try:
+            nodos = self.raiz.find('cfdi:Complemento', self.name_spaces).find(
+                'nomina12:Nomina',
+                self.name_spaces
+            ).find('nomina12:Percepciones', self.name_spaces)
+            
+            self.v12_TotalSueldos = Validator.convertToFloat(
+                nodos.get('TotalSueldos')
+            )
+            self.V12_percepciones_totalGravado = Validator.convertToFloat(
+                nodos.get('TotalGravado')
+            )
+            self.V12_percepciones_totalExento = Validator.convertToFloat(
+                nodos.get('TotalExento')
+            )
+
+            for nodo in nodos:
+                item = {
+                    'TipoPercepcion': Validator.convertToChar(
+                        nodo.get('TipoPercepcion')
+                    ),
+                    'Clave': Validator.convertToChar(nodo.get('Clave')),
+                    'Concepto': Validator.convertToChar(nodo.get('Concepto')),
+                    'ImporteGravado': Validator.convertToChar(
+                        nodo.get('ImporteGravado')
+                    ),
+                    'ImporteExento': Validator.convertToChar(
+                        nodo.get('ImporteExento')
+                    ),
+                }
+
+                self.V12_percepciones.append(item)
+
+            return True
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'Comprobante.read_Nomina12_Percepciones_Node()',
+                type(error).__name__,
+                str(error)
+            )
+
+
+    def read_Nomina12_Deducciones_Node(self):
+
+        try:
+            nodos = self.raiz.find('cfdi:Complemento', self.name_spaces).find(
+                'nomina12:Nomina',
+                self.name_spaces
+            ).find('nomina12:Deducciones', self.name_spaces)
+
+            self.V12_TotalOtrasDeducciones = Validator.convertToFloat(
+                nodos.get('TotalOtrasDeducciones')
+            )
+            self.V12_TotalImpuestosRetenidos = Validator.convertToFloat(
+                nodos.get('TotalImpuestosRetenidos')
+            )
+
+            for nodo in nodos:
+                item = {
+                    'TipoDeduccion': Validator.convertToChar(
+                        nodo.get('TipoDeduccion')
+                    ),
+                    'Clave': Validator.convertToChar(
+                        nodo.get('Clave')
+                    ),
+                    'Concepto': Validator.convertToChar(
+                        nodo.get('Concepto')
+                    ),
+                    'Importe': Validator.convertToChar(
+                        nodo.get('Importe')
+                    ),
+
+                }
+
+                self.V12_deducciones.append(item)
+
+            return True
+
+        except Exception, error:
+            raise ErrorEjecucion(
+                'Comprobante.read_Nomina12_Deducciones_Node()',
+                type(error).__name__,
+                str(error)
+            )
+
+
+
     def read(self, _tipo):
 
         # Se obtienen datos del COMPROBANTE
@@ -929,6 +1200,55 @@ class Comprobante(Archivo):
                 error.mensaje
             )
 
+        # Se obtienen datos del nodo NOMINA v1.2
+        try:
+            self.read_Nomina12_Node()
+            print "Obtiendo datos del nodo NOMINA12..................OK"
+
+        except Exception, error:
+            print "Obtiendo datos del nodo NOMINA12..................{}".format(
+                error.mensaje
+            )
+        
+        # Se obtienen datos del nodo EMISOR v1.2
+        try:
+            self.read_Nomina12_Emisor_Node()
+            print "Obtiendo datos del nodo EMISOR12..................OK"
+
+        except Exception, error:
+            print "Obtiendo datos del nodo EMISOR12..................{}".format(
+                error.mensaje
+            )
+
+        # Se obtienen datos del nodo RECEPTOR v1.2
+        try:
+            self.read_Nomina12_Receptor_Node()
+            print "Obtiendo datos del nodo RECEPTOR12..................OK"
+
+        except Exception, error:
+            print "Obtiendo datos del nodo RECEPTOR12..................{}".format(
+                error.mensaje
+            )
+
+        # Se obtienen datos del nodo PERCEPCIONES
+        try:
+            self.read_Nomina12_Percepciones_Node()
+            print "Obtiendo datos del nodo PERCEPCIONES12............OK"
+
+        except Exception, error:
+            print "Obtiendo datos del nodo PERCEPCIONES12............{}".format(
+                error.mensaje
+            )
+
+        # Se obtienen datos del nodo DEDUCCIONES
+        try:
+            self.read_Nomina12_Deducciones_Node()
+            print "Obtiendo datos del nodo DEDUCCIONES12.............OK"
+
+        except Exception, error:
+            print "Obtiendo datos del nodo DEDUCCIONES12.............{}".format(
+                error.mensaje
+            )
         if _tipo == "REC":
             self.resumen_tipo = "PROVEEDORES"
 

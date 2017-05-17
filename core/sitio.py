@@ -305,6 +305,8 @@ class ModeloComprobanteEmpleado(object):
     @classmethod
     def add(self, _comprobante):
         try:
+            import ipdb
+            ipdb.set_trace()
             connection.close()
             comprobante = ComprobanteEmpleado(
                 serie=_comprobante.serie,

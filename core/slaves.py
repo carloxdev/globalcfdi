@@ -58,7 +58,6 @@ class Contador(object):
         )
 
         try:
-
             log.begin_capture()
             relativepath = ruta.relativepath
             download_abspath = ruta.abspath
