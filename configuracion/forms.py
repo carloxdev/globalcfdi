@@ -16,7 +16,7 @@ class EmpresaCreateForm(ModelForm):
         self.usuario = kwargs.pop('username')
         super(EmpresaCreateForm, self).__init__(*args, **kwargs)
 
-        if self.usuario.username != 'root':
+        if self.usuario.is_superuser is False:
             del self.fields['usuario']
 
     class Meta:
@@ -42,7 +42,7 @@ class EmpresaEditForm(ModelForm):
         self.usuario = kwargs.pop('username')
         super(EmpresaEditForm, self).__init__(*args, **kwargs)
 
-        if self.usuario.username != 'root':
+        if self.usuario.is_superuser is False:
             del self.fields['usuario']
 
     class Meta:
