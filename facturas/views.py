@@ -17,33 +17,11 @@ import calendar
 from datetime import date
 from datetime import datetime
 
-# API Rest:
-from rest_framework import viewsets
-from rest_framework import filters
-
-# Serializadores:
-from .serializers import FacturaProveedorSerializer
-from .serializers import FacturaClienteSerializer
-from .serializers import ComprobanteEmpleadoSerializer
-from .serializers import LogSerializer
-from .serializers import ResumenSerializer
-
-# Paginadores:
-from .pagination import GenericPagination
-
-# Filtros:
-from .filters import LogFilter
-from .filters import FacturaProveedorFilter
-from .filters import FacturaClienteFilter
-from .filters import ComprobanteEmpleadoFilter
-from .filters import ResumenFilter
 
 # Modelos
 from .models import FacturaProveedor
 from .models import FacturaCliente
 from .models import ComprobanteEmpleado
-from .models import Log
-from .models import Resumen
 
 # Formularios:
 from .forms import FacturaRecibidaFormFiltros
@@ -65,6 +43,7 @@ from .tasks import obtener_Facturas
 from core.sat import WebServiceSAT
 
 
+@method_decorator(login_required, name='dispatch')
 class ValidarFactura(View):
 
     def get(self, request, type, uuid):
@@ -120,6 +99,7 @@ class ValidarFactura(View):
         return HttpResponse(data, content_type='application/json')
 
 
+@method_decorator(login_required, name='dispatch')
 class MarcarPago(View):
 
     def get(self, request, type, uuid, value):
@@ -161,6 +141,7 @@ class MarcarPago(View):
         return HttpResponse(data, content_type='application/json')
 
 
+@method_decorator(login_required, name='dispatch')
 class ReconocerFactura(View):
 
     def get(self, request, type, uuid, value):
@@ -201,8 +182,6 @@ class ReconocerFactura(View):
 
         return HttpResponse(data, content_type='application/json')
 
-
-# ----------------- FACTURA PROVEEDOR ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class FacturaProveedorList(View):
@@ -249,43 +228,6 @@ class FacturaProveedorList(View):
         return render(request, self.template_name, contexto)
 
 
-class FacturaProveedorAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaProveedorSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaProveedorFilter
-
-    def get_queryset(self):
-
-        if self.request.user.is_staff:
-            facturas = FacturaProveedor.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-class FacturaProveedorTodosAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaProveedorSerializer
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaProveedorFilter
-
-    def get_queryset(self):
-
-        if self.request.user.is_staff:
-            facturas = FacturaProveedor.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-# ----------------- FACTURA CLIENTE ----------------- #
-
 @method_decorator(login_required, name='dispatch')
 class FacturaClienteList(View):
 
@@ -330,41 +272,6 @@ class FacturaClienteList(View):
 
         return render(request, self.template_name, contexto)
 
-
-class FacturaClienteAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaClienteSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaClienteFilter
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            facturas = FacturaCliente.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-class FacturaClienteTodosAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaClienteSerializer
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaClienteFilter
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            facturas = FacturaCliente.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-# ----------------- COMPROBANTE EMPLEADO ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class ComprobanteEmpleadoList(View):
@@ -411,43 +318,8 @@ class ComprobanteEmpleadoList(View):
         return render(request, self.template_name, contexto)
 
 
-class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
-    serializer_class = ComprobanteEmpleadoSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ComprobanteEmpleadoFilter
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            facturas = ComprobanteEmpleado.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = ComprobanteEmpleado.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-class ComprobanteEmpleadoTodosAPI(viewsets.ModelViewSet):
-    serializer_class = ComprobanteEmpleadoSerializer
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ComprobanteEmpleadoFilter
-
-    def get_queryset(self):
-        if self.request.user.is_staff:
-            facturas = ComprobanteEmpleado.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-            facturas = ComprobanteEmpleado.objects.filter(empresa__in=empresas)
-
-        return facturas
-
-
-# ----------------- LOG ----------------- #
-
 @method_decorator(login_required, name='dispatch')
-class LogsList(View):
+class LogList(View):
 
     def __init__(self):
         self.template_name = 'log/log_lista.html'
@@ -462,17 +334,6 @@ class LogsList(View):
 
         return render(request, self.template_name, contexto)
 
-
-class LogAPI(viewsets.ModelViewSet):
-    queryset = Log.objects.all().order_by('-created_date',)
-    serializer_class = LogSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = LogFilter
-
-
-# ----------------- RESUMEN ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class ResumenList(View):
@@ -512,17 +373,6 @@ class ResumenList(View):
 
         return render(request, self.template_name, contexto)
 
-
-class ResumenAPI(viewsets.ModelViewSet):
-    queryset = Resumen.objects.all().order_by('fecha',)
-    serializer_class = ResumenSerializer
-    pagination_class = GenericPagination
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = ResumenFilter
-
-
-# ----------------- OBTENER ----------------- #
 
 @method_decorator(login_required, name='dispatch')
 class ObtenerFacturas(View):
