@@ -2,24 +2,15 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
-// URLS:
-var url = window.location
-var url_consulta = ""
-var url_archivos = ""
+var dominio = window.location.origin
 
-if (url.pathname.search("smart") > 0) {
-    url_consulta = url.origin + "/smart/api/logs/"
-    url_archivos = url.origin + "/smart/media/"
-}
-else {
-    url_consulta = url.origin + "/api/logs/"
-    url_archivos = url.origin + "/media/"
-}
+// URLS:
+var url_log_bypage = dominio + "/api-facturas/log_bypage/"
+var url_archivos = dominio + "/media/"
 
 // OBJS:
 var card_filtros = null
 var card_resultados = null
-// var pagina = null
 
 
 /*-----------------------------------------------*\
@@ -242,7 +233,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_log_bypage,
                 type: "GET",
                 dataType: "json",
             },

@@ -3,8 +3,10 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
+var dominio = window.location.origin
+
 // URLS:
-var url_empresa_bypage = window.location.origin + "/api-configuracion/empresa_bypage/"
+var url_empresa_bypage = dominio + "/api-configuracion/empresa_bypage/"
 var url_empresa_editar = ""
 
 // OBJS:
@@ -19,7 +21,7 @@ var card_resultados = null
 $(document).ready(function () {
 
     // Inicializar URLS:
-    url_empresa_editar = window.location.origin.toString() + $('#url_empresa_editar').val()
+    url_empresa_editar = dominio.toString() + $('#url_empresa_editar').val()
 
     // Inicializar Objectos:
     card_resultados = new TargetaResultados()

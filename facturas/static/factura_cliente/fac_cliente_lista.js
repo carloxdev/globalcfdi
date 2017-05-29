@@ -2,31 +2,16 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
-// URLS:
-var url = window.location
-var url_consulta = ""
-var url_archivos = ""
-var url_validar_factura = ""
-var url_marcar_pago = ""
-var url_reconocer_factura = ""
-var url_export = ""
+var dominio = window.location.origin
 
-if (url.pathname.search("smart") > 0) {
-    url_consulta = url.origin + "/smart/api/facturas_cliente/"
-    url_archivos = url.origin + "/smart/media/"
-    url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/cliente/"
-    url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/cliente/"
-    url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/cliente/"
-    url_export = url.origin + "/smart/api/facturas_cliente_todos/"
-}
-else {
-    url_consulta = url.origin + "/api/facturas_cliente/"
-    url_archivos = url.origin + "/media/"
-    url_validar_factura  = url.origin + "/comprobantes/validar_factura/cliente/"
-    url_marcar_pago = url.origin + "/comprobantes/marcar_pago/cliente/"
-    url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/cliente/"
-    url_export = url.origin + "/api/facturas_cliente_todos/"
-}
+// URLS:
+var url_facturacliente_bypage = dominio + "/api-facturas/facturacliente_bypage/"
+var url_facturacliente = dominio + "/api-facturas/facturacliente/"
+var url_archivos = dominio + "/media/"
+var url_validar_factura  = dominio + "/comprobantes/validar_factura/cliente/"
+var url_marcar_pago = dominio + "/comprobantes/marcar_pago/cliente/"
+var url_reconocer_factura = dominio + "/comprobantes/reconocer_factura/cliente/"
+
 
 // OBJS:
 var card_filtros = null
@@ -40,7 +25,7 @@ var card_resultados = null
 $(document).ready(function () {
 
     // Inicializar objetos
-    card_filtros = new TargetaFiltros()
+    card_filtros = new TargetaFi∫ltros()
     card_resultados = new TargetaResultados()
     // pagina = new Pagina()
 
@@ -449,7 +434,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_facturacliente_bypage,
                 type: "GET",
                 dataType: "json",
             },
@@ -623,7 +608,7 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         serverFiltering: true,
         transport: {
             read: {
-                url: url_export,
+                url: url_facturacliente,
                 type: "GET",
                 dataType: "json",
             },
