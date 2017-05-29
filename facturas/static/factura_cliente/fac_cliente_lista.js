@@ -25,7 +25,7 @@ var card_resultados = null
 $(document).ready(function () {
 
     // Inicializar objetos
-    card_filtros = new TargetaFi∫ltros()
+    card_filtros = new TargetaFiltros()
     card_resultados = new TargetaResultados()
     // pagina = new Pagina()
 
