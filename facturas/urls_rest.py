@@ -16,42 +16,42 @@ from facturas.views_rest import ResumenByPageAPI
 router_facturas = routers.DefaultRouter()
 
 router_facturas.register(
-    r'facturasproveedor_bypage',
+    r'facturaproveedor_bypage',
     FacturaProveedorByPageAPI,
-    'facturasproveedor_bypage'
+    'facturaproveedor_bypage'
 )
 router_facturas.register(
-    r'facturasproveedor',
+    r'facturaproveedor',
     FacturaProveedorAPI,
-    'facturasproveedor'
+    'facturaproveedor'
 )
 router_facturas.register(
-    r'facturascliente_bypage',
+    r'facturacliente_bypage',
     FacturaClienteByPageAPI,
-    'facturascliente_bypage'
+    'facturacliente_bypage'
 )
 router_facturas.register(
-    r'facturas_cliente',
+    r'facturacliente',
     FacturaClienteAPI,
-    'facturas_cliente'
+    'facturacliente'
 )
 router_facturas.register(
-    r'comprobantes_empleado',
+    r'comprobanteempleado_bypage',
     ComprobanteEmpleadoByPageAPI,
-    'comprobantes_empleado'
+    'comprobanteempleado_bypage'
 )
 router_facturas.register(
-    r'comprobantes_empleado',
+    r'comprobanteempleado',
     ComprobanteEmpleadoAPI,
-    'comprobantes_empleado'
+    'comprobanteempleado'
 )
 router_facturas.register(
-    r'logs',
+    r'log_bypage',
     LogByPageAPI,
-    'logs'
+    'log_bypage'
 )
 router_facturas.register(
-    r'resumenes',
+    r'resumen_bypage',
     ResumenByPageAPI,
-    'resumenes'
+    'resumen_bypage'
 )

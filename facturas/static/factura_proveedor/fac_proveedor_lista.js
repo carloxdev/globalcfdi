@@ -2,31 +2,16 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
-// URLS:
-var url = window.location
-var url_consulta = ""
-var url_archivos = ""
-var url_validar_factura = ""
-var url_marcar_pago = ""
-var url_reconocer_factura = ""
-var url_export = ""
+var dominio = window.location.origin
 
-if (url.pathname.search("smart") > 0) {
-    url_consulta = url.origin + "/smart/api/facturas_proveedor/"
-    url_archivos = url.origin + "/smart/media/"
-    url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/proveedor/"
-    url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/proveedor/"
-    url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/proveedor/"
-    url_export = url.origin + "/smart/api/facturas_proveedor_todos/"
-}
-else {
-    url_consulta = url.origin + "/api/facturas_proveedor/"
-    url_archivos = url.origin + "/media/"
-    url_validar_factura  = url.origin + "/comprobantes/validar_factura/proveedor/"
-    url_marcar_pago = url.origin + "/comprobantes/marcar_pago/proveedor/"
-    url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/proveedor/"
-    url_export = url.origin + "/api/facturas_proveedor_todos/"
-}
+// URLS:
+var url_facturaproveedor_bypage = dominio + "/api-facturas/facturaproveedor_bypage/"
+var url_facturaproveedor = dominio + "/api-facturas/facturaproveedor/"
+var url_archivos = dominio + "/media/"
+var url_validar_factura  = dominio + "/comprobantes/validar_factura/proveedor/"
+var url_marcar_pago = dominio + "/comprobantes/marcar_pago/proveedor/"
+var url_reconocer_factura = dominio + "/comprobantes/reconocer_factura/proveedor/"
+
 
 // OBJS:
 var card_filtros = null
@@ -451,7 +436,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_facturaproveedor_bypage,
                 type: "GET",
                 dataType: "json",
             },
@@ -625,7 +610,7 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         serverFiltering: true,
         transport: {
             read: {
-                url: url_export,
+                url: url_facturaproveedor,
                 type: "GET",
                 dataType: "json",
             },

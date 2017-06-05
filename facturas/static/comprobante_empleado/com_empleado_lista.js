@@ -2,31 +2,16 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
-// URLS:
-var url = window.location
-var url_consulta = ""
-var url_archivos = ""
-var url_validar_factura = ""
-var url_marcar_pago = ""
-var url_reconocer_factura = ""
-var url_export = ""
+var dominio = window.location.origin
 
-if (url.pathname.search("smart") > 0) {
-    url_consulta = url.origin + "/smart/api/comprobantes_empleado/"
-    url_archivos = url.origin + "/smart/media/"
-    url_validar_factura  = url.origin + "/smart/comprobantes/validar_factura/empleado/"
-    url_marcar_pago = url.origin + "/smart/comprobantes/marcar_pago/empleado/"
-    url_reconocer_factura = url.origin + "/smart/comprobantes/reconocer_factura/empleado/"
-    url_export = url.origin + "/smart/api/comprobantes_empleado_todos/"
-}
-else {
-    url_consulta = url.origin + "/api/comprobantes_empleado/"
-    url_archivos = url.origin + "/media/"
-    url_validar_factura  = url.origin + "/comprobantes/validar_factura/empleado/"
-    url_marcar_pago = url.origin + "/comprobantes/marcar_pago/empleado/"
-    url_reconocer_factura = url.origin + "/comprobantes/reconocer_factura/empleado/"
-    url_export = url.origin + "/api/comprobantes_empleado_todos/"
-}
+// URLS:
+var url_comprobanteempleado_bypage = dominio + "/api-facturas/comprobanteempleado_bypage/"
+var url_comprobanteempleado = dominio + "/api-facturas/comprobanteempleado/"
+var url_archivos = dominio + "/media/"
+var url_validar_factura  = dominio + "/comprobantes/validar_factura/empleado/"
+var url_marcar_pago = dominio + "/comprobantes/marcar_pago/empleado/"
+var url_reconocer_factura = dominio + "/comprobantes/reconocer_factura/empleado/"
+
 
 // OBJS:
 var card_filtros = null
@@ -450,7 +435,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_comprobanteempleado,
                 type: "GET",
                 dataType: "json",
             },
@@ -624,7 +609,7 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         serverFiltering: true,
         transport: {
             read: {
-                url: url_export,
+                url: url_comprobanteempleado,
                 type: "GET",
                 dataType: "json",
             },

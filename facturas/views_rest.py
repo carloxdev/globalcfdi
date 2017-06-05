@@ -3,8 +3,6 @@
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import BasicAuthentication
-from rest_framework.authentication import SessionAuthentication
 
 # Own's Libraries
 from .models import FacturaProveedor
@@ -31,7 +29,6 @@ from .filters import ResumenFilter
 class FacturaProveedorByPageAPI(viewsets.ModelViewSet):
     serializer_class = FacturaProveedorSerializer
     pagination_class = GenericPagination
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaProveedorFilter
     permission_classes = (IsAuthenticated,)
@@ -49,7 +46,6 @@ class FacturaProveedorByPageAPI(viewsets.ModelViewSet):
 
 class FacturaProveedorAPI(viewsets.ModelViewSet):
     serializer_class = FacturaProveedorSerializer
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaProveedorFilter
     permission_classes = (IsAuthenticated,)
@@ -68,7 +64,6 @@ class FacturaProveedorAPI(viewsets.ModelViewSet):
 class FacturaClienteByPageAPI(viewsets.ModelViewSet):
     serializer_class = FacturaClienteSerializer
     pagination_class = GenericPagination
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaClienteFilter
     permission_classes = (IsAuthenticated,)
@@ -85,7 +80,6 @@ class FacturaClienteByPageAPI(viewsets.ModelViewSet):
 
 class FacturaClienteAPI(viewsets.ModelViewSet):
     serializer_class = FacturaClienteSerializer
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaClienteFilter
     permission_classes = (IsAuthenticated,)
@@ -103,7 +97,6 @@ class FacturaClienteAPI(viewsets.ModelViewSet):
 class ComprobanteEmpleadoByPageAPI(viewsets.ModelViewSet):
     serializer_class = ComprobanteEmpleadoSerializer
     pagination_class = GenericPagination
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ComprobanteEmpleadoFilter
     permission_classes = (IsAuthenticated,)
@@ -120,7 +113,6 @@ class ComprobanteEmpleadoByPageAPI(viewsets.ModelViewSet):
 
 class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
     serializer_class = ComprobanteEmpleadoSerializer
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ComprobanteEmpleadoFilter
     permission_classes = (IsAuthenticated,)
@@ -148,7 +140,6 @@ class ResumenByPageAPI(viewsets.ModelViewSet):
     queryset = Resumen.objects.all().order_by('fecha',)
     serializer_class = ResumenSerializer
     pagination_class = GenericPagination
-
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ResumenFilter
     permission_classes = (IsAuthenticated,)

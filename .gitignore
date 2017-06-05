@@ -34,4 +34,5 @@ celerybeat-schedule.db
 configuracion/migrations/*
 dashboards/migrations/*
 facturas/migrations/*
+home/migrations/*
 seguridad/migrations/*
