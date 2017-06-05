@@ -34,6 +34,7 @@ class FacturaProveedorByPageAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaProveedorFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
 
@@ -51,6 +52,7 @@ class FacturaProveedorAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaProveedorFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
 
@@ -69,6 +71,7 @@ class FacturaClienteByPageAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaClienteFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -85,6 +88,7 @@ class FacturaClienteAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = FacturaClienteFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -102,6 +106,7 @@ class ComprobanteEmpleadoByPageAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ComprobanteEmpleadoFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -118,6 +123,7 @@ class ComprobanteEmpleadoAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ComprobanteEmpleadoFilter
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -136,7 +142,6 @@ class LogByPageAPI(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = LogFilter
     permission_classes = (IsAuthenticated,)
-    authentication_classes = (BasicAuthentication, SessionAuthentication, )
 
 
 class ResumenByPageAPI(viewsets.ModelViewSet):
@@ -146,3 +151,4 @@ class ResumenByPageAPI(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ResumenFilter
+    permission_classes = (IsAuthenticated,)
