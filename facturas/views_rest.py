@@ -3,6 +3,7 @@
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 # Own's Libraries
 from .models import FacturaProveedor
@@ -24,6 +25,16 @@ from .filters import FacturaProveedorFilter
 from .filters import FacturaClienteFilter
 from .filters import ComprobanteEmpleadoFilter
 from .filters import ResumenFilter
+
+
+class FacturaProveedorExByPageAPI(viewsets.ModelViewSet):
+    queryset = FacturaProveedor.objects.all()
+    serializer_class = FacturaProveedorSerializer
+    pagination_class = GenericPagination
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_class = FacturaProveedorFilter
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class FacturaProveedorByPageAPI(viewsets.ModelViewSet):

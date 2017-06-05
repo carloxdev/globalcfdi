@@ -3,6 +3,7 @@
 from rest_framework import routers
 
 # Own's Libraries
+from facturas.views_rest import FacturaProveedorExByPageAPI
 from facturas.views_rest import FacturaProveedorByPageAPI
 from facturas.views_rest import FacturaProveedorAPI
 from facturas.views_rest import FacturaClienteByPageAPI
@@ -19,6 +20,11 @@ router_facturas.register(
     r'facturaproveedor_bypage',
     FacturaProveedorByPageAPI,
     'facturaproveedor_bypage'
+)
+router_facturas.register(
+    r'facturaproveedorex_bypage',
+    FacturaProveedorExByPageAPI,
+    'facturaproveedorex_bypage'
 )
 router_facturas.register(
     r'facturaproveedor',
