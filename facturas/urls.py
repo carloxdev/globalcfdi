@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# Librerias Django:
+# Django's Libraries
 from django.conf.urls import url
 
-# Vistas:
+# Own's Libraries
 from .views import FacturaProveedorList
 from .views import FacturaClienteList
 from .views import ComprobanteEmpleadoList
 from .views import ResumenList
-from .views import LogsList
+from .views import LogList
 from .views import ObtenerFacturas
 from .views import ValidarFactura
 from .views import MarcarPago
 from .views import ReconocerFactura
-
-# ----------------- FACTURAS PROVEEDORES ----------------- #
 
 apps_name = "facturas"
 
@@ -41,7 +39,7 @@ urlpatterns = [
     ),
     url(
         r'^comprobantes/logs/$',
-        LogsList.as_view(),
+        LogList.as_view(),
         name='log_lista'
     ),
     url(

@@ -3,19 +3,11 @@
             GLOBAL VARIABLES
 \*-----------------------------------------------*/
 
-// URLS:
-var url = window.location
-var url_consulta = ""
-var url_editar = ""
+var dominio = window.location.origin
 
-if (url.pathname.search("smart") > 0) {
-    url_consulta = url.origin + "/smart/api/empresas/"
-    url_editar = url.origin + "/smart/empresas/editar/"
-}
-else {
-    url_consulta = url.origin + "/api/empresas/"
-    url_editar = url.origin + "/empresas/editar/"
-}
+// URLS:
+var url_empresa_bypage = dominio + "/api-configuracion/empresa_bypage/"
+var url_empresa_editar = ""
 
 // OBJS:
 var card_filtros = null
@@ -28,8 +20,11 @@ var card_resultados = null
 
 $(document).ready(function () {
 
-    card_resultados = new TargetaResultados()
+    // Inicializar URLS:
+    url_empresa_editar = dominio.toString() + $('#url_empresa_editar').val()
 
+    // Inicializar Objectos:
+    card_resultados = new TargetaResultados()
 })
 
 $(window).resize(function() {
@@ -106,7 +101,15 @@ GridResultados.prototype.get_Campos = function () {
 GridResultados.prototype.get_Columnas = function (e) {
     
     return [
-
+        {
+           command: {
+               text: "Editar",
+               click: this.editar_Registro,
+               className: "app-grid-boton-editar",
+           },
+           title: " ",
+           width: "80px"
+        },
         { field: "clave", title: "Clave", width: "90px" },
         { field: "razon_social", title: "Razon Social", width: "200px" },
         // { field: "logo", title: "logo", width: "200px" },
@@ -131,16 +134,6 @@ GridResultados.prototype.get_Columnas = function (e) {
             title: "Actualizado el", 
             width: "120px",
             template: "#= kendo.toString(kendo.parseDate(updated_date, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
-
-        },
-        {
-           command: {
-               text: "Editar",
-               click: this.editar_Registro,
-               className: "app-grid-boton-editar",
-           },
-           title: " ",
-           width: "110px"
         },
     ]
 }
@@ -153,7 +146,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_consulta,
+                url: url_empresa_bypage,
                 type: "GET",
                 dataType: "json",
             },
@@ -167,7 +160,16 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
             }
         },
         error: function (e) {
-            alertify.notify("Status: " + e.status + "; Error message: " + e.errorThrown)
+
+            if (e.xhr.status==404) {
+                alertify.error("No se pudo conectar con el API que surte los datos")
+            }
+            else if (e.xhr.status==401) {
+                alertify.error("No se tienen permisos para conectar con el API que surte los datos")
+            }
+            else {
+                alertify.error("Status: " + e.status + "; Error message: " + e.errorThrown)
+            }
         },
     }
 }
@@ -178,7 +180,7 @@ GridResultados.prototype.editar_Registro = function (e) {
 
     e.preventDefault()
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
-    window.location.href = url_editar + fila.pk;
+    window.location.href = url_empresa_editar.replace('/0/', '/' + fila.pk + '/')
 }
 GridResultados.prototype.llenar_Grid = function (e) {
 

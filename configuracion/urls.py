@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
-# Librerias Django:
+# Django's Libraries
 from django.conf.urls import url
 
-# Vistas:
+# Own's Libraries
 from .views import EmpresaListView
 from .views import EmpresaCreateView
 from .views import EmpresaUpdateView
 from .views import EmpresaTestCredentials
-
-
-# ----------------- Empresas ----------------- #
 
 app_name = "configuracion"
 

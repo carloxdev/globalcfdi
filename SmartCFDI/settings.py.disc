@@ -19,42 +19,44 @@ SECRET_KEY = '7qup9@_uzz%9v#r^xywy)@=*_&6buk!mpjw#5#&)an!frj_+!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '10.10.3.31',
-    'SVR-NOMI',
-    'contabilidad.nuvoil.com',
-    '187.216.253.27',
-    '*',
-]
+ALLOWED_HOSTS = []
 
 
 LOGIN_URL = 'seguridad:login'
 
+LOGOUT_URL = 'seguridad:logout'
+
 
 # Application definition
+SITE_ID = 1
 
 INSTALLED_APPS = [
-    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+
     'configuracion.apps.ConfiguracionConfig',
     'home.apps.HomeConfig',
     'facturas.apps.FacturasConfig',
-    'rest_framework',
-    'django.contrib.humanize',
-    # 'autorizacion.apps.AutorizacionConfig',
     'seguridad.apps.SeguridadConfig',
     'dashboards.apps.DashboardsConfig',
+
     'djcelery',
     'corsheaders',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
 ]
 
-GRAPPELLI_ADMIN_TITLE = "SmartCFDI"
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,15 +130,14 @@ CELERYBEAT_SCHEDULE = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'smartcfdidb',
-        'USER': 'smartuser',
-        'PASSWORD': '12345',
-        # Empty for localhost through domain sockets or '127.0.0.1' for
-        # localhost through TCP.
+        'NAME': 'smartdb',
+        'USER': 'root',
+        'PASSWORD': 'midaveel',
         'HOST': '',
-        'PORT': '',  # Set to empty string for default.
-    }
+        'PORT': '',
+    },
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -170,10 +171,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-# DOMINIO = 'http://187.216.253.27:8080/smart'
-DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
-# CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = '/static/'
 STATIC_ROOT = os.sep.join(
     os.path.abspath(__file__).split(os.sep)[:-2] + ['static']

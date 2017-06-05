@@ -1,46 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# Librerias Django:
-# from django.shortcuts import render
-
-# Django Login
+# Django's Libraries
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
-# Django Atajos
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-from django.core.urlresolvers import reverse
-
-# Django Generic Views
 from django.views.generic.base import View
 
-# API Rest:
-from rest_framework import viewsets
-
-# Django Paginacion:
-# from django.core.paginator import Paginator
-# from django.core.paginator import EmptyPage
-# from django.core.paginator import PageNotAnInteger
-
-# Serializadores:
-from .serializers import EmpresaSerializer
-
-# Paginadores:
-from .pagination import GenericPagination
-
-# Modelos
+# Own's Libraries
 from .models import Empresa
-
-# Formularios:
 from .forms import EmpresaCreateForm
 from .forms import EmpresaEditForm
-
-# Tasks
 from .tasks import test_Credentials
-
-# ----------------- EMPRESA ----------------- #
 
 
 @method_decorator(login_required, name='dispatch')
@@ -184,17 +157,3 @@ class EmpresaTestCredentials(View):
     def get(self, request, pk):
         test_Credentials.delay(pk)
         return render(request, self.template_name, {})
-
-
-class EmpresaAPI(viewsets.ModelViewSet):
-    serializer_class = EmpresaSerializer
-    pagination_class = GenericPagination
-
-    def get_queryset(self):
-
-        if self.request.user.is_staff:
-            empresas = Empresa.objects.all()
-        else:
-            empresas = self.request.user.empresa_set.all()
-
-        return empresas
