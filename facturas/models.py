@@ -23,99 +23,6 @@ MONEDA_PESOS = [
 ]
 
 
-class Resumen(models.Model):
-
-    RESUMEN_TIPOS = (
-        ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
-        ('CLIENTES', 'FACTURAS DE CLIENTES'),
-        ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
-    )
-
-    fecha = models.DateField()
-    tipo = models.CharField(
-        max_length=12,
-        choices=RESUMEN_TIPOS
-    )
-    cantidad_guardadas = models.IntegerField(default=0)
-    cantidad_validadas = models.IntegerField(default=0)
-    total = models.DecimalField(max_digits=20, decimal_places=4, default=0.0)
-    empresa = models.ForeignKey(Empresa, null=True)
-    created_date = models.DateTimeField(
-        auto_now=False,
-        auto_now_add=True,
-        null=True,
-        blank=True
-    )
-    updated_date = models.DateTimeField(
-        auto_now=True,
-        auto_now_add=False,
-        null=True,
-        blank=True
-    )
-
-    class Meta:
-        unique_together = (('empresa', 'fecha', 'tipo'),)
-
-    def __str__(self):
-        return "{} - {}".format(self.fecha, self.tipo).encode("utf-8")
-
-
-class Log(models.Model):
-
-    LOG_ESTADOS = (
-        ('EXITO', 'EXITO'),
-        ('ERROR', 'ERROR'),
-        ('DETALLE', 'DETALLE'),
-        ('PROCESANDO', 'PROCESANDO'),
-    )
-
-    LOG_OPERACION_TIPO = (
-        ('GET', 'OBTENER'),
-        ('SAVE', 'GUARDAR'),
-        ('VALIDATE', 'VALIDAR'),
-    )
-
-    LOG_TIPOS_COMPROBANTE = (
-        ('REC', 'RECIBIDOS'),
-        ('EMI', 'EMITIDOS'),
-    )
-
-    empresa = models.ForeignKey(Empresa, null=True)
-    nombre = models.CharField(
-        max_length=255,
-        null=True,
-        blank=True
-    )
-    estado = models.CharField(
-        max_length=10,
-        choices=LOG_ESTADOS,
-        null=True
-    )
-    tipo_comprobante = models.CharField(
-        max_length=4,
-        choices=LOG_TIPOS_COMPROBANTE,
-        null=True
-    )
-    operacion = models.CharField(
-        max_length=8,
-        choices=LOG_OPERACION_TIPO,
-        null=True
-    )
-    fecha_operacion = models.DateField()
-    descripcion = models.TextField(null=True, blank=True)
-    url = models.CharField(max_length=500, null=True, blank=True)
-
-    created_date = models.DateTimeField(auto_now_add=True)
-    updated_date = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = (
-            ('empresa', 'nombre', 'operacion', 'fecha_operacion'),)
-
-    def __str__(self):
-        return self.nombre.encode("utf-8")
-
-
 class Factura(models.Model):
 
     PAGADO_ESTADO = {
@@ -371,3 +278,96 @@ class ComprobanteEmpleado(Factura):
 
     def __str__(self):
         return "{} - {}".format(self.uuid, self.receptor_rfc).encode("utf-8")
+
+
+class Resumen(models.Model):
+
+    RESUMEN_TIPOS = (
+        ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
+        ('CLIENTES', 'FACTURAS DE CLIENTES'),
+        ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
+    )
+
+    fecha = models.DateField()
+    tipo = models.CharField(
+        max_length=12,
+        choices=RESUMEN_TIPOS
+    )
+    cantidad_guardadas = models.IntegerField(default=0)
+    cantidad_validadas = models.IntegerField(default=0)
+    total = models.DecimalField(max_digits=20, decimal_places=4, default=0.0)
+    empresa = models.ForeignKey(Empresa, null=True)
+    created_date = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=True,
+        blank=True
+    )
+    updated_date = models.DateTimeField(
+        auto_now=True,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    class Meta:
+        unique_together = (('empresa', 'fecha', 'tipo'),)
+
+    def __str__(self):
+        return "{} - {}".format(self.fecha, self.tipo).encode("utf-8")
+
+
+class Log(models.Model):
+
+    LOG_ESTADOS = (
+        ('EXITO', 'EXITO'),
+        ('ERROR', 'ERROR'),
+        ('DETALLE', 'DETALLE'),
+        ('PROCESANDO', 'PROCESANDO'),
+    )
+
+    LOG_OPERACION_TIPO = (
+        ('GET', 'OBTENER'),
+        ('SAVE', 'GUARDAR'),
+        ('VALIDATE', 'VALIDAR'),
+    )
+
+    LOG_TIPOS_COMPROBANTE = (
+        ('REC', 'RECIBIDOS'),
+        ('EMI', 'EMITIDOS'),
+    )
+
+    empresa = models.ForeignKey(Empresa, null=True)
+    nombre = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
+    estado = models.CharField(
+        max_length=10,
+        choices=LOG_ESTADOS,
+        null=True
+    )
+    tipo_comprobante = models.CharField(
+        max_length=4,
+        choices=LOG_TIPOS_COMPROBANTE,
+        null=True
+    )
+    operacion = models.CharField(
+        max_length=8,
+        choices=LOG_OPERACION_TIPO,
+        null=True
+    )
+    fecha_operacion = models.DateField()
+    descripcion = models.TextField(null=True, blank=True)
+    url = models.CharField(max_length=500, null=True, blank=True)
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = (
+            ('empresa', 'nombre', 'operacion', 'fecha_operacion'),)
+
+    def __str__(self):
+        return self.nombre.encode("utf-8")

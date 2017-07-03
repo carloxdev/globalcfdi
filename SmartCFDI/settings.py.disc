@@ -19,19 +19,10 @@ SECRET_KEY = '7qup9@_uzz%9v#r^xywy)@=*_&6buk!mpjw#5#&)an!frj_+!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '10.10.3.31',
-    'SVR-NOMI',
-    'contabilidad.nuvoil.com',
-    '187.216.253.27',
-    '*',
-]
-
+ALLOWED_HOSTS = []
 
 LOGIN_URL = 'seguridad:login'
 
-SITE_ID = 1
 
 # Application definition
 
@@ -43,19 +34,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Own's Apps
     'configuracion.apps.ConfiguracionConfig',
-    'home.apps.HomeConfig',
-    'facturas.apps.FacturasConfig',
-    'rest_framework',
-    'django.contrib.humanize',
-    # 'autorizacion.apps.AutorizacionConfig',
-    'seguridad.apps.SeguridadConfig',
     'dashboards.apps.DashboardsConfig',
+    'facturas.apps.FacturasConfig',
+    'home.apps.HomeConfig',
+    'jde.apps.JdeConfig',
+    'seguridad.apps.SeguridadConfig',
+    'rest_framework',
+
+    # Other's Apps
+    'django.contrib.humanize',
     'djcelery',
     'corsheaders',
     'rest_framework.authtoken',
     'rest_auth',
-
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -153,7 +147,19 @@ DATABASES = {
         # localhost through TCP.
         'HOST': '',
         'PORT': '',  # Set to empty string for default.
-    }
+    },
+    'jde_p': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': '10.10.3.210:1521/PDBPDJDE91',
+        'USER': 'system',
+        'PASSWORD': 'Nuv01l2015',
+    },
+    'jde_d': {
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': '10.10.3.218:1521/PDBDVJDE91',
+        'USER': 'system',
+        'PASSWORD': 'Nuv01l2015',
+    },
 }
 
 # Password validation
@@ -188,8 +194,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-# DOMINIO = 'http://187.216.253.27:8080/smart'
-DOMINIO = 'http://contabilidad.nuvoil.com:8080/smart'
 
 # CONFIGURACION DE STATIC Y MEDIAS
 STATIC_URL = '/static/'

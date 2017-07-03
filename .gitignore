@@ -16,8 +16,12 @@ static/*
 # ARCHIVOS
 # ---------------------------------------
 tst.py
+.config.codekit.icloud
+npm-debug.log
 *.rdb
 *.log
+*.icloud
+*.db
 
 # Configuracion
 # ---------------------------------------
