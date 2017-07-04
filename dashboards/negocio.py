@@ -1,6 +1,6 @@
 # from facturas.models import Resumen
-from facturas.models import FacturaProveedor
-from facturas.models import FacturaCliente
+from facturas.models import ComprobanteProveedor
+from facturas.models import ComprobanteCliente
 from facturas.models import ComprobanteEmpleado
 from facturas.models import MONEDA_PESOS
 
@@ -35,7 +35,7 @@ class EmpresaResumen(object):
 
     def get_Clientes_Resumen(self, _fecha_inicial, _fecha_final):
 
-        facturas = FacturaCliente.objects.filter(
+        facturas = ComprobanteCliente.objects.filter(
             empresa=self.empresa,
             fecha__range=[_fecha_inicial, _fecha_final],
             estadoSat="Vigente"
@@ -51,7 +51,7 @@ class EmpresaResumen(object):
 
     def get_Proveedores_Resumen(self, _fecha_inicial, _fecha_final):
 
-        facturas = FacturaProveedor.objects.filter(
+        facturas = ComprobanteProveedor.objects.filter(
             empresa=self.empresa,
             fecha__range=[_fecha_inicial, _fecha_final],
             estadoSat="Vigente"

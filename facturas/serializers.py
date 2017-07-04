@@ -4,19 +4,19 @@
 from rest_framework import serializers
 
 # Modelos:
-from .models import FacturaProveedor
-from .models import FacturaCliente
+from .models import ComprobanteProveedor
+from .models import ComprobanteCliente
 from .models import ComprobanteEmpleado
 from .models import Log
 from .models import Resumen
 
 
-class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
+class ComprobanteProveedorSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()
 
     class Meta:
-        model = FacturaProveedor
+        model = ComprobanteProveedor
         fields = (
             'serie',
             'folio',
@@ -89,12 +89,12 @@ class FacturaProveedorSerializer(serializers.HyperlinkedModelSerializer):
             return ""
 
 
-class FacturaClienteSerializer(serializers.HyperlinkedModelSerializer):
+class ComprobanteClienteSerializer(serializers.HyperlinkedModelSerializer):
 
     empresa = serializers.SerializerMethodField()
 
     class Meta:
-        model = FacturaCliente
+        model = ComprobanteCliente
         fields = (
             'serie',
             'folio',

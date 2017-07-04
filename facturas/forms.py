@@ -5,7 +5,7 @@ from django import forms
 
 # Modelos de otras APPS:
 from configuracion.models import Empresa
-from facturas.models import Factura
+from facturas.models import Comprobante
 from facturas.models import Log
 from facturas.models import Resumen
 
@@ -136,7 +136,7 @@ class FacturaRecibidaFormFiltros(forms.Form):
         super(FacturaRecibidaFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
-            Factura.COMPROBACION_ESTADOS)
+            Comprobante.COMPROBACION_ESTADOS)
 
     def obtener_Empresas(self, _usuario):
 
@@ -210,7 +210,7 @@ class FacturaEmitidaFormFiltros(forms.Form):
         super(FacturaEmitidaFormFiltros, self).__init__(*args, **kwargs)
         self.fields['empresa'].choices = self.obtener_Empresas(_usuario)
         self.fields['comprobacion'].choices = self.obtener_Comprobaciones(
-            Factura.COMPROBACION_ESTADOS)
+            Comprobante.COMPROBACION_ESTADOS)
 
     def obtener_Empresas(self, _usuario):
 

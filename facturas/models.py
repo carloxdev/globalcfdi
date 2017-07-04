@@ -7,6 +7,8 @@ from django.db import models
 # Otros Modelos:
 from configuracion.models import Empresa
 
+# Own's Libraries:
+from .utilities import get_FilePath
 
 MONEDA_PESOS = [
     "NACIONAL",
@@ -23,7 +25,7 @@ MONEDA_PESOS = [
 ]
 
 
-class Factura(models.Model):
+class Comprobante(models.Model):
 
     PAGADO_ESTADO = {
         ('PEN', 'PENDIENTE'),
@@ -64,6 +66,7 @@ class Factura(models.Model):
     # Emisor
     emisor_rfc = models.CharField(max_length=255, null=True, blank=True)
     emisor_nombre = models.CharField(max_length=255, null=True, blank=True)
+    emisor_jde_clave = models.CharField(max_length=255, null=True, blank=True)
 
     # Emisor Direccion
     emisor_calle = models.CharField(max_length=255, null=True, blank=True)
@@ -107,6 +110,7 @@ class Factura(models.Model):
     # Receptor
     receptor_rfc = models.CharField(max_length=255, null=True, blank=True)
     receptor_nombre = models.CharField(max_length=255, null=True, blank=True)
+    receptor_jde_clave = models.CharField(max_length=255, null=True, blank=True)
 
     # Receptor Direccion
     receptor_calle = models.CharField(max_length=255, null=True, blank=True)
@@ -194,24 +198,34 @@ class Factura(models.Model):
         null=True,
         blank=True
     )
+    archivo_xml = models.FileField(
+        upload_to=get_FilePath,
+        blank=True,
+        null=True
+    )
+    archivo_pdf = models.FileField(
+        upload_to=get_FilePath,
+        blank=True,
+        null=True
+    )
 
     class Meta:
         abstract = True
 
 
-class FacturaProveedor(Factura):
+class ComprobanteProveedor(Comprobante):
 
     def __str__(self):
         return "{} - {}".format(self.uuid, self.emisor_rfc).encode("utf-8")
 
 
-class FacturaCliente(Factura):
+class ComprobanteCliente(Comprobante):
 
     def __str__(self):
         return "{} - {}".format(self.uuid, self.receptor_rfc).encode("utf-8")
 
 
-class ComprobanteEmpleado(Factura):
+class ComprobanteEmpleado(Comprobante):
 
     # Nomina Datos
     registroPatronal = models.CharField(
@@ -283,8 +297,8 @@ class ComprobanteEmpleado(Factura):
 class Resumen(models.Model):
 
     RESUMEN_TIPOS = (
-        ('PROVEEDORES', 'FACTURAS DE PROVEEDORES'),
-        ('CLIENTES', 'FACTURAS DE CLIENTES'),
+        ('PROVEEDORES', 'COMPROBANTES DE PROVEEDORES'),
+        ('CLIENTES', 'COMPROBANTES DE CLIENTES'),
         ('EMPLEADOS', 'COMPROBANTES DE EMPLEADOS'),
     )
 

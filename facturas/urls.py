@@ -4,8 +4,8 @@
 from django.conf.urls import url
 
 # Own's Libraries
-from .views import FacturaProveedorList
-from .views import FacturaClienteList
+from .views import ComprobanteProveedorList
+from .views import ComprobanteClienteList
 from .views import ComprobanteEmpleadoList
 from .views import ResumenList
 from .views import LogList
@@ -19,12 +19,12 @@ apps_name = "facturas"
 urlpatterns = [
     url(
         r'^comprobantes/proveedores/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
-        FacturaProveedorList.as_view(),
+        ComprobanteProveedorList.as_view(),
         name='proveedor_lista'
     ),
     url(
         r'^comprobantes/clientes/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
-        FacturaClienteList.as_view(),
+        ComprobanteClienteList.as_view(),
         name='cliente_lista'
     ),
     url(

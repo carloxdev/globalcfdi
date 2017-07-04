@@ -6,14 +6,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 # Own's Libraries
-from .models import FacturaProveedor
-from .models import FacturaCliente
+from .models import ComprobanteProveedor
+from .models import ComprobanteCliente
 from .models import ComprobanteEmpleado
 from .models import Log
 from .models import Resumen
 
-from .serializers import FacturaProveedorSerializer
-from .serializers import FacturaClienteSerializer
+from .serializers import ComprobanteProveedorSerializer
+from .serializers import ComprobanteClienteSerializer
 from .serializers import ComprobanteEmpleadoSerializer
 from .serializers import LogSerializer
 from .serializers import ResumenSerializer
@@ -21,86 +21,86 @@ from .serializers import ResumenSerializer
 from .pagination import GenericPagination
 
 from .filters import LogFilter
-from .filters import FacturaProveedorFilter
-from .filters import FacturaClienteFilter
+from .filters import ComprobanteProveedorFilter
+from .filters import ComprobanteClienteFilter
 from .filters import ComprobanteEmpleadoFilter
 from .filters import ResumenFilter
 
 
-class FacturaProveedorExByPageAPI(viewsets.ModelViewSet):
-    queryset = FacturaProveedor.objects.all()
-    serializer_class = FacturaProveedorSerializer
+class ComprobanteProveedorExByPageAPI(viewsets.ModelViewSet):
+    queryset = ComprobanteProveedor.objects.all()
+    serializer_class = ComprobanteProveedorSerializer
     pagination_class = GenericPagination
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaProveedorFilter
+    filter_class = ComprobanteProveedorFilter
     permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
 
-class FacturaProveedorByPageAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaProveedorSerializer
+class ComprobanteProveedorByPageAPI(viewsets.ModelViewSet):
+    serializer_class = ComprobanteProveedorSerializer
     pagination_class = GenericPagination
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaProveedorFilter
+    filter_class = ComprobanteProveedorFilter
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
 
         if self.request.user.is_staff:
-            facturas = FacturaProveedor.objects.all()
+            facturas = ComprobanteProveedor.objects.all()
         else:
             empresas = self.request.user.empresa_set.all()
-            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
+            facturas = ComprobanteProveedor.objects.filter(empresa__in=empresas)
 
         return facturas
 
 
-class FacturaProveedorAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaProveedorSerializer
+class ComprobanteProveedorAPI(viewsets.ModelViewSet):
+    serializer_class = ComprobanteProveedorSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaProveedorFilter
+    filter_class = ComprobanteProveedorFilter
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
 
         if self.request.user.is_staff:
-            facturas = FacturaProveedor.objects.all()
+            facturas = ComprobanteProveedor.objects.all()
         else:
             empresas = self.request.user.empresa_set.all()
-            facturas = FacturaProveedor.objects.filter(empresa__in=empresas)
+            facturas = ComprobanteProveedor.objects.filter(empresa__in=empresas)
 
         return facturas
 
 
-class FacturaClienteByPageAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaClienteSerializer
+class ComprobanteClienteByPageAPI(viewsets.ModelViewSet):
+    serializer_class = ComprobanteClienteSerializer
     pagination_class = GenericPagination
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaClienteFilter
+    filter_class = ComprobanteClienteFilter
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            facturas = FacturaCliente.objects.all()
+            facturas = ComprobanteCliente.objects.all()
         else:
             empresas = self.request.user.empresa_set.all()
-            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
+            facturas = ComprobanteCliente.objects.filter(empresa__in=empresas)
 
         return facturas
 
 
-class FacturaClienteAPI(viewsets.ModelViewSet):
-    serializer_class = FacturaClienteSerializer
+class ComprobanteClienteAPI(viewsets.ModelViewSet):
+    serializer_class = ComprobanteClienteSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_class = FacturaClienteFilter
+    filter_class = ComprobanteClienteFilter
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            facturas = FacturaCliente.objects.all()
+            facturas = ComprobanteCliente.objects.all()
         else:
             empresas = self.request.user.empresa_set.all()
-            facturas = FacturaCliente.objects.filter(empresa__in=empresas)
+            facturas = ComprobanteCliente.objects.filter(empresa__in=empresas)
 
         return facturas
 

@@ -3,11 +3,11 @@
 from rest_framework import routers
 
 # Own's Libraries
-from facturas.views_rest import FacturaProveedorExByPageAPI
-from facturas.views_rest import FacturaProveedorByPageAPI
-from facturas.views_rest import FacturaProveedorAPI
-from facturas.views_rest import FacturaClienteByPageAPI
-from facturas.views_rest import FacturaClienteAPI
+from facturas.views_rest import ComprobanteProveedorExByPageAPI
+from facturas.views_rest import ComprobanteProveedorByPageAPI
+from facturas.views_rest import ComprobanteProveedorAPI
+from facturas.views_rest import ComprobanteClienteByPageAPI
+from facturas.views_rest import ComprobanteClienteAPI
 from facturas.views_rest import ComprobanteEmpleadoByPageAPI
 from facturas.views_rest import ComprobanteEmpleadoAPI
 from facturas.views_rest import LogByPageAPI
@@ -17,29 +17,29 @@ from facturas.views_rest import ResumenByPageAPI
 router_facturas = routers.DefaultRouter()
 
 router_facturas.register(
-    r'facturaproveedor_bypage',
-    FacturaProveedorByPageAPI,
-    'facturaproveedor_bypage'
+    r'comprobanteproveedor_bypage',
+    ComprobanteProveedorByPageAPI,
+    'comprobanteproveedor_bypage'
 )
 router_facturas.register(
-    r'facturaproveedorex_bypage',
-    FacturaProveedorExByPageAPI,
-    'facturaproveedorex_bypage'
+    r'comprobanteproveedorex_bypage',
+    ComprobanteProveedorExByPageAPI,
+    'comprobanteproveedorex_bypage'
 )
 router_facturas.register(
-    r'facturaproveedor',
-    FacturaProveedorAPI,
-    'facturaproveedor'
+    r'comprobanteproveedor',
+    ComprobanteProveedorAPI,
+    'comprobanteproveedor'
 )
 router_facturas.register(
-    r'facturacliente_bypage',
-    FacturaClienteByPageAPI,
-    'facturacliente_bypage'
+    r'comprobantecliente_bypage',
+    ComprobanteClienteByPageAPI,
+    'comprobantecliente_bypage'
 )
 router_facturas.register(
-    r'facturacliente',
-    FacturaClienteAPI,
-    'facturacliente'
+    r'comprobantecliente',
+    ComprobanteClienteAPI,
+    'comprobantecliente'
 )
 router_facturas.register(
     r'comprobanteempleado_bypage',

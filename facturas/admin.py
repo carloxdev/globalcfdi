@@ -5,8 +5,8 @@ from django.contrib import admin
 
 # Modelos:
 from .models import Resumen
-from .models import FacturaCliente
-from .models import FacturaProveedor
+from .models import ComprobanteCliente
+from .models import ComprobanteProveedor
 from .models import ComprobanteEmpleado
 from .models import Log
 
@@ -30,9 +30,10 @@ class AdminResumen(admin.ModelAdmin):
     list_filter = ('tipo', 'empresa', 'fecha')
 
 
-@admin.register(FacturaCliente)
-class AdminFacturaCliente(admin.ModelAdmin):
+@admin.register(ComprobanteCliente)
+class AdminComprobanteCliente(admin.ModelAdmin):
     list_display = (
+        'uuid',
         'serie',
         'folio',
         'fecha',
@@ -83,7 +84,6 @@ class AdminFacturaCliente(admin.ModelAdmin):
         'totalImpuestosRetenidos',
         'impuestos_trasladados',
         'impuestos_retenidos',
-        'uuid',
         'fechaTimbrado',
         'noCertificadoSAT',
         'selloSAT',
@@ -110,9 +110,10 @@ class AdminFacturaCliente(admin.ModelAdmin):
     )
 
 
-@admin.register(FacturaProveedor)
-class AdminFacturaProveedor(admin.ModelAdmin):
+@admin.register(ComprobanteProveedor)
+class AdminComprobanteProveedor(admin.ModelAdmin):
     list_display = (
+        'uuid',
         'serie',
         'folio',
         'fecha',
@@ -163,7 +164,6 @@ class AdminFacturaProveedor(admin.ModelAdmin):
         'totalImpuestosRetenidos',
         'impuestos_trasladados',
         'impuestos_retenidos',
-        'uuid',
         'fechaTimbrado',
         'noCertificadoSAT',
         'selloSAT',
@@ -190,6 +190,7 @@ class AdminFacturaProveedor(admin.ModelAdmin):
 @admin.register(ComprobanteEmpleado)
 class AdminComprobanteEmpleado(admin.ModelAdmin):
     list_display = (
+        'uuid',
         'serie',
         'folio',
         'fecha',
@@ -240,7 +241,6 @@ class AdminComprobanteEmpleado(admin.ModelAdmin):
         'totalImpuestosRetenidos',
         'impuestos_trasladados',
         'impuestos_retenidos',
-        'uuid',
         'fechaTimbrado',
         'noCertificadoSAT',
         'selloSAT',

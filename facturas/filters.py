@@ -6,8 +6,8 @@ import django_filters
 
 # Modelos
 from .models import Log
-from .models import FacturaProveedor
-from .models import FacturaCliente
+from .models import ComprobanteProveedor
+from .models import ComprobanteCliente
 from .models import ComprobanteEmpleado
 from .models import Resumen
 
@@ -136,7 +136,7 @@ def filtra_FechaTimbrado_Max(queryset, value):
         return consulta
 
 
-class FacturaProveedorFilter(filters.FilterSet):
+class ComprobanteProveedorFilter(filters.FilterSet):
 
     uuid = django_filters.CharFilter(name="uuid", lookup_expr="contains")
 
@@ -163,7 +163,7 @@ class FacturaProveedorFilter(filters.FilterSet):
     fecha_max = django_filters.CharFilter(action=filtra_Fecha_Max)
 
     class Meta:
-        model = FacturaProveedor
+        model = ComprobanteProveedor
         fields = [
             'empresa__clave',
             'fecha_min',
@@ -183,7 +183,7 @@ class FacturaProveedorFilter(filters.FilterSet):
         ]
 
 
-class FacturaClienteFilter(filters.FilterSet):
+class ComprobanteClienteFilter(filters.FilterSet):
 
     uuid = django_filters.CharFilter(name="uuid", lookup_expr="contains")
 
@@ -210,7 +210,7 @@ class FacturaClienteFilter(filters.FilterSet):
     fecha_max = django_filters.CharFilter(action=filtra_Fecha_Max)
 
     class Meta:
-        model = FacturaCliente
+        model = ComprobanteCliente
         fields = [
             'empresa__clave',
             'fecha_min',

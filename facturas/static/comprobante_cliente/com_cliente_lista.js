@@ -5,18 +5,18 @@
 var dominio = window.location.origin
 
 // URLS:
-var url_facturaproveedor_bypage = dominio + "/api-facturas/facturaproveedor_bypage/"
-var url_facturaproveedor = dominio + "/api-facturas/facturaproveedor/"
+var url_comprobantecliente_bypage = dominio + "/api-facturas/comprobantecliente_bypage/"
+var url_comprobantecliente = dominio + "/api-facturas/comprobantecliente/"
 var url_archivos = dominio + "/media/"
-var url_validar_factura  = dominio + "/comprobantes/validar_factura/proveedor/"
-var url_marcar_pago = dominio + "/comprobantes/marcar_pago/proveedor/"
-var url_reconocer_factura = dominio + "/comprobantes/reconocer_factura/proveedor/"
+var url_validar_factura  = dominio + "/comprobantes/validar_factura/cliente/"
+var url_marcar_pago = dominio + "/comprobantes/marcar_pago/cliente/"
+var url_reconocer_factura = dominio + "/comprobantes/reconocer_factura/cliente/"
 
 
 // OBJS:
 var card_filtros = null
 var card_resultados = null
-// var pagina = null
+
 
 /*-----------------------------------------------*\
             LOAD
@@ -29,7 +29,7 @@ $(document).ready(function () {
     card_resultados = new TargetaResultados()
     // pagina = new Pagina()
 
-    // // Inicializar Alertify
+    // Inicializar Alertify
     // pagina.init_Alertify()
 
     // Asigna eventos a teclas
@@ -39,9 +39,8 @@ $(document).ready(function () {
         if (e.which == 13) {
             card_filtros.click_BotonBuscar(e)
         }
-    })
+    })    
 })
-
 
 $(window).resize(function() {
 
@@ -56,13 +55,13 @@ $(window).resize(function() {
 function TargetaFiltros() {
 
     this.$id = $('#filtros_id')
-    this.$btn_collapsed = $('#btn_collapsed')
+    this.$btn_collapsed = $('#btn_collapsed')    
 
     this.$empresa = $('#id_empresa')
     this.$uuid = $('#id_uuid')
-    this.$emisor_rfc = $('#id_emisor_rfc')
+    this.$receptor_rfc = $('#id_receptor_rfc')
     this.$serie = $('#id_serie')
-    this.$emisor_nombre = $('#id_emisor_nombre')
+    this.$receptor_nombre = $('#id_receptor_nombre')
     this.$folio = $('#id_folio')    
     this.$fecha_inicio = $('#id_fecha_inicio')
     this.$fecha_fin = $('#id_fecha_final')
@@ -91,7 +90,7 @@ TargetaFiltros.prototype.init = function () {
     this.$boton_limpiar.on('click', this, this.click_BotonLimpiar)
 
     this.$id.on('shown.bs.collapse', this, this.descolapsar)
-    this.$id.on('hidden.bs.collapse', this, this.colapsar)
+    this.$id.on('hidden.bs.collapse', this, this.colapsar)    
 
     this.show_FilterSelected()
 }
@@ -107,9 +106,9 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
 
     e.data.$empresa.val("")
     e.data.$uuid.val("")
-    e.data.$emisor_rfc.val("")
     e.data.$serie.val("")
-    e.data.$emisor_nombre.val("")
+    e.data.$receptor_rfc.val("")
+    e.data.$receptor_nombre.val("")
     e.data.$folio.val("")
     e.data.$fecha_inicio.val("")
     e.data.$fecha_fin.val("")
@@ -123,9 +122,9 @@ TargetaFiltros.prototype.validar_Filtros = function () {
 
     if ((this.$empresa.val() != "") ||
         (this.$uuid.val() != "") ||
-        (this.$emisor_rfc.val() != "") ||
+        (this.$receptor_rfc.val() != "") ||
         (this.$serie.val() != "") ||
-        (this.$emisor_nombre.val() != "") ||
+        (this.$receptor_nombre.val() != "") ||
         (this.$folio.val() != "") ||
         (this.$fecha_inicio.val() != "") ||
         (this.$fecha_fin.val() != "") ||
@@ -146,8 +145,8 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
         empresa__clave: this.$empresa.val(),
         fecha_min: this.$fecha_inicio.val(),
         fecha_max: this.$fecha_fin.val(),
-        emisor_rfc: this.$emisor_rfc.val(),
-        emisor_nombre: this.$emisor_nombre.val(),
+        receptor_rfc: this.$receptor_rfc.val(),
+        receptor_nombre: this.$receptor_nombre.val(),
         uuid: this.$uuid.val(),
         estadoSat: this.$estado_sat.val(),
         folio: this.$folio.val(),
@@ -181,7 +180,7 @@ TargetaFiltros.prototype.show_FilterSelected = function () {
 
     if (mes_inicio == mes_fin) {
 
-        alertify.warning("Facturas recibidas en month del year, business"
+        alertify.warning("Facturas emitidas en month del year, business"
             .replace("month", moment(this.$fecha_inicio.val()).format('MMMM').toUpperCase())
                 .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
                     .replace("business", empresa)
@@ -189,14 +188,13 @@ TargetaFiltros.prototype.show_FilterSelected = function () {
     }
     else if (anio_inicio == anio_fin) {
 
-        alertify.warning("Facturas recibidas en year business"
+        alertify.warning("Facturas emitidas en year business"
                 .replace("year", moment(this.$fecha_inicio.val()).format('YYYY'))
                     .replace("business", empresa)
         )
     }
 
 }
-
 /*-----------------------------------------------*\
             OBJETO: TargetaResultados
 \*-----------------------------------------------*/
@@ -265,14 +263,14 @@ GridResultados.prototype.get_Config = function () {
         pageable: true,
         noRecords: {
             template: "<div class='app-resultados-grid__empy'> No se encontraron registros </div>"
-        },        
+        },                
     }
 }
 GridResultados.prototype.get_Columnas = function (e) {
     return [
-        { field: "empresa", title: "Empresa", width: "80px"},
-        { field: "emisor_rfc", title: "Proveedor RFC", width: "140px" },
-        { field: "emisor_nombre", title: "Proveedor Nombre", width: "350px" },    
+        { field: "empresa", title: "Empresa", width: "80px"},    
+        { field: "receptor_rfc", title: "Cliente RFC", width: "200px"},
+        { field: "receptor_nombre", title: "Cliente Nombre", width: "200px"},
         { field: "uuid", title: "UUID", width: "290px" },       
         {   
             field: "fecha", 
@@ -369,6 +367,8 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "lugarExpedicion", title: "Lugar Expedicion", width: "200px", hidden: true },
         { field: "numCtaPago", title: "Num Cta Pago", width: "200px", hidden: true },
         { field: "condicionesDePago", title: "Condiciones Pago", width: "200px", hidden: true },
+        { field: "emisor_rfc", title: "Emisor RFC", width: "140px", hidden: true },
+        { field: "emisor_nombre", title: "Emisor Nombre", width: "350px", hidden: true },            
         { field: "emisor_calle", title: "Emisor Calle", width: "200px", hidden: true },
         { field: "emisor_noExterior", title: "Emisor no Exterior", width: "200px", hidden: true },
         { field: "emisor_noInterior", title: "Emisor no Interior", width: "200px", hidden: true },
@@ -386,8 +386,6 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "emisor_expedidoEn_estado", title: "Emisor Expedido En_estado", width: "200px", hidden: true },
         { field: "emisor_expedidoEn_pais", title: "Emisor Expedido En_pais", width: "200px", hidden: true },
         { field: "emisor_regimen", title: "Emisor Regimen", width: "200px", hidden: true },
-        { field: "receptor_rfc", title: "Receptor RFC", width: "200px", hidden: true },
-        { field: "receptor_nombre", title: "Receptor Nombre", width: "200px", hidden: true },                
         { field: "receptor_calle", title: "Receptor Calle", width: "200px", hidden: true },
         { field: "receptor_noExterior", title: "Receptor noExterior", width: "200px", hidden: true },
         { field: "receptor_noInterior", title: "Receptor noInterior", width: "200px", hidden: true },
@@ -436,7 +434,7 @@ GridResultados.prototype.get_FuenteDatosConfig = function (e) {
         transport: {
             read: {
 
-                url: url_facturaproveedor_bypage,
+                url: url_comprobantecliente_bypage,
                 type: "GET",
                 dataType: "json",
             },
@@ -610,7 +608,7 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         serverFiltering: true,
         transport: {
             read: {
-                url: url_facturaproveedor,
+                url: url_comprobantecliente,
                 type: "GET",
                 dataType: "json",
             },
@@ -630,6 +628,7 @@ ToolBar.prototype.get_FuenteDatosConfig = function (e) {
         error: function (e) {
             alert("Status: " + e.status + "; Error message: " + e.errorThrown);
         },
+        serverFiltering: true
     }
 }
 ToolBar.prototype.init_Celdas = function (e) {

@@ -5,6 +5,7 @@ from django.contrib import admin
 
 # Modelos:
 from .models import Empresa
+from .models import EmailAccount
 
 
 @admin.register(Empresa)
@@ -23,4 +24,14 @@ class AdminEmpresa(admin.ModelAdmin):
         'logo',
         'created_date',
         'updated_date',
+    )
+
+
+@admin.register(EmailAccount)
+class AdminEmailAccount(admin.ModelAdmin):
+    list_display = (
+        'clave',
+        'account_email',
+        'password_email',
+        'smtp_server',
     )

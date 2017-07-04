@@ -15,12 +15,12 @@ from django.views.generic.base import View
 import json
 import calendar
 from datetime import date
-from datetime import datetime
+# from datetime import datetime
 
 
 # Modelos
-from .models import FacturaProveedor
-from .models import FacturaCliente
+from .models import ComprobanteProveedor
+from .models import ComprobanteCliente
 from .models import ComprobanteEmpleado
 
 # Formularios:
@@ -31,7 +31,7 @@ from .forms import LogFormFiltros
 from .forms import ResumenFormFiltros
 
 # Librerias Propias:
-from core.tools.datos import Chronos
+# from core.tools.datos import Chronos
 
 # Django Paginacion:
 # from django.core.paginator import Paginator
@@ -39,8 +39,8 @@ from core.tools.datos import Chronos
 # from django.core.paginator import PageNotAnInteger
 
 # Tasks
-from .tasks import obtener_Facturas
-from core.sat import WebServiceSAT
+# from .tasks import obtener_Facturas
+# from core.sat import WebServiceSAT
 
 
 @method_decorator(login_required, name='dispatch')
@@ -48,53 +48,55 @@ class ValidarFactura(View):
 
     def get(self, request, type, uuid):
 
-        satweb = WebServiceSAT()
+        # satweb = WebServiceSAT()
 
-        estado = ""
-        mensaje = ""
+        # estado = ""
+        # mensaje = ""
 
-        try:
+        # try:
 
-            if type == "proveedor":
-                documento = FacturaProveedor.objects.get(uuid=uuid)
+        #     if type == "proveedor":
+        #         documento = ComprobanteProveedor.objects.get(uuid=uuid)
 
-            elif type == "cliente":
-                documento = FacturaCliente.objects.get(uuid=uuid)
+        #     elif type == "cliente":
+        #         documento = ComprobanteCliente.objects.get(uuid=uuid)
 
-            elif type == "empleado":
-                documento = ComprobanteEmpleado.objects.get(uuid=uuid)
+        #     elif type == "empleado":
+        #         documento = ComprobanteEmpleado.objects.get(uuid=uuid)
 
-            else:
-                documento = None
+        #     else:
+        #         documento = None
 
-            if documento is not None:
+        #     if documento is not None:
 
-                estado = satweb.get_Estado(
-                    documento.emisor_rfc,
-                    documento.receptor_rfc,
-                    documento.total,
-                    documento.uuid
-                )
+        #         estado = satweb.get_Estado(
+        #             documento.emisor_rfc,
+        #             documento.receptor_rfc,
+        #             documento.total,
+        #             documento.uuid
+        #         )
 
-                if estado != documento.estadoSat:
-                    documento.estadoSat = estado
-                    documento.save()
-                    mensaje = "Estado actualizado a:"
-                else:
-                    mensaje = "El estado no a cambiado en la BD"
+        #         if estado != documento.estadoSat:
+        #             documento.estadoSat = estado
+        #             documento.save()
+        #             mensaje = "Estado actualizado a:"
+        #         else:
+        #             mensaje = "El estado no a cambiado en la BD"
 
-            else:
-                mensaje = "Favor de especificar un tipo"
+        #     else:
+        #         mensaje = "Favor de especificar un tipo"
 
-        except Exception, error:
-            mensaje = "Error: {} ".format(str(error))
+        # except Exception, error:
+        #     mensaje = "Error: {} ".format(str(error))
 
-        msg = {
-            "estado": estado,
-            "mensaje": mensaje
-        }
+        # msg = {
+        #     "estado": estado,
+        #     "mensaje": mensaje
+        # }
 
-        data = json.dumps(msg)
+        # data = json.dumps(msg)
+
+        data = {}
 
         return HttpResponse(data, content_type='application/json')
 
@@ -109,10 +111,10 @@ class MarcarPago(View):
         try:
 
             if type == "proveedor":
-                documento = FacturaProveedor.objects.get(uuid=uuid)
+                documento = ComprobanteProveedor.objects.get(uuid=uuid)
 
             elif type == "cliente":
-                documento = FacturaCliente.objects.get(uuid=uuid)
+                documento = ComprobanteCliente.objects.get(uuid=uuid)
 
             elif type == "empleado":
                 documento = ComprobanteEmpleado.objects.get(uuid=uuid)
@@ -151,10 +153,10 @@ class ReconocerFactura(View):
         try:
 
             if type == "proveedor":
-                documento = FacturaProveedor.objects.get(uuid=uuid)
+                documento = ComprobanteProveedor.objects.get(uuid=uuid)
 
             elif type == "cliente":
-                documento = FacturaCliente.objects.get(uuid=uuid)
+                documento = ComprobanteCliente.objects.get(uuid=uuid)
 
             elif type == "empleado":
                 documento = ComprobanteEmpleado.objects.get(uuid=uuid)
@@ -184,10 +186,10 @@ class ReconocerFactura(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class FacturaProveedorList(View):
+class ComprobanteProveedorList(View):
 
     def __init__(self):
-        self.template_name = 'factura_proveedor/fac_proveedor_lista.html'
+        self.template_name = 'comprobante_proveedor/com_proveedor_lista.html'
 
     def get(self, request, empresa, anio, mes):
 
@@ -229,10 +231,10 @@ class FacturaProveedorList(View):
 
 
 @method_decorator(login_required, name='dispatch')
-class FacturaClienteList(View):
+class ComprobanteClienteList(View):
 
     def __init__(self):
-        self.template_name = 'factura_cliente/fac_cliente_lista.html'
+        self.template_name = 'comprobante_cliente/com_cliente_lista.html'
 
     def get(self, request, empresa, anio, mes):
 
@@ -394,49 +396,49 @@ class ObtenerFacturas(View):
 
     def post(self, request):
 
-        formulario = ObtenerForm(request.POST, username=request.user)
+        # formulario = ObtenerForm(request.POST, username=request.user)
 
-        if formulario.is_valid():
-            datos_formulario = formulario.cleaned_data
+        # if formulario.is_valid():
+        #     datos_formulario = formulario.cleaned_data
 
-            empresa_clave = datos_formulario.get('empresa')
-            fecha_inicio = str(datos_formulario.get('fecha_inicio'))
-            fecha_fin = str(datos_formulario.get('fecha_final'))
-            tipo_comprobante = datos_formulario.get('tipo_comprobante')
+        #     empresa_clave = datos_formulario.get('empresa')
+        #     fecha_inicio = str(datos_formulario.get('fecha_inicio'))
+        #     fecha_fin = str(datos_formulario.get('fecha_final'))
+        #     tipo_comprobante = datos_formulario.get('tipo_comprobante')
 
-            print "Empresa: {}".format(empresa_clave)
-            print "Fecha Inicio: {}".format(fecha_inicio)
-            print "Fecha Final: {}".format(fecha_fin)
-            print "Tipo Comprobante: {}".format(tipo_comprobante)
+        #     print "Empresa: {}".format(empresa_clave)
+        #     print "Fecha Inicio: {}".format(fecha_inicio)
+        #     print "Fecha Final: {}".format(fecha_fin)
+        #     print "Tipo Comprobante: {}".format(tipo_comprobante)
 
-            try:
-                f_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
-                f_final = datetime.strptime(fecha_fin, "%Y-%m-%d")
+        #     try:
+        #         f_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        #         f_final = datetime.strptime(fecha_fin, "%Y-%m-%d")
 
-                fechas = Chronos.getDays_FromRange(f_inicio, f_final)
+        #         fechas = Chronos.getDays_FromRange(f_inicio, f_final)
 
-                # Descargar Emitidas y Recibidas por cada fecha
-                for fecha in fechas:
+        #         # Descargar Emitidas y Recibidas por cada fecha
+        #         for fecha in fechas:
 
-                    obtener_Facturas.delay(
-                        empresa_clave,
-                        str(fecha),
-                        tipo_comprobante
-                    )
+        #             obtener_Facturas.delay(
+        #                 empresa_clave,
+        #                 str(fecha),
+        #                 tipo_comprobante
+        #             )
 
-                self.bandera = "INICIO_PROCESO"
-                self.mensaje = "En la siguiente tabla se " \
-                    "mostrara el resultado de la descargar por Dia:"""
+        #         self.bandera = "INICIO_PROCESO"
+        #         self.mensaje = "En la siguiente tabla se " \
+        #             "mostrara el resultado de la descargar por Dia:"""
 
-            except Exception as e:
-                self.bandera = "ERROR"
-                self.mensaje = "Ocurio un error al llamar la tarea: {}".format(
-                    str(e)
-                )
+        #     except Exception as e:
+        #         self.bandera = "ERROR"
+        #         self.mensaje = "Ocurio un error al llamar la tarea: {}".format(
+        #             str(e)
+        #         )
 
-        contexto = {
-            'form': formulario,
-            'mensaje': self.mensaje,
-            'bandera': self.bandera,
-        }
-        return render(request, self.template_name, contexto)
+        # contexto = {
+        #     'form': formulario,
+        #     'mensaje': self.mensaje,
+        #     'bandera': self.bandera,
+        # }
+        return render(request, self.template_name, {})
