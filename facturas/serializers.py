@@ -75,10 +75,10 @@ class ComprobanteProveedorSerializer(serializers.HyperlinkedModelSerializer):
             'empresa',
             'comentarios',
             'comprobacion',
-            'url',
-            'tiene_pdf',
             'estadoSat',
             'pago',
+            'archivo_pdf',
+            'archivo_xml',
         )
 
     def get_empresa(self, obj):
@@ -153,8 +153,6 @@ class ComprobanteClienteSerializer(serializers.HyperlinkedModelSerializer):
             'empresa',
             'comentarios',
             'comprobacion',
-            'url',
-            'tiene_pdf',
             'estadoSat',
             'pago',
         )
@@ -231,8 +229,6 @@ class ComprobanteEmpleadoSerializer(serializers.HyperlinkedModelSerializer):
             'empresa',
             'comentarios',
             'comprobacion',
-            'url',
-            'tiene_pdf',
             'estadoSat',
             'registroPatronal',
             'numEmpleado',

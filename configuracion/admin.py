@@ -31,7 +31,7 @@ class AdminEmpresa(admin.ModelAdmin):
 class AdminEmailAccount(admin.ModelAdmin):
     list_display = (
         'clave',
-        'account_email',
-        'password_email',
+        'account',
+        'password',
         'smtp_server',
     )

@@ -270,6 +270,16 @@ GridResultados.prototype.get_Config = function () {
 }
 GridResultados.prototype.get_Columnas = function (e) {
     return [
+        {
+            command: [
+                // { text: "Validar", click: this.validar_XML },
+                { text: "XML", click: this.descargar_XML },
+                { text: "PDF", click: this.descargar_PDF },
+            ],
+            title: " ",
+            // width: "230px"
+            width: "150px"
+        },    
         { field: "empresa", title: "Empresa", width: "80px"},
         { field: "emisor_rfc", title: "Proveedor RFC", width: "140px" },
         { field: "emisor_nombre", title: "Proveedor Nombre", width: "350px" },    
@@ -404,8 +414,8 @@ GridResultados.prototype.get_Columnas = function (e) {
             title: "Comprobacion", 
             width: "140px",           
             values: [
-                { text: "RECONOCIDO",  value : "RECONOCIDO" },
-                { text: "NO Reconocido",  value : "NO_RECONOCIDO" },                
+                { text: "RECIBIDO",  value : "REC" },
+                { text: "NO Recibido",  value : "NRE" },                
             ]
         },
         { 
@@ -416,16 +426,7 @@ GridResultados.prototype.get_Columnas = function (e) {
                 { text: "PAGADO",  value : "PAGADO" },
                 { text: "Pendiente",  value : "PENDIENTE" },
             ]
-        },
-        {
-            command: [
-                { text: "Validar", click: this.validar_XML },
-                { text: "XML", click: this.descargar_XML },
-                { text: "PDF", click: this.descargar_PDF },
-            ],
-            title: " ",
-            width: "230px"
-        },              
+        },            
     ]
 }
 GridResultados.prototype.get_FuenteDatosConfig = function (e) {
@@ -530,8 +531,8 @@ GridResultados.prototype.descargar_XML = function (e) {
     // Obteniedo informacion del registro
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
 
-    var url = url_archivos + fila.url
-    var win = window.open(url, '_blank')
+    // var url = url_archivos + fila.url
+    var win = window.open(fila.archivo_xml, '_blank')
     win.focus()
 }
 GridResultados.prototype.descargar_PDF = function (e) {
@@ -541,11 +542,11 @@ GridResultados.prototype.descargar_PDF = function (e) {
     // Obteniedo informacion del registro
     var fila = this.dataItem($(e.currentTarget).closest('tr'))
 
-    var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
+    // var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
 
-    var url = url_archivos + ruta_archivo;
+    // var url = url_archivos + ruta_archivo;
 
-    var win = window.open(url, '_blank')
+    var win = window.open(fila.archivo_pdf, '_blank')
 
     win.focus()
 }
@@ -701,7 +702,8 @@ ToolBar.prototype.init_Celdas = function (e) {
             { value: "SELLO SAT" },
             { value: "EMPRESA" },
             { value: "COMENTARIOS" },
-            { value: "URL" },
+            { value: "ARCHIVO XML" },
+            { value: "ARCHIVO PDF" },
         ]
     }];
 }
@@ -770,7 +772,8 @@ ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
                 { value: data[i].selloSAT },
                 { value: data[i].empresa },
                 { value: data[i].comentarios },
-                { value: url_archivos + data[i].url },
+                { value: data[i].archivo_xml },
+                { value: data[i].archivo_pdf },
             ]
         })
     }

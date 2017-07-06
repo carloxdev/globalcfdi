@@ -40,3 +40,5 @@ dashboards/migrations/*
 facturas/migrations/*
 home/migrations/*
 seguridad/migrations/*
+jde/migrations/*
+

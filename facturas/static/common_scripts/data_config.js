@@ -81,8 +81,8 @@ var kFields_comprobantes = {
     empresa: { editable: false, type: "string" },
     comentarios: { editable: false, type: "string" },
     comprobacion: { editable: true, type: "string" },
-    url: { editable: false, type: "string" },
-    tiene_pdf: { editable: false, type: "string" },
+    archivo_xml: { editable: true, type: "string" },
+    archivo_pdf: { editable: true, type: "string" },
     estadoSat: { editable: false, type: "string" },
 }
 

@@ -15,10 +15,12 @@ class F0101(models.Model):
 
     class Meta:
         managed = False
-        if settings.DEBUG:
-            db_table = u'"CRPDTA"."F0101"'
-        else:
-            db_table = u'"PRODDTA"."F0101"'
+        # if settings.DEBUG:
+        #     db_table = u'"CRPDTA"."F0101"'
+        # else:
+        #     db_table = u'"PRODDTA"."F0101"'
+
+        db_table = u'"PRODDTA"."F0101"'
 
     def __str__(self):
         return "{} - {}".format(self.clave, self.nombre)
@@ -71,10 +73,12 @@ class F5903000(models.Model):
 
     class Meta:
         managed = False
-        if settings.DEBUG:
-            db_table = u'"CRPDTA"."F5903000"'
-        else:
-            db_table = u'"PRODDTA"."F5903000"'
+        # if settings.DEBUG:
+        #     db_table = u'"CRPDTA"."F5903000"'
+        # else:
+        #     db_table = u'"PRODDTA"."F5903000"'
+
+        db_table = u'"PRODDTA"."F5903000"'
 
     def __str__(self):
         return self.FTGENKEY

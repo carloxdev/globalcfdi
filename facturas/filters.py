@@ -179,7 +179,6 @@ class ComprobanteProveedorFilter(filters.FilterSet):
             'fechaTimbrado_min',
             'fechaTimbrado_max',
             'comprobacion',
-            'tiene_pdf',
         ]
 
 
@@ -226,7 +225,6 @@ class ComprobanteClienteFilter(filters.FilterSet):
             'fechaTimbrado_min',
             'fechaTimbrado_max',
             'comprobacion',
-            'tiene_pdf',
         ]
 
 
@@ -273,7 +271,6 @@ class ComprobanteEmpleadoFilter(filters.FilterSet):
             'fechaTimbrado_min',
             'fechaTimbrado_max',
             'comprobacion',
-            'tiene_pdf',
         ]
 
 

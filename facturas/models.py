@@ -33,8 +33,8 @@ class Comprobante(models.Model):
     }
 
     COMPROBACION_ESTADOS = (
-        ('REC', 'RECONOCIDO'),
-        ('NRE', 'NO RECONOCIDO'),
+        ('REC', 'RECIBIDO'),
+        ('NRE', 'No Recibido'),
     )
 
     # Comprobante
@@ -165,11 +165,9 @@ class Comprobante(models.Model):
     comprobacion = models.CharField(
         max_length=4,
         choices=COMPROBACION_ESTADOS,
-        default="REC",
+        default="NRE",
         null=True
     )
-    url = models.CharField(max_length=255, null=True, blank=True)
-    tiene_pdf = models.BooleanField(default=False)
     estadoSat = models.CharField(
         max_length=255, null=True, blank=True, default="SIN VALIDAR")
 

@@ -403,8 +403,8 @@ GridResultados.prototype.get_Columnas = function (e) {
             title: "Comprobacion", 
             width: "140px",           
             values: [
-                { text: "RECONOCIDO",  value : "RECONOCIDO" },
-                { text: "NO Reconocido",  value : "NO_RECONOCIDO" },                
+                { text: "RECIBIDO",  value : "REC" },
+                { text: "NO Recibido",  value : "NRE" },                
             ]
         },
         { 
