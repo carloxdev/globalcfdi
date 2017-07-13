@@ -140,12 +140,8 @@
 
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle app-menu-opc-user" data-toggle="dropdown" role="button">
-							
-							{% if user.username == "root" %}
-								Administrador
-							{% else %}
-								{{ user.username }}
-							{% endif %}
+
+                            {{ user.get_full_name }}
 							
 							<span class="caret"></span>
 						</a>
@@ -166,11 +162,6 @@
 							</li>
 						</ul>
 					</li>
-					{% else %}
-			        <li><a href="{% url 'home:quienes_somos' %}">¿Quienes somos?</a></li>
-			        <li><a href="{% url 'home:servicios' %}">Servicios</a></li>
-			        <li><a href="{% url 'home:contactanos' %}">Contactanos</a></li>
-					<li><a href="{% url 'seguridad:login' %}">Login</a></li>
 					{% endif %}
 				</ul>
 			</div>
