@@ -194,7 +194,6 @@ TargetaFiltros.prototype.show_FilterSelected = function () {
                     .replace("business", empresa)
         )
     }
-
 }
 
 /*-----------------------------------------------*\
@@ -485,15 +484,19 @@ GridResultados.prototype.llenar = function (e) {
 
     $.each(data, function (indice, elemento) {
         
-        if (elemento.tiene_pdf == "false") {
+        if (elemento.archivo_pdf == null) {
             card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-PDF").attr('disabled', 'disabled')            
         }
-        if (elemento.totalImpuestosTrasladados == 0) {
-            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
-        }
-        if (elemento.totalImpuestosRetenidos == 0) {
-            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
-        }
+        if (elemento.archivo_xml == null) {
+            card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-XML").attr('disabled', 'disabled')            
+        }        
+
+        // if (elemento.totalImpuestosTrasladados == 0) {
+        //     card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-T").attr('disabled', 'disabled')
+        // }
+        // if (elemento.totalImpuestosRetenidos == 0) {
+        //     card_resultados.grid.kgrid.find("[data-uid='" + elemento.uid + "']").find(".k-grid-R").attr('disabled', 'disabled')
+        // }
     })
 }
 GridResultados.prototype.buscar = function () {
@@ -528,27 +531,36 @@ GridResultados.prototype.validar_XML = function (e) {
 GridResultados.prototype.descargar_XML = function (e) {
     e.preventDefault()
 
-    // Obteniedo informacion del registro
-    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    var status = e.currentTarget.getAttribute("disabled")
 
-    // var url = url_archivos + fila.url
-    var win = window.open(fila.archivo_xml, '_blank')
-    win.focus()
+    if ( status != "disabled" || status == null) {
+
+        var fila = this.dataItem($(e.currentTarget).closest('tr'))
+        var win = window.open(fila.archivo_xml, '_blank')
+        win.focus()
+    }
+    else {
+
+        alertify.warning("No se le ha cargado XML a esta Factura")
+    }        
 }
 GridResultados.prototype.descargar_PDF = function (e) {
     
     e.preventDefault()
 
-    // Obteniedo informacion del registro
-    var fila = this.dataItem($(e.currentTarget).closest('tr'))
+    var status = e.currentTarget.getAttribute("disabled")
 
-    // var ruta_archivo = fila.ruta_archivo.replace('xml','pdf')
+    if ( status != "disabled" || status == null) {
 
-    // var url = url_archivos + ruta_archivo;
+        var fila = this.dataItem($(e.currentTarget).closest('tr'))
+        var win = window.open(fila.archivo_pdf, '_blank')
 
-    var win = window.open(fila.archivo_pdf, '_blank')
+        win.focus()
+    }
+    else {
 
-    win.focus()
+        alertify.warning("No se le ha cargado PDF a esta Factura")
+    }
 }
 GridResultados.prototype.marcar_Pago = function (_uuid, _valor) {
 
@@ -781,70 +793,18 @@ ToolBar.prototype.agregar_Info_A_Celdas = function (data) {
 ToolBar.prototype.get_Hojas = function () {
     return {
         sheets: [{
-            columnas: [
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-                { autoWidth: true },
-            ],
-            title: "registros",
+
+            columnas: function () {
+
+                var filas = []
+
+                this.krows[0].each(function (indice, elemento) {
+                    filas.push({ autoWidth: false })
+                })
+
+                return filas
+            },
+            title: "comprobantes",
             rows: this.krows
         }]
     }
@@ -855,31 +815,37 @@ ToolBar.prototype.click_BotonExportar = function (e) {
 
     if (card_filtros.validar_Filtros() == true) {
 
-        // Se inicializan los titulos:
-        e.data.init_Celdas();
+        if (card_resultados.grid.kfuente_datos.total() > 0 )
+        {
 
-        // show_Spinner()
+            // Se inicializan los titulos:
+            e.data.init_Celdas();
 
-        // se carga y los datos se agregarn a las filas:
-        e.data.kfuente_datos.fetch(function () {
+            // show_Spinner()
 
-            var datos = this.data();
+            // se carga y los datos se agregarn a las filas:
+            e.data.kfuente_datos.fetch(function () {
 
-            e.data.agregar_Info_A_Celdas(datos)
+                var datos = this.data();
 
-            // Se crea Libro:
-            var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
+                e.data.agregar_Info_A_Celdas(datos)
 
-            // Se genera archivo de Excel:
-            kendo.saveAs({
-                dataURI: workbook.toDataURL(),
-                fileName: "registros.xlsx",
-                // proxyURL: 'frmSaveFile.aspx'
+                // Se crea Libro:
+                var workbook = new kendo.ooxml.Workbook(e.data.get_Hojas())
+
+                // Se genera archivo de Excel:
+                kendo.saveAs({
+                    dataURI: workbook.toDataURL(),
+                    fileName: "comprobantes.xlsx",
+                })
             })
-        })
+        }
+        else {
+            alertify.warning("No se encontraron registros para exportar")
+        }
     }
     else {
-        alert("Favor de seleccionar al menos un filtro")
+        alertify.warning("Favor de seleccionar al menos un filtro")
     }
 }
 
