@@ -69,7 +69,7 @@ class Comprobante(models.Model):
     emisor_jde_clave = models.CharField(max_length=255, null=True, blank=True)
 
     # Emisor Direccion
-    emisor_calle = models.CharField(max_length=255, null=True, blank=True)
+    emisor_calle = models.CharField(max_length=1000, null=True, blank=True)
     emisor_noExterior = models.CharField(max_length=255, null=True, blank=True)
     emisor_noInterior = models.CharField(max_length=255, null=True, blank=True)
     emisor_colonia = models.CharField(max_length=255, null=True, blank=True)
@@ -113,7 +113,7 @@ class Comprobante(models.Model):
     receptor_jde_clave = models.CharField(max_length=255, null=True, blank=True)
 
     # Receptor Direccion
-    receptor_calle = models.CharField(max_length=255, null=True, blank=True)
+    receptor_calle = models.CharField(max_length=1000, null=True, blank=True)
     receptor_noExterior = models.CharField(
         max_length=255, null=True, blank=True
     )
