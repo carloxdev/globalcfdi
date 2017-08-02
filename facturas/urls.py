@@ -5,6 +5,8 @@ from django.conf.urls import url
 
 # Own's Libraries
 from .views import ComprobanteProveedorList
+from .views import ComprobanteProveedorView
+
 from .views import ComprobanteClienteList
 from .views import ComprobanteEmpleadoList
 from .views import ResumenList
@@ -21,6 +23,11 @@ urlpatterns = [
         r'^comprobantes/proveedores/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',
         ComprobanteProveedorList.as_view(),
         name='proveedor_lista'
+    ),
+    url(
+        r'^comprobantes/proveedores/(?P<uuid>.+)/$',
+        ComprobanteProveedorView.as_view(),
+        name='proveedor_view'
     ),
     url(
         r'^comprobantes/clientes/(?P<empresa>.*?)/(?P<anio>.*?)/(?P<mes>.*?)/$',

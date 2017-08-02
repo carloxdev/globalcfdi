@@ -231,6 +231,15 @@ class ComprobanteProveedorList(View):
 
 
 @method_decorator(login_required, name='dispatch')
+class ComprobanteProveedorView(View):
+
+    template_name = 'comprobante_proveedor/com_proveedor_view.html'
+
+    def get(self, request, uuid):
+        return render(request, self.template_name, {})
+
+
+@method_decorator(login_required, name='dispatch')
 class ComprobanteClienteList(View):
 
     def __init__(self):

@@ -1,0 +1,82 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %} {% endblock title %}</title>
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+
+	<!-- Pace -->
+	<link rel="stylesheet" href="{% static 'libs/pace/pace.flash.theme.css' %}" />
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css' %}" />
+
+	<!-- Awesome Icons -->
+	<link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.min.css' %}" />
+
+	<!-- Own's Styles -->
+	<link rel="stylesheet" href="{% static 'comprobante_proveedor/com_proveedor_view.css' %}"/>
+
+</head>
+<body>
+	<div class="container">
+
+		<h2 class="text-center">SmartCFDI - CFDI Generico</h2>
+
+		<div class="row">
+			<div class="col-xs-6 own-actor-container">
+				<div class="own-actor">
+					<div class="field-bold">Emisor</div>
+					<div class="field">Laboratorios Zell S.A. de C.V</div>
+					<div class="field">PABLO UCELO 9</div>
+					<div class="field">COL. SAN JUAN, BENITO JUAREZ</div>
+					<div class="field">BENITO JUAREZ, DISTRITO FEDERAL, MEXICO</div>
+				</div>
+			</div>
+
+			<div class="col-xs-6 own-actor-container">
+				<div class="own-actor">
+					<div class="field-bold">Receptor</div>
+					<div class="field">Distribuidora Liverpool SA de CV</div>
+					<div class="field">PABLO UCELO 9</div>
+					<div class="field">COL. SAN JUAN, BENITO JUAREZ</div>
+					<div class="field">BENITO JUAREZ, DISTRITO FEDERAL, MEXICO</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row items">
+			<div class="col-xs-12">
+				<table class="items-table">
+					<thead>
+						<th>Codigo</th>
+						<th>Concepto</th>
+						<th>Cantidad</th>
+						<th>Unidad</th>
+						<th>Precio</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>75018465000240</td>
+							<td>SEDA FIXOLAN 250 ML XIOMARA</td>
+							<td>3.00</td>
+							<td>Pza</td>
+							<td>53.62</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sx-12 own-lineas">
+				Muchas lineas
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
