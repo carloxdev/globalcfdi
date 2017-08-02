@@ -57,7 +57,7 @@ class Comprobante(models.Model):
     total = models.DecimalField(max_digits=20, decimal_places=4, default=0.0)
     tipoDeComprobante = models.CharField(max_length=255, null=True, blank=True)
     metodoDePago = models.CharField(max_length=255, null=True, blank=True)
-    lugarExpedicion = models.CharField(max_length=255, null=True, blank=True)
+    lugarExpedicion = models.CharField(max_length=1000, null=True, blank=True)
     numCtaPago = models.CharField(max_length=255, null=True, blank=True)
     condicionesDePago = models.CharField(
         max_length=2000, null=True, blank=True
