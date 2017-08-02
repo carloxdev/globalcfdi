@@ -83,7 +83,7 @@ class Comprobante(models.Model):
 
     # Emisor Expedido En
     emisor_expedidoEn_calle = models.CharField(
-        max_length=255, null=True, blank=True
+        max_length=1000, null=True, blank=True
     )
     emisor_expedidoEn_noExterior = models.CharField(
         max_length=255, null=True, blank=True
