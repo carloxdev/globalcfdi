@@ -224,7 +224,17 @@ class ComprobanteCliente(Comprobante):
 
 
 class ComprobanteEmpleado(Comprobante):
-
+    # Nomina Datos 1.2
+    tipoNomina = models.CharField(max_length=3, null=True, blank=True)
+    totalDeducciones = models.CharField(max_length=30, null=True, blank=True)
+    totalPercepciones = models.CharField(max_length=30, null=True, blank=True)
+    version = models.CharField(max_length=6, null=True, blank=True)
+    cveEntidadFederativa = models.CharField(max_length=10, null=True, blank=True)
+    cuentaBancaria= models.CharField(max_length=20, null=True, blank=True)
+    departamento= models.CharField(max_length=255, null=True, blank=True)
+    salarioBaseCotApor = models.CharField(max_length=10, null=True, blank=True)
+    sindicalizado = models.CharField(max_length=20, null=True, blank=True)
+    tipoContrato = models.CharField(max_length=5, null=True, blank=True)
     # Nomina Datos
     registroPatronal = models.CharField(
         max_length=255, null=True, blank=True
