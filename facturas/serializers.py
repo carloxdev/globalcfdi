@@ -255,6 +255,8 @@ class ComprobanteEmpleadoSerializer(serializers.HyperlinkedModelSerializer):
             'deducciones_totalExento',
             'deducciones',
             'horasExtras',
+            'archivo_xml',
+            'archivo_pdf'
         )
 
     def get_empresa(self, obj):
