@@ -67,6 +67,8 @@ function TargetaFiltros() {
     this.$fecha_fin = $('#id_fecha_final')
     this.$fecha_timbrado_inicio = $('#id_fecha_timbrado_inicio')
     this.$fecha_timbrado_fin = $('#id_fecha_timbrado_final')
+    this.$fecha_pago_inicio = $('#id_fecha_pago_inicio')
+    this.$fecha_pago_fin = $('#id_fecha_pago_final')
     this.$estado_sat = $('#id_estadoSat')
     this.$comprobacion = $('#id_comprobacion')
 
@@ -85,6 +87,8 @@ TargetaFiltros.prototype.init = function () {
     this.$fecha_timbrado_inicio.datepicker(datepicker_init)
     this.$fecha_timbrado_fin.datepicker(datepicker_init)
 
+    this.$fecha_pago_inicio.datepicker(datepicker_init)
+    this.$fecha_pago_fin.datepicker(datepicker_init)
     // Botones
     this.$boton_buscar.on('click', this, this.click_BotonBuscar)
     this.$boton_limpiar.on('click', this, this.click_BotonLimpiar)
@@ -114,6 +118,8 @@ TargetaFiltros.prototype.click_BotonLimpiar = function (e) {
     e.data.$fecha_fin.val("")
     e.data.$fecha_timbrado_inicio.val("")
     e.data.$fecha_timbrado_fin.val("")
+    e.data.$fecha_pago_inicio.val("")
+    e.data.$fecha_pago_fin.val("")
     e.data.$estado_sat.val("")
     e.data.$comprobacion.val("")
 }
@@ -130,6 +136,8 @@ TargetaFiltros.prototype.validar_Filtros = function () {
         (this.$fecha_fin.val() != "") ||
         (this.$fecha_timbrado_inicio.val() != "") ||
         (this.$fecha_timbrado_fin.val() != "") ||
+        (this.$fecha_pago_inicio.val() != "") ||
+        (this.$fecha_pago_fin.val() != "") ||
         (this.$estado_sat.val() != "") ||
         (this.$comprobacion.val() != "")) {
         bandera = true
@@ -153,6 +161,8 @@ TargetaFiltros.prototype.get_Filtros = function (_page, _pageSize) {
         serie: this.$serie.val(),
         fechaTimbrado_min: this.$fecha_timbrado_inicio.val(),
         fechaTimbrado_max: this.$fecha_timbrado_fin.val(),
+        fechaPago_min: this.$fecha_pago_inicio.val(),
+        fechaPago_max: this.$fecha_pago_fin.val(),
         comprobacion: this.$comprobacion.val(),
     }
 }
@@ -286,7 +296,28 @@ GridResultados.prototype.get_Columnas = function (e) {
             title: "Fecha Timbrado",
             width: "150px",
             template: "#= kendo.toString(kendo.parseDate(fechaTimbrado, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
-            hidden: true
+            hidden: false
+        },
+        {
+            field: "fechaPago",
+            title: "Fecha Pago",
+            width: "150px",
+            template: "#= kendo.toString(kendo.parseDate(fechaPago, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+            hidden: false
+        },
+        {
+            field: "fechaInicialPago",
+            title: "Fecha Inicial",
+            width: "150px",
+            template: "#= kendo.toString(kendo.parseDate(fechaInicialPago, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+            hidden: false
+        },
+        {
+            field: "fechaFinalPago",
+            title: "Fecha Final",
+            width: "150px",
+            template: "#= kendo.toString(kendo.parseDate(fechaFinalPago, 'yyyy-MM-dd'), 'dd-MM-yyyy') #",
+            hidden: false
         },
         {
            command: {
@@ -343,7 +374,7 @@ GridResultados.prototype.get_Columnas = function (e) {
             width: "180px",
             format: '{0:c}',
             attributes:{style:"text-align:right;"},
-            hidden: true
+            hidden: false
         },
         {
            command: {
@@ -366,8 +397,8 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "formaDePago", title: "Forma Pago", width: "200px", hidden: true },
 
         { field: "tipoDeComprobante", title: "Tipo Comprobante", width: "200px", hidden: true },
-        { field: "metodoDePago", title: "Metodo Pago", width: "200px", hidden: true },
-        { field: "lugarExpedicion", title: "Lugar Expedicion", width: "200px", hidden: true },
+        { field: "metodoDePago", title: "Metodo Pago", width: "200px", hidden: false },
+        { field: "lugarExpedicion", title: "Lugar Expedicion", width: "200px", hidden: false },
         { field: "numCtaPago", title: "Num Cta Pago", width: "200px", hidden: true },
         { field: "condicionesDePago", title: "Condiciones Pago", width: "200px", hidden: true },
         { field: "emisor_calle", title: "Emisor Calle", width: "200px", hidden: true },
@@ -402,6 +433,7 @@ GridResultados.prototype.get_Columnas = function (e) {
             field: "comprobacion",
             title: "Comprobacion",
             width: "140px",
+            hidden: true,
             values: [
                 { text: "RECIBIDO",  value : "REC" },
                 { text: "NO Recibido",  value : "NRE" },
@@ -411,6 +443,7 @@ GridResultados.prototype.get_Columnas = function (e) {
             field: "pago",
             title: "Pago",
             width: "100px",
+            filtros_idhidden: true,
             values: [
                 { text: "PAGADO",  value : "PAGADO" },
                 { text: "Pendiente",  value : "PENDIENTE" },

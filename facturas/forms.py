@@ -194,6 +194,11 @@ class FacturaEmitidaFormFiltros(forms.Form):
     fecha_final = forms.DateField(widget=forms.TextInput(
         attrs={'class': 'form-control'}))
 
+    fecha_pago_inicio = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+    fecha_pago_final = forms.DateField(widget=forms.TextInput(
+        attrs={'class': 'form-control'}))
+
     estadoSat = forms.ChoiceField(
         choices=ESTADOSAT_OPCIONES,
         widget=forms.Select(

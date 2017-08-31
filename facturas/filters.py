@@ -135,6 +135,26 @@ def filtra_FechaTimbrado_Max(queryset, value):
         consulta = queryset.filter(fecha__lte=valor)
         return consulta
 
+def filtra_FechaPago_Min(queryset, value):
+
+    valor = "{}T00:00:00".format(value)
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(fechaPago__gte=valor)
+        return consulta
+
+
+def filtra_FechaPago_Max(queryset, value):
+
+    valor = "{}T23:59:59".format(value)
+
+    if not value:
+        return queryset
+    else:
+        consulta = queryset.filter(fechaPago__lte=valor)
+        return consulta
 
 class ComprobanteProveedorFilter(filters.FilterSet):
 
@@ -248,6 +268,11 @@ class ComprobanteEmpleadoFilter(filters.FilterSet):
     fechaTimbrado_max = django_filters.CharFilter(
         action=filtra_FechaTimbrado_Max)
 
+    fechaPago_min = django_filters.CharFilter(
+        action=filtra_FechaPago_Min)
+    fechaPago_max = django_filters.CharFilter(
+        action=filtra_FechaPago_Max)
+
     comprobacion = django_filters.CharFilter(
         name="comprobacion", lookup_expr="contains")
 
@@ -270,6 +295,8 @@ class ComprobanteEmpleadoFilter(filters.FilterSet):
             'serie',
             'fechaTimbrado_min',
             'fechaTimbrado_max',
+            'fechaPago_min',
+            'fechaPago_max',
             'comprobacion',
         ]
 
