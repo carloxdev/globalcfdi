@@ -8,6 +8,7 @@ from facturas.views_rest import ComprobanteProveedorByPageAPI
 from facturas.views_rest import ComprobanteProveedorAPI
 from facturas.views_rest import ComprobanteClienteByPageAPI
 from facturas.views_rest import ComprobanteClienteAPI
+from facturas.views_rest import ComprobanteEmpleadoExByPageAPI
 from facturas.views_rest import ComprobanteEmpleadoByPageAPI
 from facturas.views_rest import ComprobanteEmpleadoAPI
 from facturas.views_rest import LogByPageAPI
@@ -45,6 +46,11 @@ router_facturas.register(
     r'comprobanteempleado_bypage',
     ComprobanteEmpleadoByPageAPI,
     'comprobanteempleado_bypage'
+)
+router_facturas.register(
+    r'comprobanteempleadoex_bypage',
+    ComprobanteEmpleadoExByPageAPI,
+    'comprobanteempleadoex_bypage'
 )
 router_facturas.register(
     r'comprobanteempleado',
