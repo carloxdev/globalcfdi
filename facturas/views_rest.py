@@ -106,7 +106,7 @@ class ComprobanteClienteAPI(viewsets.ModelViewSet):
 
 class ComprobanteEmpleadoExByPageAPI(viewsets.ModelViewSet):
     queryset = ComprobanteEmpleado.objects.all()
-    serializer_class = ComprobanteClienteSerializer
+    serializer_class = ComprobanteEmpleadoSerializer
     pagination_class = GenericPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filter_class = ComprobanteEmpleadoFilter

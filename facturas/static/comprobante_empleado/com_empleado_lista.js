@@ -429,6 +429,7 @@ GridResultados.prototype.get_Columnas = function (e) {
         { field: "receptor_codigoPostal", title: "Receptor CodigoPostal", width: "200px", hidden: true },
         { field: "comentarios", title: "Comentarios", width: "200px", hidden: true },
         { field: "estadoSat", title: "Estado SAT", width: "100px" },
+        { field: "noCertificadoSAT", title: "Certificado SAT", width: "100px" },
         {
             field: "comprobacion",
             title: "Comprobacion",
