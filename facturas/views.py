@@ -30,6 +30,8 @@ from .forms import ObtenerForm
 from .forms import LogFormFiltros
 from .forms import ResumenFormFiltros
 
+from satconnect.sat import WebServiceSAT
+
 # Librerias Propias:
 # from core.tools.datos import Chronos
 
@@ -48,55 +50,53 @@ class ValidarFactura(View):
 
     def get(self, request, type, uuid):
 
-        # satweb = WebServiceSAT()
+        satweb = WebServiceSAT()
 
-        # estado = ""
-        # mensaje = ""
+        estado = ""
+        mensaje = ""
 
-        # try:
+        try:
 
-        #     if type == "proveedor":
-        #         documento = ComprobanteProveedor.objects.get(uuid=uuid)
+            if type == "proveedor":
+                documento = ComprobanteProveedor.objects.get(uuid=uuid)
 
-        #     elif type == "cliente":
-        #         documento = ComprobanteCliente.objects.get(uuid=uuid)
+            elif type == "cliente":
+                documento = ComprobanteCliente.objects.get(uuid=uuid)
 
-        #     elif type == "empleado":
-        #         documento = ComprobanteEmpleado.objects.get(uuid=uuid)
+            elif type == "empleado":
+                documento = ComprobanteEmpleado.objects.get(uuid=uuid)
 
-        #     else:
-        #         documento = None
+            else:
+                documento = None
 
-        #     if documento is not None:
+            if documento is not None:
 
-        #         estado = satweb.get_Estado(
-        #             documento.emisor_rfc,
-        #             documento.receptor_rfc,
-        #             documento.total,
-        #             documento.uuid
-        #         )
+                estado = satweb.get_Estado(
+                    documento.emisor_rfc,
+                    documento.receptor_rfc,
+                    documento.total,
+                    documento.uuid
+                )
 
-        #         if estado != documento.estadoSat:
-        #             documento.estadoSat = estado
-        #             documento.save()
-        #             mensaje = "Estado actualizado a:"
-        #         else:
-        #             mensaje = "El estado no a cambiado en la BD"
+                if estado != documento.estadoSat:
+                    documento.estadoSat = estado
+                    documento.save()
+                    mensaje = "Estado actualizado a:"
+                else:
+                    mensaje = "El estado no a cambiado en la BD"
 
-        #     else:
-        #         mensaje = "Favor de especificar un tipo"
+            else:
+                mensaje = "Favor de especificar un tipo"
 
-        # except Exception, error:
-        #     mensaje = "Error: {} ".format(str(error))
+        except Exception, error:
+            mensaje = "Error: {} ".format(str(error))
 
-        # msg = {
-        #     "estado": estado,
-        #     "mensaje": mensaje
-        # }
+        msg = {
+            "estado": estado,
+            "mensaje": mensaje
+        }
 
-        # data = json.dumps(msg)
-
-        data = {}
+        data = json.dumps(msg)
 
         return HttpResponse(data, content_type='application/json')
 
