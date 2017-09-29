@@ -105,7 +105,7 @@ class ComprobanteClienteAPI(viewsets.ModelViewSet):
         return facturas
 
 class ComprobanteEmpleadoExByPageAPI(viewsets.ModelViewSet):
-    queryset = ComprobanteEmpleado.objects.all()
+    queryset = ComprobanteEmpleado.objects.all().order_by('-fechaPago')
     serializer_class = ComprobanteEmpleadoSerializer
     pagination_class = GenericPagination
     filter_backends = (filters.DjangoFilterBackend,)
@@ -123,7 +123,7 @@ class ComprobanteEmpleadoByPageAPI(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_staff:
             facturas = ComprobanteEmpleado.objects.all()
-        else:
+        else:            
             empresas = self.request.user.empresa_set.all()
             facturas = ComprobanteEmpleado.objects.filter(empresa__in=empresas)
 
